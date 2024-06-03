@@ -106,6 +106,46 @@ def sidebar():
 def adminDashboard():
     return render_template('adminDashboard.html')
 
+@app.route('/adminProduk')
+def adminProduk():
+    return render_template('adminProduk.html')
+
+@app.route('/adminPelanggan')
+def adminPelanggan():
+    return render_template('adminPelanggan.html')
+
+@app.route('/adminPemesanan')
+def adminPemesanan():
+    return render_template('adminPemesanan.html')
+
+@app.route('/adminPembayaran')
+def adminPembayaran():
+    return render_template('adminPembayaran.html')
+
+@app.route('/adminProdukTerlaris')
+def adminProdukTerlaris():
+    return render_template('adminProdukTerlaris.html')
+
+@app.route('/adminBannerHomepage')
+def adminBannerHomepage():
+    return render_template('adminBannerHomepage.html')
+
+@app.route('/adminFooter')
+def adminFooter():
+    return render_template('adminFooter.html')
+
+@app.route('/adminDataAdmin')
+def adminDataAdmin():
+    return render_template('adminDataAdmin.html')
+
+@app.route('/adminRiwayatPemesanan')
+def adminRiwayatPemesanan():
+    return render_template('adminRiwayatPemesanan.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")

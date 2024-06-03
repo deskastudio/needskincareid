@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <!-- sidebar start -->
+    {% include 'sidebarAdmin.html' %}
+    <!-- sidebar end -->
+
+    <!-- hero section start -->
+    <div class="flex-grow-1 p-3" style="background-color: #FAFBFF;">
+    {% include 'navbarAdmin.html' %}
+
+    <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
+        <div class="row align-items-center px-3">
+            <div class="col-lg-7">
+              <h3 class="fw-bold">Semua Produk</h3>
+            </div>
+            <div class="col-lg-2">
+              <button class="py-2 px-3" style="background-color: #00B087; color: white; border-radius: 8px;">Tambah Produk</button>
+            </div>
+            <div class="col-lg-3">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+          </div>
+
+          <div class="px-3">
+              <div class="p-3 mt-4" style="background-color: #F5F5F5; border-radius: 12px;">
+                  <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn fs-5" for="btnradio1" style="background-color: #DB7095; color: white; border-radius: 12px;">Sunscreen</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio2">Moisturizer</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Serum</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Toner</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Masker</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Facial Wash</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Micellar Water</label>
+    
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Essense</label>
+                  </div>
+              </div>
+          </div>
+
+          <div class="px-3">
+              <div class="p-3 mt-3">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Jenis Skincare</th>
+                        <th scope="col">Nama Produk</th>
+                        <th scope="col">Harga/Pcs</th>
+                        <th scope="col">Total Dus</th>
+                        <th scope="col">Total Harga</th>
+                        <th scope="col">Tindakan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Sunscreen</th>
+                        <td>Azarine</td>
+                        <td>Rp. 46.000</td>
+                        <td>2 dus</td>
+                        <td>Rp.466.500</td>
+                        <td>
+                            <button class="btn" style="background-color:#A6E7D8; color:#008767;">Edit</button>
+                            <button class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
+                          </td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+          </div>
+    </div>
+    <!-- hero section end -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
+</html>
