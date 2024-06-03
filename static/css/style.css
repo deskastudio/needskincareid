@@ -1,3 +1,49 @@
 body {
     font-family: 'Montserrat', sans-serif;
 }
+
+/* sidebar start */
+.sidebar {
+    height: 100vh;
+    transition: width 0.3s;
+  }
+  .sidebar.collapsed {
+    width: 4.5rem;
+  }
+  .sidebar.expanded {
+    width: 15rem;
+  }
+  .sidebar .nav-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s;
+  }
+  .sidebar .nav-link:hover {
+    background-color: #e9ecef;
+  }
+  .sidebar .nav-link i {
+    width: 24px;
+    text-align: center;
+  }
+  .sidebar .nav-link.active {
+    color: white; /* Warna putih untuk item aktif */
+    background-color: #5932EA !important; /* Warna latar belakang ungu untuk item aktif */
+  }
+  .sidebar.collapsed .nav-link span {
+    display: none;
+  }
+  .sidebar.expanded .nav-link span {
+    display: inline;
+  }
+  .sidebar .nav-link {
+      border-radius: 8px;
+  }
+  .sidebar .nav-link:hover {
+      color: white;
+      background-color: #5932EA !important;
+  }
+  .sidebar .nav-link {
+      color: #9197B3;
+  }
+/* sidebar end */

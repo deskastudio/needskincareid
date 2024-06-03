@@ -10,44 +10,7 @@
 
   <!-- Font Awesome CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-  <!-- Custom CSS -->
-  <style>
-    .sidebar {
-      height: 100vh;
-      transition: width 0.3s;
-    }
-    .sidebar.collapsed {
-      width: 4.5rem;
-    }
-    .sidebar.expanded {
-      width: 15rem;
-    }
-    .sidebar .nav-link {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color 0.3s;
-    }
-    .sidebar .nav-link:hover {
-      background-color: #e9ecef;
-    }
-    .sidebar .nav-link i {
-      width: 24px;
-      text-align: center;
-    }
-    .sidebar .nav-link.active {
-      color: white; /* Warna ungu untuk item aktif */
-      background-color: #5932EA !important; /* Warna latar belakang ungu untuk item aktif */
-    }
-    .sidebar.collapsed .nav-link span {
-      display: none;
-    }
-    .sidebar.expanded .nav-link span {
-      display: inline;
-    }
-  </style>
-  
+  <link rel="stylesheet" href="./static/css/style.css">
 
   <title>Admin Sidebar</title>
 </head>
@@ -56,68 +19,68 @@
     <div id="sidebar" class="sidebar bg-body-tertiary collapsed d-flex flex-column flex-shrink-0 p-2">
       <ul class="nav nav-pills flex-column mb-auto text-center text-sm-start">
         <li>
-            <a href="#" id="toggle-link" class="nav-link py-2" style="border-radius: 8px;">
+            <a href="#" id="toggle-link" class="nav-link py-2">
               <i class="fas fa-bars" style="color: black;"></i>
               <span class="fw-bold" style="color: black;">NeedSkincareID</span>
             </a>
           </li>
           <hr>
         <li>
-          <a href="#" id="dashboard-link" class="active nav-link py-2" style="border-radius: 8px;">
+          <a href="#" id="dashboard-link" class="nav-link py-2">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard <span class="float-end"> > </span></span>
           </a>
         </li>
         <li>
-          <a href="#" id="produk-link" class="nav-link py-2  rounded-0">
+          <a href="#" id="produk-link" class="nav-link py-2">
             <i class="fas fa-table"></i>
             <span>Produk <span class="float-end"> > </span></span>
           </a>
         </li>
         <li>
-          <a href="#" id="pelanggan-link" class="nav-link py-2  rounded-0">
+          <a href="#" id="pelanggan-link" class="nav-link py-2">
             <i class="fas fa-box-open"></i>
             <span>Pelanggan <span class="float-end"> > </span></span>
           </a>
         </li>
         <li>
-          <a href="#" id="pemesanan-link" class="nav-link py-2  rounded-0">
+          <a href="#" id="pemesanan-link" class="nav-link py-2">
             <i class="fas fa-users"></i>
             <span>Pemesanan <span class="float-end"> > </span></span>
           </a>
         </li>
         <li>
-            <a href="#" id="pembayaran-link" class="nav-link py-2  rounded-0">
+            <a href="#" id="pembayaran-link" class="nav-link py-2">
               <i class="fas fa-users"></i>
               <span>pembayaran <span class="float-end"> > </span></span>
             </a>
           </li>
           <li>
-            <a href="#" id="produkTerlaris-link" class="nav-link py-2  rounded-0">
+            <a href="#" id="produkTerlaris-link" class="nav-link py-2">
               <i class="fas fa-users"></i>
               <span>Produk Terlaris <span class="float-end"> > </span></span>
             </a>
           </li>
           <li>
-            <a href="#" id="bannerHomepage-link" class="nav-link py-2  rounded-0">
+            <a href="#" id="bannerHomepage-link" class="nav-link py-2">
               <i class="fas fa-users"></i>
               <span>Banner Homepage <span class="float-end"> > </span></span>
             </a>
           </li>
           <li>
-            <a href="#" id="footer-link" class="nav-link py-2  rounded-0">
+            <a href="#" id="footer-link" class="nav-link py-2">
               <i class="fas fa-users"></i>
               <span>Data Footer <span class="float-end"> > </span></span>
             </a>
           </li>
           <li>
-            <a href="#" id="admin-link" class="nav-link py-2  rounded-0">
+            <a href="#" id="admin-link" class="nav-link py-2">
               <i class="fas fa-users"></i>
               <span>Data Admin <span class="float-end"> > </span></span>
             </a>
           </li>
           <li>
-            <a href="#" id="riwayatPemesanan-link" class="nav-link py-2  rounded-0">
+            <a href="#" id="riwayatPemesanan-link" class="nav-link py-2">
               <i class="fas fa-users"></i>
               <span>Riwayat Pemesanan <span class="float-end"> > </span></span>
             </a>
@@ -143,27 +106,8 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-  <!-- Custom JS -->
-  <script>
-    const toggleSidebar = () => {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('collapsed');
-      sidebar.classList.toggle('expanded');
-    };
+  <script src="./static/js/main.js"></script>
 
-    document.getElementById('toggle-link').addEventListener('click', toggleSidebar);
-    document.getElementById('dashboard-link').addEventListener('click', toggleSidebar);
-    document.getElementById('produk-link').addEventListener('click', toggleSidebar);
-    document.getElementById('pelanggan-link').addEventListener('click', toggleSidebar);
-    document.getElementById('pemesanan-link').addEventListener('click', toggleSidebar);
-    document.getElementById('pembayaran-link').addEventListener('click', toggleSidebar);
-    document.getElementById('produkTerlaris-link').addEventListener('click', toggleSidebar);
-    document.getElementById('bannerHomepage-link').addEventListener('click', toggleSidebar);
-    document.getElementById('bannerHomepage-link').addEventListener('click', toggleSidebar);
-    document.getElementById('footer-link').addEventListener('click', toggleSidebar);
-    document.getElementById('admin-link').addEventListener('click', toggleSidebar);
-    document.getElementById('riwayatPemesanan-link').addEventListener('click', toggleSidebar);
-    document.getElementById('keluar-link').addEventListener('click', toggleSidebar);
-  </script>
 </body>
 </html>
+
