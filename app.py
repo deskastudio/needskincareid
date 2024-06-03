@@ -84,7 +84,7 @@ def login_user():
                 session['nama-lengkap'] = user['namaLengkap']
                 session['email'] = user['email']
                 session['user_id'] = str(user['_id'])
-                return redirect(url_for('produk'))
+                return redirect(url_for('index'))
             else:
                 flash("Email atau Password salah")
                 return redirect(url_for('login_user'))
