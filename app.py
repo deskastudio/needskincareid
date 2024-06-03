@@ -98,6 +98,10 @@ def login_user():
 def produk():
     return render_template('produk.html')
 
+@app.route('/sidebar')
+def sidebar():
+    return render_template('sidebarAdmin.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
