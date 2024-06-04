@@ -2,9 +2,10 @@ import os
 from posixpath import dirname, join
 import re
 from dotenv import load_dotenv
-from flask import Flask, flash, render_template, request, redirect, session, url_for
+from flask import Flask, flash, jsonify, render_template, request, redirect, session, url_for
 from pymongo import MongoClient
 import bcrypt
+from werkzeug.utils import secure_filename
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -12,14 +13,23 @@ load_dotenv(dotenv_path)
 MONGODB_URI = os.environ.get("MONGODB_URI")
 DB_NAME =  str(os.environ.get("DB_NAME"))
 
+# Configuration for file uploads
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
 client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
 
 users_collection = db['users']
+products_collection = db["products"]
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 app = Flask(__name__)
-
 app.secret_key = os.urandom(24)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -94,9 +104,10 @@ def login_user():
     else:
         return render_template('loginUser.html')
     
-@app.route('/produk')
+@app.route('/produk', methods=['GET'])
 def produk():
-    return render_template('produk.html')
+    products = products_collection.find()
+    return render_template('produk.html', products=products)
 
 @app.route('/sidebar')
 def sidebar():
@@ -108,7 +119,42 @@ def adminDashboard():
 
 @app.route('/adminProduk')
 def adminProduk():
-    return render_template('adminProduk.html')
+    products = products_collection.find()
+    return render_template('adminProduk.html', products=products)
+
+@app.route('/add_product', methods=['POST'])
+def add_product():
+    if 'photo' not in request.files:
+        return jsonify({"status": "error", "message": "No file part"})
+    
+    file = request.files['photo']
+    if file.filename == '':
+        return jsonify({"status": "error", "message": "No selected file"})
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        data = request.form
+        jenis_skincare = data['jenisSkincare']
+        nama_produk = data['namaProduk']
+        harga_per_pcs = data['hargaPerPcs']
+        total_dus = data['totalDus']
+        total_harga = data['totalHarga']
+
+        product = {
+            "jenis_skincare": jenis_skincare,
+            "nama_produk": nama_produk,
+            "harga_per_pcs": harga_per_pcs,
+            "total_dus": total_dus,
+            "total_harga": total_harga,
+            "photo": filename
+        }
+
+        products_collection.insert_one(product)
+        return jsonify({"status": "success", "message": "Product added successfully!"})
+    else:
+        return jsonify({"status": "error", "message": "Invalid file type"})
 
 @app.route('/adminPelanggan')
 def adminPelanggan():
