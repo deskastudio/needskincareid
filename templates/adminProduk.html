@@ -90,7 +90,7 @@
                         <td>Rp. {{ product.harga_per_pcs }}</td>
                         <td>{{ product.total_dus }}</td>
                         <td>Rp. {{ product.total_harga }}</td>
-                        <td><img src="../static/uploads/{{ product.photo }}" alt="{{ product.jenis_skincare }}" width="200px" class="product-image" style="cursor: pointer;"></td>
+                        <td><img src="../static/uploads/{{ product.photo }}" alt="{{ product.jenis_skincare }}" width="100px" class="product-image" style="cursor: pointer;"></td>
                         <td>
                             <button class="btn" style="background-color:#A6E7D8; color:#008767;">Edit</button>
                             <button class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
@@ -99,17 +99,38 @@
                     {% endfor %}
                     </tbody>
                   </table>
+                  
+                  <div class="d-flex justify-content-end">
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+
               </div>
           </div>
     </div>
     <!-- hero section end -->
 
-    <!-- Modal -->
+    <!-- Modal untuk Tambah Produk -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content bg-light p-3">
           <div class="modal-header">
-            <h5 class="modal-title" id="addProductModalLabel">Tambah Produk Baru</h5>
+            <h5 class="modal-title p-2" id="addProductModalLabel" style="background-color: #DB7095; color: white; border-radius: 8px;">Tambah Produk Baru</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -148,14 +169,14 @@
                 <label for="photo" class="form-label">Upload Foto</label>
                 <input type="file" class="form-control" id="photo" name="photo" required>
               </div>
-              <button type="submit" class="btn btn-primary">Tambah</button>
+              <button type="submit" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Tambah Produk</button>
             </form>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal for product image -->
+    <!-- Modal untuk melihat gambar produk -->
     <div class="modal fade" id="productImageModal" tabindex="-1" aria-labelledby="productImageModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
