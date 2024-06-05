@@ -47,3 +47,46 @@ body {
       color: #9197B3;
   }
 /* sidebar end */
+
+
+/* homepage start*/
+
+.banner {
+  margin: 0px;
+  padding: 0px;
+}
+  .banner-area {
+    width: 100%;
+    height: 300px;
+
+    margin: 220px 0px 220px 0px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+.product-card {
+  margin: 0;
+  padding: 0;
+}
+.card{
+  width: 20rem;
+  max-width: 1200px;
+  margin: 50px 100px 50px 100px;
+  border: 2px solid #DB7095;
+  border-radius: 10px;
+  justify-content: center;
+}
+  .card-body{
+    background-color: #DB7095;
+    color: white;
+    margin-top: 5px;
+  }
+  .card-title{
+    color: white;
+    font-weight: bold;
+  }
+/* homepage end */
