@@ -1,6 +1,7 @@
 import os
 from posixpath import dirname, join
 import re
+from bson import ObjectId
 from dotenv import load_dotenv
 from flask import Flask, flash, jsonify, render_template, request, redirect, session, url_for
 from pymongo import MongoClient
@@ -155,6 +156,30 @@ def add_product():
         return jsonify({"status": "success", "message": "Product added successfully!"})
     else:
         return jsonify({"status": "error", "message": "Invalid file type"})
+    
+@app.route('/edit_product', methods=['POST'])
+def edit_product():
+    data = request.form
+    product_id = data['productId']
+    jenis_skincare = data['editJenisSkincare']
+    nama_produk = data['editNamaProduk']
+    harga_per_pcs = data['editHargaPerPcs']
+    total_dus = data['editTotalDus']
+    total_harga = data['editTotalHarga']
+
+    # Lakukan pembaruan data pada database sesuai dengan product_id
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": {
+            "jenis_skincare": jenis_skincare,
+            "nama_produk": nama_produk,
+            "harga_per_pcs": harga_per_pcs,
+            "total_dus": total_dus,
+            "total_harga": total_harga
+        }}
+    )
+
+    return jsonify({"status": "success", "message": "Product updated successfully!"})
 
 @app.route('/adminPelanggan')
 def adminPelanggan():
