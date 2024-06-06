@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <!-- sidebar start -->
+    {% include 'sidebarAdmin.html' %}
+    <!-- sidebar end -->
+
+    <!-- hero section start -->
+    <div class="flex-grow-1 p-3" style="background-color: #FAFBFF;">
+    {% include 'navbarAdmin.html' %}
+
+    <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
+        <div class="row align-items-center px-3">
+            <div class="col-lg-9">
+              <h3 class="fw-bold">Semua Produk</h3>
+            </div>
+            <div class="col-lg-3">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+          </div>
+
+          <div class="px-3">
+              <div class="p-3 mt-3">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Nama Pengguna</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">No Handphone</th>
+                        <th scope="col">Tanggal Lahir</th>
+                        <th scope="col">Alamat</th>
+                        <th scope="col">Tindakan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for data in users %}
+                    <tr>
+                        <td>{{ data.namaLengkap }}</td>
+                        <td>{{ data.namaPengguna }}</td>
+                        <td>{{ data.email }}</td>
+                        <td>{{ data.no_handphone }}</td>
+                        <td>{{ data.tanggal_lahir }}</td>
+                        <td>{{ data.alamat }}</td>
+                        <td>
+                            <button onclick="confirmDelete('{{ data._id }}')" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                  <div class="d-flex justify-content-end">
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+
+              </div>
+          </div>
+    </div>
+    <!-- hero section end -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin ingin menghapus?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Jika pengguna mengkonfirmasi penghapusan, kirim permintaan AJAX ke server Flask
+                $.ajax({
+                    url: '/hapusDataPelanggan/' + id,
+                    type: 'POST',
+                    success: function(response) {
+                        // Jika penghapusan berhasil, tampilkan pesan sukses dan muat ulang halaman
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'Data berhasil dihapus',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Jika terjadi kesalahan, tampilkan pesan error
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan saat menghapus data',
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                });
+            }
+        });
+    }
+</script>
+  
+  </body>
+</html>

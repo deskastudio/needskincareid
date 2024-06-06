@@ -24,6 +24,13 @@ db = client[DB_NAME]
 
 users_collection = db['users']
 products_collection = db["products"]
+pemesanan_collection = db["pemesanan"]
+pembayaran_collection = db["pembayaran"]
+produkTerlaris_collection = db["produkTerlaris"]
+bannerHomepage_collection = db["bannerHomepage"]
+riwayatPemesanan_collection = db["riwayatPemesanan"]
+admin_collection = db["admin"]
+footer_collection = db["footer"]
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -181,9 +188,20 @@ def edit_product():
 
     return jsonify({"status": "success", "message": "Product updated successfully!"})
 
+@app.route('/hapusDataProduk/<string:_id>', methods=["GET", "POST"])
+def hapus_data_produk(_id):
+    db.products.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('admin_produk'))
+
 @app.route('/adminPelanggan')
 def adminPelanggan():
-    return render_template('adminPelanggan.html')
+    users = users_collection.find()
+    return render_template('adminPelanggan.html', users=users)
+
+@app.route('/hapusDataPelanggan/<string:_id>', methods=["GET", "POST"])
+def hapus_data_pelanggan(_id):
+    db.users.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('admin_pelanggan'))
 
 @app.route('/adminPemesanan')
 def adminPemesanan():
@@ -191,7 +209,23 @@ def adminPemesanan():
 
 @app.route('/adminPembayaran')
 def adminPembayaran():
-    return render_template('adminPembayaran.html')
+    pembayaran = db.pembayaran.find()
+    return render_template('adminPembayaran.html', pembayaran=pembayaran)
+
+@app.route('/addPembayaran', methods=['POST'])
+def add_pembayaran():
+    data = {
+        'metodePembayaran': request.form.get['metodePembayaran'],
+        'jenisPembayaran': request.form.get['jenisPembayaran'],
+        'nomorPembayaran': request.form.get['nomorPembayaran']
+    }
+    db.pembayaran.insert_one(data)
+    return jsonify({'status': 'Data berhasil ditambahkan'})
+
+@app.route('/hapusDataPembayaran/<id>', methods=['POST'])
+def hapus_data_pembayaran(id):
+    db.pembayaran.delete_one({'_id': ObjectId(id)})
+    return jsonify({'status': 'Data berhasil dihapus'})
 
 @app.route('/adminProdukTerlaris')
 def adminProdukTerlaris():

@@ -316,6 +316,45 @@
         });
 
       });
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin ingin menghapus?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Jika pengguna mengkonfirmasi penghapusan, kirim permintaan AJAX ke server Flask
+                    $.ajax({
+                        url: '/hapusDataProduk/' + id,
+                        type: 'POST',
+                        success: function(response) {
+                            // Jika penghapusan berhasil, tampilkan pesan sukses dan muat ulang halaman
+                            Swal.fire({
+                                title: 'Berhasil',
+                                text: 'Data berhasil dihapus',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            // Jika terjadi kesalahan, tampilkan pesan error
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Terjadi kesalahan saat menghapus data',
+                                icon: 'error',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    });
+                }
+            });
+        }
     </script>
   </body>
 </html>
