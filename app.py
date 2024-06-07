@@ -212,7 +212,7 @@ def adminPemesanan():
 
 @app.route('/adminPembayaran')
 def adminPembayaran():
-    pembayaran = db.pembayaran.find()
+    pembayaran = pembayaran_collection.find()
     return render_template('adminPembayaran.html', pembayaran=pembayaran)
 
 @app.route('/addPembayaran', methods=['POST'])
@@ -227,12 +227,18 @@ def add_pembayaran():
 
 @app.route('/addFooter', methods=['POST'])
 def add_footer():
-    data = {
-        'mediaSosial': request.form.get['mediaSosial'],
-        'LinkMediaSosial': request.form.get['LinkMediaSosial']
-    }
-    db.footer.insert_one(data)
-    return jsonify({'status': 'Data berhasil ditambahkan'})
+        data = request.form
+        mediaSosial = data['mediaSosial']
+        LinkMediaSosial = data['LinkMediaSosial']
+        
+        media = {
+            "mediaSosial": mediaSosial,
+            "LinkMediaSosial": LinkMediaSosial,
+            
+        }
+        footer_collection.insert_one(media)
+        return jsonify({"status": "success", "message": "Footer added successfully!"})
+
 
 @app.route('/hapusDataPembayaran/<id>', methods=['POST'])
 def hapus_data_pembayaran(id):
@@ -249,6 +255,7 @@ def adminBannerHomepage():
 
 @app.route('/adminFooter')
 def adminFooter():
+    footer = footer_collection.find()
     return render_template('adminFooter.html')
 
 @app.route('/adminDataAdmin')
