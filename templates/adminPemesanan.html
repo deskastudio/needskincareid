@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <!-- sidebar start -->
+    {% include 'sidebarAdmin.html' %}
+    <!-- sidebar end -->
+
+    <!-- hero section start -->
+    <div class="flex-grow-1 p-3" style="background-color: #FAFBFF;">
+    {% include 'navbarAdmin.html' %}
+
+    <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
+        <div class="row align-items-center px-3">
+            <div class="col-lg-9">
+              <h3 class="fw-bold">Semua Produk</h3>
+            </div>
+            <div class="col-lg-3">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+          </div>
+
+          <div class="px-3">
+              <div class="p-3 mt-4" style="background-color: #F5F5F5; border-radius: 12px;">
+                  <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn fs-5" for="btnradio1" style="background-color: #DB7095; color: white; border-radius: 12px;">Sunscreen</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio2">Moisturizer</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio3">Serum</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio4">Toner</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio5">Masker</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio6">Facial Wash</label>
+        
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio7">Micellar Water</label>
+    
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio8" autocomplete="off">
+                    <label class="btn fs-5" for="btnradio8">Essense</label>
+                  </div>
+              </div>
+          </div>
+
+          <div class="px-3">
+              <div class="p-3 mt-3">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nama </th>
+                        <th scope="col">No Handphone</th>
+                        <th scope="col">Nama Produk</th>
+                        <th scope="col">Jumlah Produk</th>
+                        <th scope="col">Harga Produk</th>
+                        <th scope="col">Tanggal Pemesanan</th>
+                        <th scope="col">Alamat</th>
+                        <th scope="col">Tindakan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for data in pemesanan %}
+                    <tr>
+                        <td>{{ data.nama }}</td>
+                        <td>{{ data.no_handphone }}</td>
+                        <td>{{ data.nama_produk }}</td>
+                        <td>{{ data.jumlah_produk }}</td>
+                        <td>{{ data.harga_produk }}</td>
+                        <td>{{ data.tanggal_pemesanan }}</td>
+                        <td>{{ data.alamat }}</td>
+                        <td>
+                            <button class="btn" style="background-color: #FFC5C5; color: #DF0404;">Selesai</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                  <div class="d-flex justify-content-end">
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page
+                          <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+
+              </div>
+          </div>
+    </div>
+    <!-- hero section end -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  </body>
+</html>
