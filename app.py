@@ -23,14 +23,6 @@ client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
 
 users_collection = db['users']
-products_collection = db["products"]
-pemesanan_collection = db["pemesanan"]
-pembayaran_collection = db["pembayaran"]
-produkTerlaris_collection = db["produkTerlaris"]
-bannerHomepage_collection = db["bannerHomepage"]
-riwayatPemesanan_collection = db["riwayatPemesanan"]
-admin_collection = db["admin"]
-footer_collection = db["footer"]
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -114,8 +106,7 @@ def login_user():
     
 @app.route('/produk', methods=['GET'])
 def produk():
-    products = products_collection.find()
-    return render_template('produk.html', products=products)
+    return render_template('produk.html')
 
 @app.route('/sidebar')
 def sidebar():
@@ -127,90 +118,99 @@ def adminDashboard():
 
 @app.route('/adminProduk')
 def adminProduk():
-    products = products_collection.find()
+    products = db.products.find()
     return render_template('adminProduk.html', products=products)
 
-@app.route('/add_product', methods=['POST'])
-def add_product():
-    if 'photo' not in request.files:
-        return jsonify({"status": "error", "message": "No file part"})
-    
-    file = request.files['photo']
-    if file.filename == '':
-        return jsonify({"status": "error", "message": "No selected file"})
-
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+@app.route('/tambahDataProduk', methods=['GET', 'POST'])
+def tambah_data_produk():
+    if request.method == 'POST':
+        jenisSkincare = request.form['jenisSkincare']
+        namaProduk = request.form['namaProduk']
+        hargaPerPcs = request.form['hargaPerPcs']
+        totalDus = request.form['totalDus']
+        totalHarga = request.form['totalHarga']
+        photo = request.files['photo']
         
-        data = request.form
-        jenis_skincare = data['jenisSkincare']
-        nama_produk = data['namaProduk']
-        harga_per_pcs = data['hargaPerPcs']
-        total_dus = data['totalDus']
-        total_harga = data['totalHarga']
+        if photo:
+            nama_file_asli = photo.filename
+            nama_file_gambar = secure_filename(nama_file_asli)
+            file_path = f'./static/assets/imgProduk/{nama_file_gambar}'
+            photo.save(file_path)
+        else:
+            nama_file_gambar = None
+            
+        doc = {
+            'jenis_skincare': jenisSkincare,
+            'nama_produk': namaProduk,
+            'harga_per_pcs': hargaPerPcs,
+            'total_dus': totalDus,
+            'total_harga': totalHarga,
+            'photo': nama_file_gambar
+        }
+        
+        db.products.insert_one(doc)
+        return redirect(url_for("adminProduk"))
+        
+    return render_template('tambahDataProduk.html')
 
-        product = {
-            "jenis_skincare": jenis_skincare,
-            "nama_produk": nama_produk,
-            "harga_per_pcs": harga_per_pcs,
-            "total_dus": total_dus,
-            "total_harga": total_harga,
-            "photo": filename
+@app.route('/editDataProduk/<string:_id>', methods=["GET", "POST"])
+def edit_data_produk(_id):
+    if request.method == 'POST':
+        jenisSkincare = request.form['jenisSkincare']
+        namaProduk = request.form['namaProduk']
+        hargaPerPcs = request.form['hargaPerPcs']
+        totalDus = request.form['totalDus']
+        totalHarga = request.form['totalHarga']
+        photo = request.files['photo']
+
+        # Inisialisasi nama_file_gambar dengan nilai default
+        nama_file_gambar = None
+
+        # Simpan file jika ada
+        if photo:
+            nama_file_asli = photo.filename
+            nama_file_gambar = secure_filename(nama_file_asli)
+            file_path = f'./static/assets/imgProduk/{nama_file_gambar}'
+            photo.save(file_path)
+        
+        # Buat dictionary untuk update
+        doc = {
+            'jenis_skincare': jenisSkincare,
+            'nama_produk': namaProduk,
+            'harga_per_pcs': hargaPerPcs,
+            'total_dus': totalDus,
+            'total_harga': totalHarga
         }
 
-        products_collection.insert_one(product)
-        return jsonify({"status": "success", "message": "Product added successfully!"})
-    else:
-        return jsonify({"status": "error", "message": "Invalid file type"})
+        # Tambahkan nama_file_gambar ke dictionary jika ada
+        if nama_file_gambar:
+            doc['photo'] = nama_file_gambar
+        
+        # Update database
+        db.products.update_one({'_id': ObjectId(_id)}, {'$set': doc})
+        return redirect(url_for('adminProduk'))
     
-@app.route('/edit_product', methods=['POST'])
-def edit_product():
-    data = request.form
-    product_id = data['productId']
-    jenis_skincare = data['editJenisSkincare']
-    nama_produk = data['editNamaProduk']
-    harga_per_pcs = data['editHargaPerPcs']
-    total_dus = data['editTotalDus']
-    total_harga = data['editTotalHarga']
-
-    # Lakukan pembaruan data pada database sesuai dengan product_id
-    products_collection.update_one(
-        {"_id": ObjectId(product_id)},
-        {"$set": {
-            "jenis_skincare": jenis_skincare,
-            "nama_produk": nama_produk,
-            "harga_per_pcs": harga_per_pcs,
-            "total_dus": total_dus,
-            "total_harga": total_harga
-        }}
-    )
-
-    return jsonify({"status": "success", "message": "Product updated successfully!"})
+    data = db.products.find_one({'_id': ObjectId(_id)})
+    return render_template('editDataProduk.html', data=data)
 
 @app.route('/hapusDataProduk/<string:_id>', methods=["GET", "POST"])
 def hapus_data_produk(_id):
     db.products.delete_one({'_id': ObjectId(_id)})
-    return redirect(url_for('admin_produk'))
+    return redirect(url_for('adminProduk'))
 
 @app.route('/adminPelanggan')
 def adminPelanggan():
     users = users_collection.find()
     return render_template('adminPelanggan.html', users=users)
 
-@app.route('/hapusDataPelanggan/<string:_id>', methods=["GET", "POST"])
-def hapus_data_pelanggan(_id):
-    db.users.delete_one({'_id': ObjectId(_id)})
-    return redirect(url_for('admin_pelanggan'))
-
 @app.route('/adminPemesanan')
 def adminPemesanan():
     return render_template('adminPemesanan.html')
 
-@app.route('/adminPembayaran')
-def adminPembayaran():
-    pembayaran = db.pembayaran.find()
-    return render_template('adminPembayaran.html', pembayaran=pembayaran)
+# @app.route('/adminPembayaran')
+# def adminPembayaran():
+#     pembayaran = pembayaran_collection.find()
+#     return render_template('adminPembayaran.html', pembayaran=pembayaran)
 
 @app.route('/addPembayaran', methods=['POST'])
 def add_pembayaran():
@@ -221,6 +221,21 @@ def add_pembayaran():
     }
     db.pembayaran.insert_one(data)
     return jsonify({'status': 'Data berhasil ditambahkan'})
+
+# @app.route('/addFooter', methods=['POST'])
+# def add_footer():
+#         data = request.form
+#         mediaSosial = data['mediaSosial']
+#         LinkMediaSosial = data['LinkMediaSosial']
+        
+#         media = {
+#             "mediaSosial": mediaSosial,
+#             "LinkMediaSosial": LinkMediaSosial,
+            
+#         }
+#         footer_collection.insert_one(media)
+#         return jsonify({"status": "success", "message": "Footer added successfully!"})
+
 
 @app.route('/hapusDataPembayaran/<id>', methods=['POST'])
 def hapus_data_pembayaran(id):
@@ -235,9 +250,10 @@ def adminProdukTerlaris():
 def adminBannerHomepage():
     return render_template('adminBannerHomepage.html')
 
-@app.route('/adminFooter')
-def adminFooter():
-    return render_template('adminFooter.html')
+# @app.route('/adminFooter')
+# def adminFooter():
+#     footer = footer_collection.find()
+#     return render_template('adminFooter.html')
 
 @app.route('/adminDataAdmin')
 def adminDataAdmin():

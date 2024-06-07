@@ -52,7 +52,7 @@
                         <td>{{ data.namaLengkap }}</td>
                         <td>{{ data.namaPengguna }}</td>
                         <td>{{ data.email }}</td>
-                        <td>{{ data.no_handphone }}</td>
+                        <td>{{ data.no_handphone }}</td>  
                         <td>{{ data.tanggal_lahir }}</td>
                         <td>{{ data.alamat }}</td>
                         <td>
@@ -91,46 +91,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Apakah Anda yakin ingin menghapus?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Tidak',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Jika pengguna mengkonfirmasi penghapusan, kirim permintaan AJAX ke server Flask
-                $.ajax({
-                    url: '/hapusDataPelanggan/' + id,
-                    type: 'POST',
-                    success: function(response) {
-                        // Jika penghapusan berhasil, tampilkan pesan sukses dan muat ulang halaman
-                        Swal.fire({
-                            title: 'Berhasil',
-                            text: 'Data berhasil dihapus',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        // Jika terjadi kesalahan, tampilkan pesan error
-                        Swal.fire({
-                            title: 'Gagal',
-                            text: 'Terjadi kesalahan saat menghapus data',
-                            icon: 'error',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    }
-                });
-            }
-        });
-    }
-</script>
-  
+
   </body>
 </html>

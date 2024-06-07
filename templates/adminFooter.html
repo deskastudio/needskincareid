@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <!-- sidebar start -->
+    {% include 'sidebarAdmin.html' %}
+    <!-- sidebar end -->
+
+    <!-- hero section start -->
+    <div class="flex-grow-1 p-3" style="background-color: #FAFBFF;">
+        {% include 'navbarAdmin.html' %}
+
+        <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
+            <div class="row align-items-center px-3">
+                <div class="col-lg-9">
+                    <h3 class="fw-bold">Semua Media Sosial</h3>
+                </div>
+                <div class="col-lg-2">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="py-2 px-3 btn" style="background-color: #00B087; color: white; border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                      Tambah Media Sosial
+                    </button>
+                  </div>
+                <div class="col-lg-3">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="px-3">
+                <div class="p-3 mt-3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Media Sosial</th>
+                                <th scope="col">Link Media Sosial</th>
+                                <th scope="col">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for media in footer %}
+                            <tr>
+                                <td>{{ media.mediaSosial }}</td>
+                                <td>{{ media.LinkMediaSosial }}</td>
+                                <td>
+                                    <button class="btn edit-button" data-product-id="{{ product.id }}"
+                                        data-product-name="{{ product.nama_produk }}"
+                                        data-product-price="{{ product.harga_per_pcs }}"
+                                        data-product-quantity="{{ product.total_dus }}"
+                                        data-product-total-price="{{ product.total_harga }}"
+                                        data-product-type="{{ product.jenis_skincare }}"
+                                        style="background-color:#A6E7D8; color:#008767;">Edit</button>
+                                    <button onclick="confirmDelete('{{ media._id }}')" class="btn"
+                                        style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-end">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal untuk Tambah Media Sosial -->
+     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-light p-3">
+            <div class="modal-header">
+              <h5 class="modal-title p-2" id="addProductModalLabel" style="background-color: #DB7095; color: white; border-radius: 8px;">Tambah Media Sosial</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="addFooterForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="mediaSosial" class="form-label">Media Sosial</label>
+                  <input type="text" class="form-control" id="mediaSosial" name="mediaSosial" required>
+                </div>
+                <div class="mb-3">
+                  <label for="LinkMediaSosial" class="form-label">Link Media Sosial</label>
+                  <input type="text" class="form-control" id="LinkMediaSosial" name="LinkMediaSosial" required>
+                </div>
+                <button type="button" id="submitFooterBtn" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Tambah</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- hero section end -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function() {
+            $("#addFooterForm").on("submit", function(event) {
+              event.preventDefault();
+    
+              var formData = new FormData(this);
+    
+              $.ajax({
+                type: "POST",
+                url: "/add_footer",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                  alert(response.message);
+                  $("#addProductModal").modal('hide');
+                  location.reload();
+                },
+                error: function(error) {
+                  alert("Error adding footer: " + error.responseJSON.message);
+                }
+              });
+            });
+        });
+
+        
+        
+        
+    </script>
+</body>
+
+</html>
