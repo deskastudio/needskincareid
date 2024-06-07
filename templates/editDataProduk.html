@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Edit Produk</title>
+</head>
+
+<body>
+    <!-- sidebar start -->
+    {% include 'sidebarAdmin.html' %}
+    <!-- sidebar end -->
+
+    <!-- hero section start -->
+    <div class="flex-grow-1 p-3" style="background-color: #FAFBFF;">
+        {% include 'navbarAdmin.html' %}
+
+        <!-- Modal untuk Edit Produk -->
+        <div class="modal-body">
+            <form action="/editDataProduk/{{data._id}}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="jenisSkincare" class="form-label">Jenis Skincare</label>
+                    <select class="form-select" id="jenisSkincare" name="jenisSkincare" required>
+                        <option value="">Pilih Jenis Skincare</option>
+                        <option value="Sunscreen" {% if data.jenis_skincare == 'Sunscreen' %}selected{% endif %}>Sunscreen</option>
+                        <option value="Moisturizer" {% if data.jenis_skincare == 'Moisturizer' %}selected{% endif %}>Moisturizer</option>
+                        <option value="Serum" {% if data.jenis_skincare == 'Serum' %}selected{% endif %}>Serum</option>
+                        <option value="Toner" {% if data.jenis_skincare == 'Toner' %}selected{% endif %}>Toner</option>
+                        <option value="Masker" {% if data.jenis_skincare == 'Masker' %}selected{% endif %}>Masker</option>
+                        <option value="Facial Wash" {% if data.jenis_skincare == 'Facial Wash' %}selected{% endif %}>Facial Wash</option>
+                        <option value="Micellar Water" {% if data.jenis_skincare == 'Micellar Water' %}selected{% endif %}>Micellar Water</option>
+                        <option value="Essense" {% if data.jenis_skincare == 'Essense' %}selected{% endif %}>Essense</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="namaProduk" class="form-label">Nama Produk</label>
+                    <input type="text" class="form-control" id="namaProduk" name="namaProduk" required value="{{ data.nama_produk }}">
+                </div>
+                <div class="mb-3">
+                    <label for="hargaPerPcs" class="form-label">Harga/Pcs</label>
+                    <input type="number" class="form-control" id="hargaPerPcs" name="hargaPerPcs" required value="{{ data.harga_per_pcs }}">
+                </div>
+                <div class="mb-3">
+                    <label for="totalDus" class="form-label">Total Dus</label>
+                    <input type="number" class="form-control" id="totalDus" name="totalDus" required value="{{ data.total_dus }}">
+                </div>
+                <div class="mb-3">
+                    <label for="totalHarga" class="form-label">Total Harga</label>
+                    <input type="number" class="form-control" id="totalHarga" name="totalHarga" required value="{{ data.total_harga }}">
+                </div>
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Upload Foto</label>
+                    <input type="file" class="form-control" id="photo" name="photo">
+                    <img src="{{ url_for('static', filename='assets/imgProduk/' ~ data.photo) }}" alt="Current Image" width="100px" class="mt-2">
+                </div>
+                <button type="submit" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+    <!-- hero section end -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>

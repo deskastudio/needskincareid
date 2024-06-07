@@ -26,7 +26,7 @@
             </div>
             <div class="col-lg-2">
               <!-- Button trigger modal -->
-              <button type="button" class="py-2 px-3 btn" style="background-color: #00B087; color: white; border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#addProductModal">
+              <button onclick="window.location.href='/tambahDataProduk'" type="button" class="py-2 px-3 btn" style="background-color: #00B087; color: white; border-radius: 8px;">
                 Tambah Produk
               </button>
             </div>
@@ -83,17 +83,17 @@
                       </tr>
                     </thead>
                     <tbody>
-                      {% for product in products %}
+                      {% for data in products %}
                     <tr>
-                        <td>{{ product.jenis_skincare }}</td>
-                        <td>{{ product.nama_produk }}</td>
-                        <td>Rp. {{ product.harga_per_pcs }}</td>
-                        <td>{{ product.total_dus }}</td>
-                        <td>Rp. {{ product.total_harga }}</td>
-                        <td><img src="../static/uploads/{{ product.photo }}" alt="{{ product.jenis_skincare }}" width="100px" class="product-image" style="cursor: pointer;"></td>
+                        <td>{{ data.jenis_skincare }}</td>
+                        <td>{{ data.nama_produk }}</td>
+                        <td>Rp. {{ data.harga_per_pcs }}</td>
+                        <td>{{ data.total_dus }}</td>
+                        <td>Rp. {{ data.total_harga }}</td>
+                        <td><img src="../static/assets/imgProduk/{{ data.photo }}" alt="{{ data.jenis_skincare }}" width="100px" class="product-image" style="cursor: pointer;"></td>
                         <td>
-                            <button class="btn edit-button" data-product-id="{{ product.id }}" data-product-name="{{ product.nama_produk }}" data-product-price="{{ product.harga_per_pcs }}" data-product-quantity="{{ product.total_dus }}" data-product-total-price="{{ product.total_harga }}" data-product-type="{{ product.jenis_skincare }}" style="background-color:#A6E7D8; color:#008767;">Edit</button>
-                            <button class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
+                            <button onclick="window.location.href='/editDataProduk/{{ data._id }}';" class="btn edit-button" style="background-color:#A6E7D8; color:#008767;">Edit</button>
+                            <button onclick="window.location.href='/hapusDataProduk/{{ data._id }}';" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -119,62 +119,10 @@
                       </ul>
                     </nav>
                   </div>
-
               </div>
           </div>
     </div>
     <!-- hero section end -->
-
-    <!-- Modal untuk Tambah Produk -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content bg-light p-3">
-          <div class="modal-header">
-            <h5 class="modal-title p-2" id="addProductModalLabel" style="background-color: #DB7095; color: white; border-radius: 8px;">Tambah Produk Baru</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="addProductForm" enctype="multipart/form-data">
-              <div class="mb-3">
-                <label for="jenisSkincare" class="form-label">Jenis Skincare</label>
-                <select class="form-select" id="jenisSkincare" name="jenisSkincare" required>
-                  <option value="">Pilih Jenis Skincare</option>
-                  <option value="Sunscreen">Sunscreen</option>
-                  <option value="Moisturizer">Moisturizer</option>
-                  <option value="Serum">Serum</option>
-                  <option value="Toner">Toner</option>
-                  <option value="Masker">Masker</option>
-                  <option value="Facial Wash">Facial Wash</option>
-                  <option value="Micellar Water">Micellar Water</option>
-                  <option value="Essense">Essense</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="namaProduk" class="form-label">Nama Produk</label>
-                <input type="text" class="form-control" id="namaProduk" name="namaProduk" required>
-              </div>
-              <div class="mb-3">
-                <label for="hargaPerPcs" class="form-label">Harga/Pcs</label>
-                <input type="number" class="form-control" id="hargaPerPcs" name="hargaPerPcs" required>
-              </div>
-              <div class="mb-3">
-                <label for="totalDus" class="form-label">Total Dus</label>
-                <input type="number" class="form-control" id="totalDus" name="totalDus" required>
-              </div>
-              <div class="mb-3">
-                <label for="totalHarga" class="form-label">Total Harga</label>
-                <input type="number" class="form-control" id="totalHarga" name="totalHarga" required>
-              </div>
-              <div class="mb-3">
-                <label for="photo" class="form-label">Upload Foto</label>
-                <input type="file" class="form-control" id="photo" name="photo" required>
-              </div>
-              <button type="submit" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Tambah Produk</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Modal untuk melihat gambar produk -->
     <div class="modal fade" id="productImageModal" tabindex="-1" aria-labelledby="productImageModalLabel" aria-hidden="true">
@@ -187,80 +135,9 @@
       </div>
     </div>
 
-    <!-- Modal untuk Edit Produk -->
-    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content bg-light p-3">
-          <div class="modal-header">
-            <h5 class="modal-title p-2" id="editProductModalLabel" style="background-color: #DB7095; color: white; border-radius: 8px;">Edit Produk</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="editProductForm" enctype="multipart/form-data">
-              <input type="hidden" id="productId" name="productId">
-              <div class="mb-3">
-                <label for="editJenisSkincare" class="form-label">Jenis Skincare</label>
-                <select class="form-select" id="editJenisSkincare" name="editJenisSkincare" required>
-                  <option value="">Pilih Jenis Skincare</option>
-                  <option value="Sunscreen">Sunscreen</option>
-                  <option value="Moisturizer">Moisturizer</option>
-                  <option value="Serum">Serum</option>
-                  <option value="Toner">Toner</option>
-                  <option value="Masker">Masker</option>
-                  <option value="Facial Wash">Facial Wash</option>
-                  <option value="Micellar Water">Micellar Water</option>
-                  <option value="Essense">Essense</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="editNamaProduk" class="form-label">Nama Produk</label>
-                <input type="text" class="form-control" id="editNamaProduk" name="editNamaProduk" required>
-              </div>
-              <div class="mb-3">
-                <label for="editHargaPerPcs" class="form-label">Harga/Pcs</label>
-                <input type="number" class="form-control" id="editHargaPerPcs" name="editHargaPerPcs" required>
-              </div>
-              <div class="mb-3">
-                <label for="editTotalDus" class="form-label">Total Dus</label>
-                <input type="number" class="form-control" id="editTotalDus" name="editTotalDus" required>
-              </div>
-              <div class="mb-3">
-                <label for="editTotalHarga" class="form-label">Total Harga</label>
-                <input type="number" class="form-control" id="editTotalHarga" name="editTotalHarga" required>
-              </div>
-                <button type="submit" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Simpan Perubahan</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-      $(document).ready(function() {
-        $("#addProductForm").on("submit", function(event) {
-          event.preventDefault();
-
-          var formData = new FormData(this);
-
-          $.ajax({
-            type: "POST",
-            url: "/add_product",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-              alert(response.message);
-              $("#addProductModal").modal('hide');
-              location.reload();
-            },
-            error: function(error) {
-              alert("Error adding product: " + error.responseJSON.message);
-            }
-          });
-        });
-
         // untuk menampilkan gambar produk
         const productImages = document.querySelectorAll('.product-image');
         productImages.forEach(function(image) {
@@ -271,89 +148,6 @@
                 modal.show();
             });
         });
-
-        // Edit Product
-        $(".edit-button").click(function() {
-          var productId = $(this).data("product-id");
-          var productName = $(this).data("product-name");
-          var productPrice = $(this).data("product-price");
-          var productQuantity = $(this).data("product-quantity");
-          var productTotalPrice = $(this).data("product-total-price");
-          var productType = $(this).data("product-type");
-
-          $("#productId").val(productId);
-          $("#editJenisSkincare").val(productType);
-          $("#editNamaProduk").val(productName);
-          $("#editHargaPerPcs").val(productPrice);
-          $("#editTotalDus").val(productQuantity);
-          $("#editTotalHarga").val(productTotalPrice);
-
-          $("#editProductModal").modal("show");
-        });
-
-        // Submit Edit Product Form
-        $("#editProductForm").on("submit", function(event) {
-          event.preventDefault();
-    
-          var formData = new FormData(this);
-    
-          $.ajax({
-            type: "POST",
-            url: "/edit_product",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-              alert(response.message);
-              $("#editProductModal").modal('hide');
-              location.reload();
-            },
-            error: function(xhr, status, error) {
-              alert("Error editing product: " + error);
-            }
-          });
-        });
-
-      });
-
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'Apakah Anda yakin ingin menghapus?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Jika pengguna mengkonfirmasi penghapusan, kirim permintaan AJAX ke server Flask
-                    $.ajax({
-                        url: '/hapusDataProduk/' + id,
-                        type: 'POST',
-                        success: function(response) {
-                            // Jika penghapusan berhasil, tampilkan pesan sukses dan muat ulang halaman
-                            Swal.fire({
-                                title: 'Berhasil',
-                                text: 'Data berhasil dihapus',
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            // Jika terjadi kesalahan, tampilkan pesan error
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: 'Terjadi kesalahan saat menghapus data',
-                                icon: 'error',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        }
-                    });
-                }
-            });
-        }
     </script>
   </body>
 </html>
