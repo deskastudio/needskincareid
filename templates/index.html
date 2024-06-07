@@ -12,7 +12,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
 
-    <title>Hello, world!</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const track = document.querySelector(".carousel-content");
+        const cards = document.querySelectorAll(".carousel-card");
+        const prevBtn = document.querySelector(".prev");
+        const nextBtn = document.querySelector(".next");
+      
+        let index = 0;
+        const cardWidth = cards[0].offsetWidth + 20; // Lebar card + margin-right
+        const totalCards = cards.length;
+      
+        function updateCarousel() {
+          track.style.transform = `translateX(-${index * cardWidth}px)`;
+        }
+      
+        prevBtn.addEventListener("click", function() {
+          index = Math.max(index - 1, 0);
+          updateCarousel();
+        });
+      
+        nextBtn.addEventListener("click", function() {
+          index = (index + 1) % totalCards; // Menggunakan modulo untuk kembali ke card pertama jika sudah di card terakhir
+          updateCarousel();
+        });
+      });
+      </script>
+
+    <title>Beranda</title>
     
   </head>
   <body>
@@ -23,7 +50,7 @@
     <!-- homepage start -->
 
     <!-- banner start -->
-      <section id="banner">
+      <section class="banner">
         <div class="banner-area">
           <img src="../static/img/banner.png" >
         </div>
@@ -64,7 +91,7 @@
             <img src="../static/img/owner.png">
           </div>
           <div class="about-text">
-            <h2 class="fw-bold text-center" style="margin-bottom: 20px;">Tentang Kami</h2>
+            <h2 class="fw-bold text-center" style="padding-top: 20px;">Tentang Kami</h2>
             <p>Needskincareid adalah platform reseller yang
               didirikan pada tahun 2021 oleh Khairunnisa Hayyu 
               Kusnadi dengan semangat kewirausahaan dan
@@ -80,28 +107,97 @@
         </section>
       </div>
     <!-- Tentang kami end -->
-    
-    <!-- homepage end -->
-
-    
-
-    <!-- tentang kami start -->
-    <section id="tentangKami">
+    <section class="product-container" style="background-color: #FEE8EE;">
+      <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Produk Terlaris</h3>
+      <div class="product-card">
+        <div class="card">
+          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
+          <div class="card-body">
+            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
+            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
+            <button class="btn">Beli Sekarang</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
+          <div class="card-body">
+            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
+            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
+            <button class="btn">Beli Sekarang</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
+          <div class="card-body">
+            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
+            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
+            <button class="btn">Beli Sekarang</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
+          <div class="card-body">
+            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
+            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
+            <button class="btn">Beli Sekarang</button>
+          </div>
+        </div>
+      </div>
 
     </section>
-    <!-- tentang kami end -->
-
+    
     <!-- manfaat start  -->
-    <section id="manfaat">
-
-    </section>
+    <div class="carousel-container">
+      <h3 class="fw-bold text-center" style="padding-top: 30px; color: white">Manfaat Penggunaan Skincare</h3>
+      <div class="carousel-content">
+        <div class="carousel-card">
+          <h5>Membantu Memelihara Kulit</h5>
+          <p>Menjaga kesehatan kulit agar tetap sehat dengan menyediakan nutrisi yang dibutuhkan</p>
+        </div>
+        <div class="carousel-card">
+          <h5>Mencegah Penuaan Dini</h5>
+          <p>Penggunaan produk skincare khususnya produk yang mengandung antioksidan, 
+             retinol, dan asam hialuronat membantu mengurangi tanda-tanda penuaan</p>
+        </div>
+        <div class="carousel-card">
+          <h5>Mencerahkan Kulit</h5>
+          <p>Dapat mencerahkan kulit dan mengurangi noda hitam dengan mengandung vitamin C</p>
+        </div>
+        <div class="carousel-card">
+          <h5>Membantu permasalahan kulit</h5>
+          <p>Penggunaan produk skincare dapat mengatasi berbagai masalah kulit seperti 
+            jerawat, kulit kering, rosacea, dll.</p>
+        </div>
+        <div class="carousel-card">
+          <h5>Menjaga Kelembapan Kulit</h5>
+          <p>Membantu menjaga kulit agar tetap lembap sepanjang hari, mencegah kekeringan dan 
+            kulit melupas yang menyebabkan ketidaknyamanan</p>
+        </div>
+        <div class="carousel-card">
+          <h5>Dapat mengontrol minyak di wajah</h5>
+          <p>Bagi mereka dengan kulit berminyak dengan menggunakan produk skincare yang tepat
+            dapat membantu mengontrol produksi minyak </p>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-control prev">&#10094;</button>
+        <button class="carousel-control next">&#10095;</button>
+      </div>
+  </div>
     <!-- manfaat end -->
 
     <!-- payment method start -->
-    <section id="paymentMethod">
-
+    <section class="paymentMethod">
+      <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Metode Pembayaran</h3>
+      <div class="image-container">
+        <img src="../static/img/mandiri.png" alt="Bank Mandiri">
+        <img src="../static/img/bca.png" alt="Bank BCA">
+        <img src="..//static/img/bri.png" alt="Bank BRI">
+      </div>
     </section>
     <!-- payment method end -->
+    
+    <!-- homepage end -->
 
     <!-- footer start -->
     {% include 'footer.html' %}
