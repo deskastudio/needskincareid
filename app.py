@@ -198,10 +198,13 @@ def adminPelanggan():
     users = users_collection.find()
     return render_template('adminPelanggan.html', users=users)
 
-@app.route('/hapusDataPelanggan/<string:_id>', methods=["GET", "POST"])
+@app.route('/hapusDataPelanggan/<string:_id>', methods=["POST"])
 def hapus_data_pelanggan(_id):
-    db.users.delete_one({'_id': ObjectId(_id)})
-    return redirect(url_for('admin_pelanggan'))
+    result = db.users.delete_one({'_id': ObjectId(_id)})
+    if result.deleted_count == 1:
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False}), 404
 
 @app.route('/adminPemesanan')
 def adminPemesanan():
