@@ -222,6 +222,15 @@ def add_pembayaran():
     db.pembayaran.insert_one(data)
     return jsonify({'status': 'Data berhasil ditambahkan'})
 
+@app.route('/addFooter', methods=['POST'])
+def add_footer():
+    data = {
+        'mediaSosial': request.form.get['mediaSosial'],
+        'LinkMediaSosial': request.form.get['LinkMediaSosial']
+    }
+    db.footer.insert_one(data)
+    return jsonify({'status': 'Data berhasil ditambahkan'})
+
 @app.route('/hapusDataPembayaran/<id>', methods=['POST'])
 def hapus_data_pembayaran(id):
     db.pembayaran.delete_one({'_id': ObjectId(id)})
