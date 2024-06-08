@@ -22,11 +22,11 @@
     <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
         <div class="row align-items-center px-3">
             <div class="col-lg-7">
-              <h3 class="fw-bold">Semua Produk</h3>
+              <h3 class="fw-bold">Semua Pembayaran</h3>
             </div>
             <div class="col-lg-2">
               <!-- Button trigger modal -->
-              <button type="button" class="py-2 px-3 btn" style="background-color: #00B087; color: white; border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#addProductModal">
+              <button onclick="window.location.href='/tambahDataPembayaran'" type="button" class="py-2 px-3 btn" style="background-color: #00B087; color: white; border-radius: 8px;">
                 Tambah Pembayaran
               </button>
             </div>
@@ -56,7 +56,8 @@
                         <td>{{ data.jenisPembayaran }}</td>
                         <td>{{ data.nomorPembayaran }}</td>
                         <td>
-                            <button onclick="confirmDelete('{{ data._id }}')" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
+                          <button onclick="window.location.href='/editDataPembayaran/{{ data._id }}';" class="btn edit-button" style="background-color:#A6E7D8; color:#008767;">Edit</button>
+                          <button onclick="window.location.href='/hapusDataPembayaran/{{ data._id }}';" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -86,112 +87,10 @@
               </div>
           </div>
     </div>
-
-    <!-- Modal untuk Tambah Produk -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content bg-light p-3">
-            <div class="modal-header">
-              <h5 class="modal-title p-2" id="addProductModalLabel" style="background-color: #DB7095; color: white; border-radius: 8px;">Tambah Pembayaran Baru</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form id="addPembayaranForm" enctype="multipart/form-data">
-                <div class="mb-3">
-                  <label for="metodePembayaran" class="form-label">Metode Pembayaran</label>
-                  <input type="text" class="form-control" id="metodePembayaran" name="metodePembayaran" required>
-                </div>
-                <div class="mb-3">
-                  <label for="jenisPembayaran" class="form-label">Jenis Pembayaran</label>
-                  <input type="text" class="form-control" id="jenisPembayaran" name="jenisPembayaran" required>
-                </div>
-                <div class="mb-3">
-                  <label for="nomorPembayaran" class="form-label">Nomor Pembayaran</label>
-                  <input type="number" class="form-control" id="nomorPembayaran" name="nomorPembayaran" required>
-                </div>
-                <button type="button" id="submitPembayaranBtn" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Tambah Pembayaran</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
     <!-- hero section end -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-      $(document).ready(function(){
-          $("#submitPembayaranBtn").click(function(){
-              var formData = {
-                  metodePembayaran: $("#metodePembayaran").val(),
-                  jenisPembayaran: $("#jenisPembayaran").val(),
-                  nomorPembayaran: $("#nomorPembayaran").val()
-              };
-
-              $.ajax({
-                  type: "POST",
-                  url: "/addPembayaran",
-                  data: formData,
-                  success: function(response){
-                      Swal.fire({
-                          title: 'Berhasil',
-                          text: 'Data berhasil ditambahkan',
-                          icon: 'success',
-                          showConfirmButton: false,
-                          timer: 1500
-                      });
-                      location.reload();
-                  },
-                  error: function(xhr, status, error){
-                      Swal.fire({
-                          title: 'Gagal',
-                          text: 'Terjadi kesalahan saat menambahkan data',
-                          icon: 'error',
-                          showConfirmButton: false,
-                          timer: 1500
-                      });
-                  }
-              });
-          });
-      });
-
-      function confirmDelete(id) {
-          Swal.fire({
-              title: 'Apakah Anda yakin ingin menghapus?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Ya',
-              cancelButtonText: 'Tidak',
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  $.ajax({
-                      url: '/hapusDataPembayaran/' + id,
-                      type: 'POST',
-                      success: function(response) {
-                          Swal.fire({
-                              title: 'Berhasil',
-                              text: 'Data berhasil dihapus',
-                              icon: 'success',
-                              showConfirmButton: false,
-                              timer: 1500
-                          });
-                          location.reload();
-                      },
-                      error: function(xhr, status, error) {
-                          Swal.fire({
-                              title: 'Gagal',
-                              text: 'Terjadi kesalahan saat menghapus data',
-                              icon: 'error',
-                              showConfirmButton: false,
-                              timer: 1500
-                          });
-                      }
-                  });
-              }
-          });
-      }
-    </script>
   
   </body>
 </html>

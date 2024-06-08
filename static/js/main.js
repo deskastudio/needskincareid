@@ -1,92 +1,33 @@
-// sidebar start
-const toggleSidebar = () => {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar.classList.contains('collapsed')) {
-      sidebar.classList.remove('collapsed');
-      sidebar.classList.add('expanded');
-    } else {
-      sidebar.classList.remove('expanded');
-      sidebar.classList.add('collapsed');
-    }
-  };
+$(document).ready(function() {
+    const toggleSidebar = () => {
+        const sidebar = $('#sidebar');
+        if (sidebar.hasClass('collapsed')) {
+            sidebar.removeClass('collapsed').addClass('expanded');
+        } else {
+            sidebar.removeClass('expanded').addClass('collapsed');
+        }
+    };
 
-document.getElementById('toggle-link').addEventListener('click', toggleSidebar);
+    $('#toggle-link').click(function(event) {
+        event.preventDefault();
+        toggleSidebar();
+    });
 
-document.getElementById('dashboard-link').addEventListener('click', function() {
-document.getElementById('dashboard-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
+    $('.nav-link:not(#toggle-link)').click(function(event) {
+        event.preventDefault();
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
     });
-    this.classList.add('active');
+
+    $('#dashboard-link').click(toggleSidebar);
+    $('#produk-link').click(toggleSidebar);
+    $('#pelanggan-link').click(toggleSidebar);
+    $('#pemesanan-link').click(toggleSidebar);
+    $('#pembayaran-link').click(toggleSidebar);
+    $('#produkTerlaris-link').click(toggleSidebar);
+    $('#bannerHomepage-link').click(toggleSidebar);
+    $('#footer-link').click(toggleSidebar);
+    $('#admin-link').click(toggleSidebar);
+    $('#riwayatPemesanan-link').click(toggleSidebar);
+    $('#keluar-link').click(toggleSidebar);
 });
-document.getElementById('produk-link').addEventListener('click', function() {
-document.getElementById('produk-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('pelanggan-link').addEventListener('click', function() {
-document.getElementById('pelanggan-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('pemesanan-link').addEventListener('click', function() {
-document.getElementById('pemesanan-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('pembayaran-link').addEventListener('click', function() {
-document.getElementById('pembayaran-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('produkTerlaris-link').addEventListener('click', function() {
-document.getElementById('produkTerlaris-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('bannerHomepage-link').addEventListener('click', function() {
-document.getElementById('bannerHomepage-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('footer-link').addEventListener('click', function() {
-document.getElementById('footer-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('admin-link').addEventListener('click', function() {
-document.getElementById('admin-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('riwayatPemesanan-link').addEventListener('click', function() {
-document.getElementById('riwayatPemesanan-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-document.getElementById('keluar-link').addEventListener('click', function() {
-document.getElementById('keluar-link').addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.nav-link').forEach(item => {
-        item.classList.remove('active');
-    });
-    this.classList.add('active');
-});
-// sidebar end
