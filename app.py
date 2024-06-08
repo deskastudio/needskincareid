@@ -480,6 +480,58 @@ def hapus_data_admin(_id):
 
 
 
+# route admin footer start
+@app.route('/adminFooter')
+def adminFooter():
+    footer = db.footer.find()
+    return render_template('adminFooter.html', footer=footer)
+
+@app.route('/tambahDataFooter', methods=['GET', 'POST'])
+def tambah_data_footer():
+    if request.method == 'POST':
+        socialMedia = request.form['socialMedia']
+        username = request.form['username']
+        linkSosmed = request.form['linkSosmed']
+
+        doc = {
+            'socialMedia': socialMedia,
+            'username': username,
+            'linkSosmed': linkSosmed
+        }
+        
+        db.footer.insert_one(doc)
+        return redirect(url_for("adminFooter"))
+        
+    return render_template('tambahDataFooter.html')
+
+@app.route('/editDataFooter/<string:_id>', methods=["GET", "POST"])
+def edit_data_footer(_id):
+    if request.method == 'POST':
+        socialMedia = request.form['socialMedia']
+        username = request.form['username']
+        linkSosmed = request.form['linkSosmed']
+
+        doc = {
+            'socialMedia': socialMedia,
+            'username': username,
+            'linkSosmed': linkSosmed
+        }
+        
+        # Update database
+        db.footer.update_one({'_id': ObjectId(_id)}, {'$set': doc})
+        return redirect(url_for('adminFooter'))
+    
+    data = db.footer.find_one({'_id': ObjectId(_id)})
+    return render_template('editDataFooter.html', data=data)
+
+@app.route('/hapusDataFooter/<string:_id>', methods=["GET", "POST"])
+def hapus_data_footer(_id):
+    db.footer.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('adminFooter'))
+# route admin footer end
+
+
+
 # route admin riwayat pemesanan start
 @app.route('/adminRiwayatPemesanan')
 def adminRiwayatPemesanan():
