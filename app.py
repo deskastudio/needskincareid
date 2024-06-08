@@ -16,20 +16,15 @@ DB_NAME =  str(os.environ.get("DB_NAME"))
 
 # Configuration for file uploads
 UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
 
 client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
 
 users_collection = db['users']
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 @app.route('/')
 def index():
@@ -112,10 +107,16 @@ def produk():
 def sidebar():
     return render_template('sidebarAdmin.html')
 
+
+# route admin dashboard start
 @app.route('/adminDashboard')
 def adminDashboard():
     return render_template('adminDashboard.html')
+# route admin dashboard end
 
+
+
+# route admin produk start
 @app.route('/adminProduk')
 def adminProduk():
     products = db.products.find()
@@ -197,7 +198,11 @@ def edit_data_produk(_id):
 def hapus_data_produk(_id):
     db.products.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('adminProduk'))
+# route admin produk end
 
+
+
+# route admin pelanggan start
 @app.route('/adminPelanggan')
 def adminPelanggan():
     users = db.users.find()
@@ -207,11 +212,19 @@ def adminPelanggan():
 def hapus_data_pelanggan(_id):
     db.users.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('adminPelanggan'))
+# route admin pelanggan end
 
+
+
+# route admin pemesanan start
 @app.route('/adminPemesanan')
 def adminPemesanan():
     return render_template('adminPemesanan.html')
+# route admin pemesanan end
 
+
+
+# route admin pembayaran start
 @app.route('/adminPembayaran')
 def adminPembayaran():
     pembayaran = db.pembayaran.find()
@@ -259,6 +272,8 @@ def edit_data_pembayaran(_id):
 def hapus_data_pembayaran(_id):
     db.pembayaran.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('adminPembayaran'))
+# route admin pembayaran end
+
 
 
 # route produk terlaris start
@@ -343,25 +358,133 @@ def edit_data_produk_terlaris(_id):
 def hapus_data_produk_terlaris(_id):
     db.produkTerlaris.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('adminProdukTerlaris'))
-
 # route produk terlaris end
 
+
+
+# route banner homepage start
 @app.route('/adminBannerHomepage')
 def adminBannerHomepage():
-    return render_template('adminBannerHomepage.html')
+    bannerHomepage = db.bannerHomepage.find()
+    return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage)
 
-# @app.route('/adminFooter')
-# def adminFooter():
-#     footer = footer_collection.find()
-#     return render_template('adminFooter.html')
+@app.route('/tambahDataBannerHomepage', methods=['GET', 'POST'])
+def tambah_data_banner_homepage():
+    if request.method == 'POST':
+        judulBanner = request.form['judulBanner']
+        photo = request.files['photo']
+        
+        if photo:
+            nama_file_asli = photo.filename
+            nama_file_gambar = secure_filename(nama_file_asli)
+            file_path = f'./static/assets/imgBannerHomepage/{nama_file_gambar}'
+            photo.save(file_path)
+        else:
+            nama_file_gambar = None
+            
+        doc = {
+            'judulBanner': judulBanner,
+            'photo': nama_file_gambar
+        }
+        
+        db.bannerHomepage.insert_one(doc)
+        return redirect(url_for("adminBannerHomepage"))
+        
+    return render_template('tambahDataBannerHomepage.html')
 
+@app.route('/editDataBannerHomepage/<string:_id>', methods=["GET", "POST"])
+def edit_data_banner_homepage(_id):
+    if request.method == 'POST':
+        judulBanner = request.form['judulBanner']
+        photo = request.files['photo']
+
+        # Inisialisasi nama_file_gambar dengan nilai default
+        nama_file_gambar = None
+
+        # Simpan file jika ada
+        if photo:
+            nama_file_asli = photo.filename
+            nama_file_gambar = secure_filename(nama_file_asli)
+            file_path = f'./static/assets/imgBannerHomepage/{nama_file_gambar}'
+            photo.save(file_path)
+        
+        # Buat dictionary untuk update
+        doc = {
+            'judulBanner': judulBanner,
+        }
+
+        # Tambahkan nama_file_gambar ke dictionary jika ada
+        if nama_file_gambar:
+            doc['photo'] = nama_file_gambar
+        
+        # Update database
+        db.bannerHomepage.update_one({'_id': ObjectId(_id)}, {'$set': doc})
+        return redirect(url_for('adminBannerHomepage'))
+    
+    data = db.bannerHomepage.find_one({'_id': ObjectId(_id)})
+    return render_template('editDataBannerHomepage.html', data=data)
+
+@app.route('/hapusDataBannerHomepage/<string:_id>', methods=["GET", "POST"])
+def hapus_data_banner_homepage(_id):
+    db.bannerHomepage.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('adminBannerHomepage'))
+# route produk terlaris end
+
+
+
+# route data admin start
 @app.route('/adminDataAdmin')
 def adminDataAdmin():
-    return render_template('adminDataAdmin.html')
+    admin = db.admin.find()
+    return render_template('adminDataAdmin.html', admin=admin)
 
+@app.route('/tambahDataAdmin', methods=['GET', 'POST'])
+def tambah_data_admin():
+    if request.method == 'POST':
+        namaPengguna = request.form['namaPengguna']
+        password = request.form['password']
+
+        doc = {
+            'namaPengguna': namaPengguna,
+            'password': password
+        }
+        
+        db.admin.insert_one(doc)
+        return redirect(url_for("adminDataAdmin"))
+        
+    return render_template('tambahDataAdmin.html')
+
+@app.route('/editDataAdmin/<string:_id>', methods=["GET", "POST"])
+def edit_data_admin(_id):
+    if request.method == 'POST':
+        namaPengguna = request.form['namaPengguna']
+        password = request.form['password']
+
+        doc = {
+            'namaPengguna': namaPengguna,
+            'password': password
+        }
+        
+        # Update database
+        db.admin.update_one({'_id': ObjectId(_id)}, {'$set': doc})
+        return redirect(url_for('adminDataAdmin'))
+    
+    data = db.admin.find_one({'_id': ObjectId(_id)})
+    return render_template('editDataAdmin.html', data=data)
+
+@app.route('/hapusDataAdmin/<string:_id>', methods=["GET", "POST"])
+def hapus_data_admin(_id):
+    db.admin.delete_one({'_id': ObjectId(_id)})
+    return redirect(url_for('adminDataAdmin'))
+# route admin produk end
+
+
+
+# route admin riwayat pemesanan start
 @app.route('/adminRiwayatPemesanan')
 def adminRiwayatPemesanan():
     return render_template('adminRiwayatPemesanan.html')
+# route admin riwayat pemesanan end
 
 @app.route('/logout')
 def logout():
