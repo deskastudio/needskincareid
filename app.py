@@ -543,6 +543,12 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
+
+@app.route('/adminLogin')
+def admin_login():
+    return render_template('adminLogin.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
     
