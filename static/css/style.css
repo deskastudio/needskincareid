@@ -158,76 +158,106 @@ body {
   position: relative;
   background-color: #F17591;
 }
-
-.carousel-content{
+  .carousel-content{
   display: flex;
   transition: transform 0.5s ease;
   margin: 30px;
-}
+  }
 
-.carousel-card {
-  flex: 0 0 auto;
-  width: 380px;
-  /*margin-right: 20px;
-  margin-bottom: 30px;*/
-  margin: 10px 20px 30px 20px;
-  padding: 30px;
-  background-color: #FEE8EE;
-  border-radius: 10px;
-}
-.carousel-card h5{
-  color: #808080;
-  font-weight: bold;
-}
-.carousel-card p{
-  color: #F17591;
-  font-weight: 600;
-}
-.carousel-controls {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
+  .carousel-card {
+    flex: 0 0 auto;
+    width: 380px;
+    /*margin-right: 20px;
+    margin-bottom: 30px;*/
+    margin: 10px 20px 30px 20px;
+    padding: 30px;
+    background-color: #FEE8EE;
+    border-radius: 10px;
+  }
+  .carousel-card h5{
+    color: #808080;
+    font-weight: bold;
+  }
+  .carousel-card p{
+    color: #F17591;
+    font-weight: 600;
+  }
+  .carousel-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 
-.carousel-control {
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .carousel-control {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.carousel-control:hover {
-  background-color: rgba(0, 0, 0, 0.7);
-}
+  .carousel-control:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
 
 .paymentMethod{
   background-color: #FEE8EE;
 }
-.image-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
+  .image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
 
-.image-container img {
-  width: 200px; 
-  height: auto; 
-  margin-right: 30px;
-  margin-bottom: 30px;
-  object-fit: contain;
-}
+  .image-container img {
+    width: 200px; 
+    height: auto; 
+    margin-right: 30px;
+    margin-bottom: 30px;
+    object-fit: contain;
+  }
 /* homepage end */
 
 /* product start */
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #F17591;
+  border-radius: 5px;
+  width: 300px;
+  margin-left: 50px;
+  margin-top: 30px;
+}
+.search-icon {
+  font-size: 20px;
+  color: #808080;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+.search-input {
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 15px;
+  width: 300px;
+}
+.search-input::placeholder {
+  color: #808080;
+  font-weight: 400;
+}
+.search-input:focus {
+  outline: none;
+}
 
 .product {
   height: auto;
@@ -241,6 +271,7 @@ body {
     gap: 40px;
     margin-left: 130px;
     padding: 5px;
+    margin-top: 50px;
     background-color: white;
   }
     .product .card {
@@ -250,37 +281,15 @@ body {
       border: white;
       margin-bottom: 30px;
     }
-.search-container {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  border: 2px solid #F17591;
-  border-radius: 5px;
-  width: 300px;
-  margin-left: 50px;
-  margin-top: 30px;
-}
-
-.search-icon {
-  font-size: 20px;
-  color: #808080;
-  margin-right: 10px;
-  margin-left: 15px;
-}
-
-.search-input {
-  border: none;
-  outline: none;
+    
+.dropdown {
   padding: 10px;
-  font-size: 15px;
+  border: 2px solid #F17591;
+  background-color: #F17591;
+  color: white;
+  font-weight: 600;
+  border-radius: 15px;
+  margin-left: 60px;
 }
 
-.search-input::placeholder {
-  color: #808080;
-  font-weight: 400;
-}
-
-.search-input:focus {
-  outline: none;
-}
 /* product end */
