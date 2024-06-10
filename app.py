@@ -543,6 +543,11 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route('/dataPribadi')
+def dataPribadi():
+    return render_template('dataPribadi.html')
+#izin nambahin route biar keliatan tampilannya
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
     

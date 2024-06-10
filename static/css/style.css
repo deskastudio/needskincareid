@@ -139,17 +139,6 @@ body {
     background-color: #E75480;
     color: white;
   }
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .card {
-        width: calc(50% - 20px); /* two cards per row for tablets */
-    }
-  }
-  @media (max-width: 480px) {
-    .card {
-        width: 100%; /* one card per row for mobile devices */
-    }
-  }
 
 .carousel-container {
   width: 100%;
@@ -224,6 +213,60 @@ body {
     margin-bottom: 30px;
     object-fit: contain;
   }
+    /* Aturan media query untuk tampilan responsif pada perangkat seluler */
+  @media screen and (max-width: 768px) {
+    .banner-area img {
+      height: 300px; /* Mengurangi tinggi gambar banner pada perangkat seluler */
+      margin-top: -17px; /* Menghapus margin atas pada gambar banner pada perangkat seluler */
+    }
+    .about {
+      flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
+      align-items: center; /* Pusatkan konten pada perangkat seluler */
+    }
+    
+    .about-image img {
+      width: 100%; /* Menggunakan lebar penuh untuk gambar about pada perangkat seluler */
+      height: auto; /* Biarkan tinggi gambar about mengikuti proporsi aslinya */
+      margin-bottom: 20px; /* Tambahkan jarak bawah pada gambar about pada perangkat seluler */
+    }
+    
+    .about-text {
+      width: 100%; /* Menggunakan lebar penuh untuk teks about pada perangkat seluler */
+      padding: 20px; /* Ubah padding secara keseluruhan pada perangkat seluler */
+      margin-top: -20px;
+    }
+    
+    .about-text p {
+      padding: 10px; /* Ubah padding paragraf pada perangkat seluler */
+    }
+    .product-card {
+      width: 100%; /* Menggunakan lebar penuh untuk kartu produk pada perangkat seluler */
+      margin-left: 0; /* Menghapus margin kiri pada perangkat seluler */
+      padding: 0; /* Hapus padding pada perangkat seluler */
+    }
+    
+    .card {
+      width: calc(40% - 10px); /* Mengatur lebar kartu produk pada perangkat seluler */
+      margin-bottom: 20px; /* Mengurangi jarak bawah pada perangkat seluler */
+    }
+    .paymentMethod {
+      padding: 20px; /* Tambahkan padding pada perangkat seluler */
+    }
+
+    .image-container {
+      flex-wrap: wrap; /* Mengatur pembungkus gambar menjadi tumpukan vertikal pada perangkat seluler */
+      margin-top: 10px; /* Tambahkan margin atas pada perangkat seluler */
+      justify-content: center; /* Pusatkan gambar pada perangkat seluler */
+    }
+
+    .image-container img {
+      width: 120px; /* Ubah lebar gambar pada perangkat seluler */
+      height: auto; /* Biarkan tinggi gambar mengikuti proporsi aslinya */
+      margin-right: 10px; /* Kurangi margin kanan gambar pada perangkat seluler */
+      margin-bottom: 10px; /* Kurangi margin bawah gambar pada perangkat seluler */
+    }
+  }
+
 /* homepage end */
 
 /* product start */
@@ -238,25 +281,35 @@ body {
   margin-left: 50px;
   margin-top: 30px;
 }
-.search-icon {
-  font-size: 20px;
-  color: #808080;
-  margin-right: 10px;
-  margin-left: 15px;
-}
-.search-input {
-  border: none;
-  outline: none;
+  .search-icon {
+    font-size: 20px;
+    color: #808080;
+    margin-right: 10px;
+    margin-left: 15px;
+  }
+  .search-input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 15px;
+    width: 300px;
+  }
+  .search-input::placeholder {
+    color: #808080;
+    font-weight: 400;
+  }
+  .search-input:focus {
+    outline: none;
+  }
+
+.dropdown {
   padding: 10px;
-  font-size: 15px;
-  width: 300px;
-}
-.search-input::placeholder {
-  color: #808080;
-  font-weight: 400;
-}
-.search-input:focus {
-  outline: none;
+  border: 2px solid #F17591;
+  background-color: #F17591;
+  color: white;
+  font-weight: 600;
+  border-radius: 15px;
+  margin-left: 60px;
 }
 
 .product {
@@ -281,15 +334,123 @@ body {
       border: white;
       margin-bottom: 30px;
     }
-    
-.dropdown {
-  padding: 10px;
-  border: 2px solid #F17591;
-  background-color: #F17591;
-  color: white;
-  font-weight: 600;
-  border-radius: 15px;
-  margin-left: 60px;
+
+    /* Aturan media query untuk tampilan responsif pada perangkat seluler */
+@media screen and (max-width: 768px) {
+  .search-container {
+    width: calc(50% - 10px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
+    margin-top: 20px; /* Kurangi margin atas pada perangkat seluler */
+    margin-bottom: 20px; /* Tambahkan margin bawah pada perangkat seluler */
+  }
+  .search-input {
+    width: 110px;
+  }
+
+  .dropdown {
+    width: calc(50% - 40px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
+    margin-top: 10px; /* Tambahkan margin atas pada perangkat seluler */
+    margin-bottom: 20px; /* Tambahkan margin bawah pada perangkat seluler */
+    margin-right: 70px;
+  }
+  .product .product-card {
+    width: 100%; /* Gunakan lebar penuh untuk kartu produk pada perangkat seluler */
+    margin-left: 0; /* Hapus margin kiri pada perangkat seluler */
+    padding: 0; /* Hapus padding pada perangkat seluler */
+  }
+
+  .product .card {
+    width: calc(50% - 20px); /* Atur lebar kartu produk pada perangkat seluler */
+    margin-bottom: 20px; /* Kurangi jarak bawah pada perangkat seluler */
+  }
 }
 
+  
+
 /* product end */
+
+/* dataPribadi start */
+
+.image-with-text {
+  display: flex;
+  align-items: center;
+  margin-left: 90px;
+  margin-top: 40px;
+}
+  .round-image {
+    border-radius: 50%; /* Membuat gambar menjadi bulat */
+    width: 80px; /* Sesuaikan ukuran gambar */
+    height: 80px; /* Sesuaikan ukuran gambar */
+    margin-right: 20px; /* Jarak antara gambar dan teks */
+  }
+  .text-container {
+    flex-grow: 1; /* Memungkinkan kontainer teks untuk mengisi ruang tersedia */
+  }
+  .text-container p {
+    margin-bottom: 0; /* Menghilangkan margin bawah dari paragraf */
+  }
+
+.form-container{
+  padding: 30px 90px;
+}
+  .form-container .input-box{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .input-box .input-field{
+    position: relative;
+    width: 48%;
+    margin: 10px 0;
+  }
+  .input-box .input-field input,
+  .input-box .input-field textarea
+  {
+    background-color: #F07A90;
+    color: white;
+    border-color: #F07A90;
+  }
+  .input-field input::placeholder {
+    color: white;
+    font-size: small;
+  }
+  .button .btn-simpan{
+    background-color: #F17591;
+    color: white;
+    border: none;   
+
+    font-weight: 600;
+    font-size: smaller;
+
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 9px 9px;
+    width: 115px;
+    margin-top: 40px;
+  }
+
+  /* Aturan media query untuk tampilan responsif pada perangkat seluler */
+  @media screen and (max-width: 768px) {
+    .image-with-text {
+      flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
+      align-items: flex-start; /* Posisikan elemen secara vertikal pada perangkat seluler */
+      margin-left: 20px; /* Sesuaikan margin kiri pada perangkat seluler */
+      margin-top: 20px; /* Sesuaikan margin atas pada perangkat seluler */
+    }
+    
+    .round-image {
+      width: 60px; /* Ubah ukuran gambar pada perangkat seluler */
+      height: 60px; /* Ubah ukuran gambar pada perangkat seluler */
+      margin-right: 0; /* Hapus margin kanan pada perangkat seluler */
+      margin-bottom: 10px; /* Sesuaikan jarak antara gambar dan teks pada perangkat seluler */
+    }
+    .form-container {
+      padding: 30px 20px; /* Mengurangi padding pada perangkat seluler */
+    }
+    
+    .input-box .input-field {
+      width: 100%; /* Menggunakan lebar penuh pada perangkat seluler */
+    }
+  }
+
+
+/* dataPribadi end */
