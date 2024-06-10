@@ -543,18 +543,16 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-<<<<<<< HEAD
-@app.route('/dataPribadi')
-def dataPribadi():
-    return render_template('dataPribadi.html')
-#izin nambahin route biar keliatan tampilannya
-=======
 
 
 @app.route('/adminLogin')
 def admin_login():
     return render_template('adminLogin.html')
->>>>>>> cf36fb7db8b8d31e03d4c160c40db0c9160eeabe
+
+@app.route('/dataPribadi')
+def dataPribadi():
+    return render_template('dataPribadi.html')
+#izin nambahin buat liat tampilannya
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
