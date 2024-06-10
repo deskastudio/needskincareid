@@ -13,96 +13,154 @@
   <link rel="stylesheet" href="./static/css/style.css">
 
   <title>Admin Sidebar</title>
+  <style>
+    .sidebar {
+      width: 250px;
+      transition: width 0.3s;
+    }
+    .sidebar.collapsed {
+      width: 80px;
+    }
+    .sidebar .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .sidebar .nav-link img {
+      width: 25px;
+      height: 25px;
+      filter: grayscale(100%);
+      transition: width 0.3s, height 0.3s, filter 0.3s;
+    }
+    .sidebar .nav-link span {
+      margin-left: 10px;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .sidebar.collapsed .nav-link img {
+      width: 25px;
+      height: 25px;
+      margin: 0 auto;
+    }
+    .sidebar.collapsed .nav-link span {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .sidebar .nav-link.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .sidebar .nav-link.active img {
+      filter: grayscale(0%) invert(1);
+    }
+    .main-content {
+      transition: margin-left 0.3s;
+      margin-left: 250px;
+      width: calc(100% - 250px);
+    }
+    .main-content.collapsed {
+      margin-left: 80px;
+      width: calc(100% - 80px);
+    }
+  </style>
 </head>
 <body>
   <div class="d-flex">
-    <div id="sidebar" class="sidebar bg-body-tertiary collapsed d-flex flex-column flex-shrink-0 p-2">
+    <div id="sidebar" class="sidebar bg-body-tertiary d-flex flex-column flex-shrink-0 p-2">
       <ul class="nav nav-pills flex-column mb-auto text-center text-sm-start">
         <li>
           <a href="#" id="toggle-link" class="nav-link py-2">
-            <img src="./static/img/toggle.svg" alt="" class="w-100">
+            <img src="./static/img/toggle.svg" alt="">
             <span class="fw-bold" style="color: black;">NeedSkincareID</span>
           </a>
         </li>
         <hr>
         <li>
           <a href="/adminDashboard" id="dashboard-link" class="nav-link py-2">
-            <img src="./static/img/dashboard.svg" alt="" class="w-100">
-            <span>Dashboard <span class="float-end"> > </span></span>
+            <img src="./static/img/dashboard.svg" alt="">
+            <span>Dashboard</span>
           </a>
         </li>
         <li>
           <a href="/adminProduk" id="produk-link" class="nav-link py-2">
-            <img src="./static/img/produk.svg" alt="" class="w-100">
-            <span>Produk <span class="float-end"> > </span></span>
+            <img src="./static/img/produk.svg" alt="">
+            <span>Produk</span>
           </a>
         </li>
         <li>
           <a href="/adminPelanggan" id="pelanggan-link" class="nav-link py-2">
-            <img src="./static/img/pelanggan.svg" alt="" class="w-100">
-            <span>Pelanggan <span class="float-end"> > </span></span>
+            <img src="./static/img/pelanggan.svg" alt="">
+            <span>Pelanggan</span>
           </a>
         </li>
         <li>
           <a href="/adminPemesanan" id="pemesanan-link" class="nav-link py-2">
-            <img src="./static/img/pemesanan.svg" alt="" class="w-100">
-            <span>Pemesanan <span class="float-end"> > </span></span>
+            <img src="./static/img/pemesanan.svg" alt="">
+            <span>Pemesanan</span>
           </a>
         </li>
         <li>
           <a href="/adminPembayaran" id="pembayaran-link" class="nav-link py-2">
-            <img src="./static/img/pembayaran.svg" alt="" class="w-100">
-            <span>Pembayaran <span class="float-end"> > </span></span>
+            <img src="./static/img/pembayaran.svg" alt="">
+            <span>Pembayaran</span>
           </a>
         </li>
         <li>
           <a href="/adminProdukTerlaris" id="produkTerlaris-link" class="nav-link py-2">
-            <img src="./static/img/produkTerlaris.svg" alt="" class="w-100">
-            <span>Produk Terlaris <span class="float-end"> > </span></span>
+            <img src="./static/img/produkTerlaris.svg" alt="">
+            <span>Produk Terlaris</span>
           </a>
         </li>
         <li>
           <a href="/adminBannerHomepage" id="bannerHomepage-link" class="nav-link py-2">
-            <img src="./static/img/bannerHomepage.svg" alt="" class="w-100">
-            <span>Banner Homepage <span class="float-end"> > </span></span>
+            <img src="./static/img/bannerHomepage.svg" alt="">
+            <span>Banner Homepage</span>
           </a>
         </li>
         <li>
           <a href="/adminFooter" id="footer-link" class="nav-link py-2">
-            <img src="./static/img/footer.svg" alt="" class="w-100">
-            <span>Data Footer <span class="float-end"> > </span></span>
+            <img src="./static/img/footer.svg" alt="">
+            <span>Data Footer</span>
           </a>
         </li>
         <li>
           <a href="/adminDataAdmin" id="admin-link" class="nav-link py-2">
-            <img src="./static/img/admin.svg" alt="" class="w-100">
-            <span>Data Admin <span class="float-end"> > </span></span>
+            <img src="./static/img/admin.svg" alt="">
+            <span>Data Admin</span>
           </a>
         </li>
         <li>
           <a href="/adminRiwayatPemesanan" id="riwayatPemesanan-link" class="nav-link py-2">
-            <img src="./static/img/riwayatPemesanan.svg" alt="" class="w-100">
-            <span>Riwayat Pemesanan <span class="float-end"> > </span></span>
+            <img src="./static/img/riwayatPemesanan.svg" alt="">
+            <span>Riwayat Pemesanan</span>
           </a>
         </li>
       </ul>
       <div class="dropdown">
         <a href="#" id="keluar-link" class="nav-link py-2">
-          <img src="./static/img/box-arrow-right.svg" alt="" width="40" height="40" class="px-2">
-          <span>Keluar <span class="float-end"> > </span></span>
+          <img src="./static/img/box-arrow-right.svg" alt="" width="25" height="25">
+          <span>Keluar</span>
         </a>
       </div>
     </div>
 
-    <!-- <div class="flex-grow-1 p-3">
-      <h1>Main Content</h1>
-      <p>Your main content goes here...</p>
-    </div>
-  </div> -->
-
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <script src="./static/js/main.js"></script>
+  <script>
+    document.getElementById('toggle-link').addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById('sidebar').classList.toggle('collapsed');
+      document.querySelector('.main-content').classList.toggle('collapsed');
+    });
 
+    // Highlight active link
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      }
+    });
+  </script>
 </body>
 </html>

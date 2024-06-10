@@ -1,42 +1,67 @@
-<footer style="font-size: 20px; background-color: #F17591; color: white;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <title>Responsive Footer</title>
+    <style>
+        footer {
+            font-size: 20px;
+            background-color: #F17591;
+            color: white;
+        }
+        footer h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        footer img {
+            filter: brightness(0) invert(1);
+        }
+    </style>
+</head>
+<body>
+<footer>
     <div class="container">
-        <div class="d-flex flex-wrap justify-content-center border-bottom p-3">
-            <div class="col-lg-4 text-center col-sm-12 col-md-4">
-                <h1>NeedSkincareID</h1>
+        <div class="row justify-content-center border-bottom p-3">
+            <div class="col-lg-4 text-start col-sm-12 col-md-4 mb-3">
+                <h1 class="text-center">NeedSkincareID</h1>
                 <p>Gang Sadar 2 Kavling AL NO A13 RT 001 RW 002, Kec Jatisampurna Kel Jatiraden Kota Bekasi, Jawa Barat 17436</p>
             </div>
     
-            <div class="col-lg-4 text-center col-sm-12 col-md-4">
+            <div class="col-lg-4 text-center col-sm-12 col-md-4 mb-3">
                 <h1>Kontak Kami</h1>
-                <div class="d-flex justify-content-center align-items-center">
-                    <img src="./static/img/whatsapp.svg" alt=""  class="flex-shrink-0" style="width: 30px;">
-                    <p class="p-2 mb-2 text-center">6281317867755</p>
+                <div class="d-flex align-items-center justify-content-center">
+                    <img src="./static/img/whatsapp.svg" alt="WhatsApp" class="flex-shrink-0" style="width: 30px;">
+                    <p class="p-2 mb-0">6281317867755</p>
                 </div>
             </div>
     
-            <div class="col-lg-4 text-center col-sm-12 col-md-4">
-                <h1>Sosial Media</h1>
-                <div class="row">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img src="./static/img/instagram.svg" alt="" class="flex-shrink-0" style="width: 30px;">
-                        <p class="p-2 mb-2 text-center">@needskincareid</p>
+            <div class="col-lg-4 text-start col-sm-12 col-md-4">
+                <h1 class="text-center">Sosial Media</h1>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="./static/img/instagram.svg" alt="Instagram" class="flex-shrink-0" style="width: 30px;">
+                        <p class="p-2 mb-0">@needskincareid</p>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img src="./static/img/tiktok.svg" alt="" class="flex-shrink-0" style="width: 30px;">
-                        <p class="p-2 mb-2 text-center">@needskincareid</p>
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="./static/img/tiktok.svg" alt="TikTok" class="flex-shrink-0" style="width: 30px;">
+                        <p class="p-2 mb-0">@needskincareid</p>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img src="./static/img/bag-plus.svg" alt="" class="flex-shrink-0" style="width: 30px;">
-                        <p class="p-2 mb-2 text-center">needskincareid</p>
+                    <div class="d-flex align-items-center">
+                        <img src="./static/img/bag-plus.svg" alt="Bag" class="flex-shrink-0" style="width: 30px;">
+                        <p class="p-2 mb-0">needskincareid</p>
                     </div>
                 </div>
-    
             </div>
         </div>
 
-        <div class="text-center p-4">
-            <p>Copyrigth © 2024 Kingston, Inc</p>
+        <div class="text-center p-3">
+            <p class="fs-6">Copyright © 2024 Kingston, Inc</p>
         </div>
-
     </div>
 </footer>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
