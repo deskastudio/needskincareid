@@ -22,7 +22,7 @@
     <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
         <div class="row align-items-center px-3">
             <div class="col-lg-9">
-              <h3 class="fw-bold">Semua Produk</h3>
+              <h3 class="fw-bold">Semua Pelanggan</h3>
             </div>
             <div class="col-lg-3">
                 <form class="d-flex">
@@ -56,7 +56,7 @@
                         <td>{{ data.tanggal_lahir }}</td>
                         <td>{{ data.alamat }}</td>
                         <td>
-                            <button onclick="confirmDelete('{{ data._id }}')" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
+                            <button onclick="window.location.href='/hapusDataPelanggan/{{ data._id }}';" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
                         </td>
                     </tr>
                     {% endfor %}

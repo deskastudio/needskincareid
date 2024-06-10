@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <!-- sidebar start -->
+    {% include 'sidebarAdmin.html' %}
+    <!-- sidebar end -->
+
+    <!-- hero section start -->
+    <div class="flex-grow-1 p-3" style="background-color: #FAFBFF;">
+        {% include 'navbarAdmin.html' %}
+
+        <!-- Modal untuk Tambah Produk -->
+            <div class="container" style="padding-left: 10rem; padding-right: 10rem;">
+              <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="jenisSkincare" class="form-label">Jenis Skincare</label>
+                  <select class="form-select" id="jenisSkincare" name="jenisSkincare" required>
+                    <option value="">Pilih Jenis Skincare</option>
+                    <option value="Sunscreen">Sunscreen</option>
+                    <option value="Moisturizer">Moisturizer</option>
+                    <option value="Serum">Serum</option>
+                    <option value="Toner">Toner</option>
+                    <option value="Masker">Masker</option>
+                    <option value="Facial Wash">Facial Wash</option>
+                    <option value="Micellar Water">Micellar Water</option>
+                    <option value="Essense">Essense</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="namaProduk" class="form-label">Nama Produk</label>
+                  <input type="text" class="form-control" id="namaProduk" name="namaProduk" required>
+                </div>
+                <div class="mb-3">
+                  <label for="hargaPerPcs" class="form-label">Harga/Pcs</label>
+                  <input type="number" class="form-control" id="hargaPerPcs" name="hargaPerPcs" required>
+                </div>
+                <div class="mb-3">
+                  <label for="totalDus" class="form-label">Total Dus</label>
+                  <input type="number" class="form-control" id="totalDus" name="totalDus" required>
+                </div>
+                <div class="mb-3">
+                  <label for="totalHarga" class="form-label">Total Harga</label>
+                  <input type="number" class="form-control" id="totalHarga" name="totalHarga" required>
+                </div>
+                <div class="mb-3">
+                  <label for="photo" class="form-label">Upload Foto</label>
+                  <input type="file" class="form-control" id="photo" name="photo" required>
+                </div>
+                <button type="submit" class="btn p-2" style="background-color: #00B087; color: white; border-radius: 8px;">Tambah Produk Terlaris</button>
+              </form>
+            </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>
