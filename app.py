@@ -29,7 +29,8 @@ def is_valid_admin():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    produkTerlaris = db.produkTerlaris.find()
+    return render_template('index.html', produkTerlaris=produkTerlaris)
 
 @app.route('/registerUser', methods=['POST', 'GET'])
 def register_user():

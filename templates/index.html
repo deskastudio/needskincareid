@@ -107,46 +107,25 @@
         </section>
       </div>
     <!-- Tentang kami end -->
-
-    <!-- Produk Terlaris start -->
+    
+    <!-- produk terlaris start -->
     <section class="product-container" style="background-color: #FEE8EE;">
       <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Produk Terlaris</h3>
-      <div class="product-card">
-        <div class="card">
-          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
-          <div class="card-body">
-            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
-            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
+      <div class="product-card d-flex justify-content-center flex-wrap">
+        {% for data in produkTerlaris %}
+        <div class="card d-flex justify-content-center align-items-center">
+          <img src="../static/assets/imgProdukTerlaris/{{data.photo}}" alt="..." class="image">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{data.nama_produk}}</h5>
+            <p class="card-text">{{data.total_dus}} = Rp {{data.harga_per_pcs}}</p>
             <button class="btn">Beli Sekarang</button>
           </div>
         </div>
-        <div class="card">
-          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
-          <div class="card-body">
-            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
-            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
-            <button class="btn">Beli Sekarang</button>
-          </div>
-        </div>
-        <div class="card">
-          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
-          <div class="card-body">
-            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
-            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
-            <button class="btn">Beli Sekarang</button>
-          </div>
-        </div>
-        <div class="card">
-          <img src="../static/img/produk/hydramax-ss.png" alt="..." class="image">
-          <div class="card-body">
-            <h5 class="card-title">Azarine Hydramax Sunscreen Serum SPF 50</h5>
-            <p class="card-text">3 dus (216pcs) = Rp 46 .000</p>
-            <button class="btn">Beli Sekarang</button>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </section>
-      <!-- produk terlaris end -->
+    
+    <!-- produk terlaris end     -->
 
     
     <!-- manfaat start  -->
