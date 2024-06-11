@@ -203,10 +203,18 @@ def hapus_data_produk(_id):
 
 
 # route admin pelanggan start
-@app.route('/adminPelanggan')
+@app.route('/adminPelanggan', methods=['GET'])
 def adminPelanggan():
     users = db.users.find()
-    return render_template('adminPelanggan.html', users=users)
+    page = int(request.args.get('page', 1))
+    per_page = 5  # Number of users per page
+    total_users = users_collection.count_documents({})
+    total_pages = (total_users + per_page - 1) // per_page
+
+    users = list(users_collection.find().skip((page - 1) * per_page).limit(per_page))
+
+    return render_template('adminPelanggan.html', users=users, page=page, total_pages=total_pages)
+    
 
 @app.route('/hapusDataPelanggan/<string:_id>', methods=["GET", "POST"])
 def hapus_data_pelanggan(_id):
@@ -225,10 +233,17 @@ def adminPemesanan():
 
 
 # route admin pembayaran start
-@app.route('/adminPembayaran')
+@app.route('/adminPembayaran', methods=['GET'])
 def adminPembayaran():
     pembayaran = db.pembayaran.find()
-    return render_template('adminPembayaran.html', pembayaran=pembayaran)
+    page = int(request.args.get('page', 1))
+    per_page = 5  # Number of products per page
+    total_products = db.pembayaran.count_documents({})
+    total_pages = (total_products + per_page - 1) // per_page
+
+    pembayaran = list(db.pembayaran.find().skip((page - 1) * per_page).limit(per_page))
+
+    return render_template('adminPembayaran.html', pembayaran=pembayaran, page=page, total_pages=total_pages)
 
 @app.route('/tambahDataPembayaran', methods=['GET', 'POST'])
 def tambah_data_pembayaran():
@@ -277,7 +292,7 @@ def hapus_data_pembayaran(_id):
 
 
 # route produk terlaris start
-@app.route('/adminProdukTerlaris')
+@app.route('/adminProdukTerlaris', methods=['GET'])
 def adminProdukTerlaris():
     produkTerlaris = db.produkTerlaris.find()
     return render_template('adminProdukTerlaris.html', produkTerlaris=produkTerlaris)
@@ -366,7 +381,14 @@ def hapus_data_produk_terlaris(_id):
 @app.route('/adminBannerHomepage')
 def adminBannerHomepage():
     bannerHomepage = db.bannerHomepage.find()
-    return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage)
+    page = int(request.args.get('page', 1))
+    per_page = 5  # Number of products per page
+    total_banner = db.bannerHomepage.count_documents({})
+    total_pages = (total_banner + per_page - 1) // per_page
+
+    bannerHomepage = list(db.bannerHomepage.find().skip((page - 1) * per_page).limit(per_page))
+
+    return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage, page=page, total_pages=total_pages)
 
 @app.route('/tambahDataBannerHomepage', methods=['GET', 'POST'])
 def tambah_data_banner_homepage():
@@ -436,7 +458,14 @@ def hapus_data_banner_homepage(_id):
 @app.route('/adminDataAdmin')
 def adminDataAdmin():
     admin = db.admin.find()
-    return render_template('adminDataAdmin.html', admin=admin)
+    page = int(request.args.get('page', 1))
+    per_page = 5  # Number of products per page
+    total_admin = db.admin.count_documents({})
+    total_pages = (total_admin + per_page - 1) // per_page
+
+    admin = list(db.admin.find().skip((page - 1) * per_page).limit(per_page))
+
+    return render_template('adminDataAdmin.html', admin=admin, page=page, total_pages=total_pages)
 
 @app.route('/tambahDataAdmin', methods=['GET', 'POST'])
 def tambah_data_admin():
@@ -481,10 +510,17 @@ def hapus_data_admin(_id):
 
 
 # route admin footer start
-@app.route('/adminFooter')
+@app.route('/adminFooter', methods=['GET'])
 def adminFooter():
     footer = db.footer.find()
-    return render_template('adminFooter.html', footer=footer)
+    page = int(request.args.get('page', 1))
+    per_page = 5  # Number of products per page
+    total_footer = db.footer.count_documents({})
+    total_pages = (total_footer + per_page - 1) // per_page
+
+    footer = list(db.footer.find().skip((page - 1) * per_page).limit(per_page))
+
+    return render_template('adminFooter.html', footer=footer, page=page, total_pages=total_pages)
 
 @app.route('/tambahDataFooter', methods=['GET', 'POST'])
 def tambah_data_footer():

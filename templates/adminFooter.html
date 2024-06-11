@@ -24,7 +24,7 @@
 
         <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
             <div class="row align-items-center px-3">
-                <div class="col-lg-6">
+                <div class="col-lg-9">
                     <h3 class="fw-bold">Semua Media Sosial</h3>
                 </div>
                 <div class="col-lg-3">
@@ -33,12 +33,6 @@
                         Tambah Media Sosial
                       </button>
                   </div>
-                <div class="col-lg-3">
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
             </div>
 
             <div class="px-3">
@@ -69,23 +63,23 @@
 
                     <div class="d-flex justify-content-end">
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
+                          <ul class="pagination">
+                            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                              <a class="page-link" href="/adminFooter?page={{ page - 1 }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+                            {% for p in range(1, total_pages + 1) %}
+                            <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="/adminFooter?page={{ p }}">{{ p }}</a></li>
+                            {% endfor %}
+                            <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                              <a class="page-link" href="/adminFooter?page={{ page + 1 }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                          </ul>
                         </nav>
-                    </div>
+                      </div>
 
                 </div>
             </div>
