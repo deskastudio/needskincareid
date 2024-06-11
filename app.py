@@ -554,6 +554,11 @@ def dataPribadi():
     return render_template('dataPribadi.html')
 #izin nambahin buat liat tampilannya
 
+@app.route('/pemesanan')
+def pemesanan():
+    return render_template('pemesanan.html')
+#izin nambahin buat liat tampilannya
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
     
