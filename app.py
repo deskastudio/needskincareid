@@ -595,6 +595,10 @@ def pemesanan():
     return render_template('pemesanan.html')
 #izin nambahin buat liat tampilannya
 
+@app.route('/riwayatPemesanan')
+def riwayatPemesanan():
+    return render_template('riwayatPemesanan.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
     
