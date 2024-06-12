@@ -80,14 +80,14 @@ body {
  .about-image img{
     flex: 0 0 auto;
     width: 100%;
-    height: 400px;
+    height: 410px;
  }
  .about-text{
     flex: 1;
     color: white;
     background-color: #F17591;
     position: relative;
-    padding-top: 20px;
+    padding-top: 30px;
  }
  .about-text p{
   padding-left: 40px;
@@ -213,10 +213,11 @@ body {
   }
 
     /* Aturan media query untuk tampilan responsif pada perangkat seluler */
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 600px) {
     .banner-area img {
       height: 300px; /* Mengurangi tinggi gambar banner pada perangkat seluler */
       margin-top: -17px; /* Menghapus margin atas pada gambar banner pada perangkat seluler */
+      width: 100%;
     }
     .about {
       flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
@@ -266,24 +267,21 @@ body {
   display: flex;
   align-items: center;
   background-color: #fff;
+  height: 50px;
   border: 2px solid #F17591;
   border-radius: 5px;
   width: 300px;
   margin-left: 50px;
   margin-top: 30px;
 }
-  .search-icon {
-    font-size: 20px;
-    color: #808080;
-    margin-right: 10px;
-    margin-left: 15px;
-  }
   .search-input {
     border: none;
     outline: none;
-    padding: 10px;
+    padding: 9px;
     font-size: 15px;
-    width: 300px;
+    width: 200px;
+    margin-left: 10px;
+    margin-right: 20px;
   }
   .search-input::placeholder {
     color: #808080;
@@ -292,15 +290,34 @@ body {
   .search-input:focus {
     outline: none;
   }
+  .btn-search{
+    border: 2px solid #F17591;
+    color: #F17591; 
+    background-color: #fff;
 
-.dropdown {
+    font-weight: 600;
+    font-size: medium;
+    margin-left: 80px;
+
+    border-radius: 5px;
+    padding: 10px;
+    height: 50px;
+    width: 80px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .btn-search:hover {
+    background-color: #F17591; /* Warna latar belakang saat di-hover */
+    color: #fff; /* Warna teks saat di-hover */
+}
+
+.dropdown-categories {
   padding: 10px;
   border: 2px solid #F17591;
   background-color: #F17591;
   color: white;
   font-weight: 600;
   border-radius: 15px;
-  margin-left: 60px;
+  margin-left: 40px;
 }
 
 .product {
@@ -327,20 +344,25 @@ body {
     }
 
     /* Aturan media query untuk tampilan responsif pada perangkat seluler */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
   .search-container {
-    width: calc(50% - 10px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
+    width: calc(40% - 10px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
     margin-top: 20px; /* Kurangi margin atas pada perangkat seluler */
     margin-bottom: 20px; /* Tambahkan margin bawah pada perangkat seluler */
   }
   .search-input {
     width: 110px;
+    margin-right: 50px;
   }
-  .dropdown {
-    width: calc(50% - 40px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
-    margin-top: 10px; /* Tambahkan margin atas pada perangkat seluler */
+  .btn-search{
+    margin-right: 50px;
+  }
+  .dropdown-categories {
+    width: calc(100% - 40px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
+    margin-top: 20px; /* Tambahkan margin atas pada perangkat seluler */
     margin-bottom: 20px; /* Tambahkan margin bawah pada perangkat seluler */
-    margin-right: 70px;
+    margin-right: 50px;
+    margin-left: 10px;
   }
   .product .product-card {
     width: 100%; /* Gunakan lebar penuh untuk kartu produk pada perangkat seluler */
@@ -402,7 +424,7 @@ body {
   .button .btn-simpan{
     background-color: #F17591;
     color: white;
-    border: none;   
+    border: none;
 
     font-weight: 600;
     font-size: smaller;
@@ -415,7 +437,7 @@ body {
   }
 
   /* Aturan media query untuk tampilan responsif pada perangkat seluler */
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 600px) {
     .image-with-text {
       flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
       align-items: flex-start; /* Posisikan elemen secara vertikal pada perangkat seluler */
@@ -441,3 +463,58 @@ body {
     }
   }
 /* dataPribadi end */
+
+/* pemesanan start */
+.order > h5{
+  color: #F17591;
+  font-size: medium;
+  padding: 20px 30px;
+  margin-left: 40px;
+}
+.form-container-order{
+  padding: 0px 70px;
+}
+.form-input-section .input-field{
+  position: relative;
+  margin: 10px 0;
+}
+.form-input-section .input-field input::placeholder {
+  color: #808080;
+  font-size: small;
+  font-weight: 500;
+}
+
+.dropdown-order .btn-dropdown-order{
+  border: none;
+  background-color: #F17591;
+  width: 100%;
+  color: white;
+
+  border-radius: 5px;
+  text-align: left;
+  font-size: small;
+  padding: 8px;
+  font-weight: 600;
+  height: 40px;
+}
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.button .btn-pesan{
+  background-color: #F17591;
+  color: white;
+  border: none;
+
+  font-weight: 600;
+  font-size: smaller;
+
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 9px 9px;
+  width: 115px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+/* pemesanan end */
