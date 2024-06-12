@@ -131,14 +131,20 @@ def pemesanan():
         nomor_telepon = request.form.get('nomorTelepon')
         jumlah_produk = request.form.get('jumlahProduk')
         alamat = request.form.get('alamat')
+        tanggal_pemesanan = request.form.get('tanggalPemesanan')
+        
+        # Ambil nama produk dari sesi
+        nama_produk = session.get('nama_produk')
 
         # Simpan data pemesanan ke basis data
         new_order = {
             'product_id': ObjectId(product_id),
+            'nama_produk': nama_produk,
             'nama_lengkap': nama_lengkap,
             'nomor_telepon': nomor_telepon,
             'jumlah_produk': jumlah_produk,
-            'alamat': alamat
+            'alamat': alamat,
+            'tanggal_pemesanan': tanggal_pemesanan
         }
         db.orders.insert_one(new_order)
 
@@ -147,8 +153,10 @@ def pemesanan():
 
     else:
         product_id = request.args.get('id')
-        product = db.products.find_one({'_id': ObjectId(product_id)}) 
+        product = db.products.find_one({'_id': ObjectId(product_id)})
         if product:
+            # Simpan nama produk dalam sesi
+            session['nama_produk'] = product['nama_produk']
             return render_template('pemesanan.html', product=product)
         else:
             return "Produk tidak ditemukan."
@@ -236,16 +244,16 @@ def edit_data_produk(_id):
     if request.method == 'POST':
         jenisSkincare = request.form['jenisSkincare']
         namaProduk = request.form['namaProduk']
-        hargaPerPcs = request.form['hargaPerPcs']
-        totalDus = request.form['totalDus']
-        totalHarga = request.form['totalHarga']
-        photo = request.files['photo']
+        hargaPerPcs = request.form.getlist('hargaPerPcs[]')
+        totalDus = request.form.getlist('totalDus[]')
+        totalHarga = request.form.getlist('totalHarga[]')
+        photo = request.files.get('photo')  # Menggunakan get() agar tidak error jika tidak ada foto yang diunggah
 
         # Inisialisasi nama_file_gambar dengan nilai default
         nama_file_gambar = None
 
         # Simpan file jika ada
-        if photo:
+        if photo and photo.filename:  # Periksa jika ada foto yang diunggah
             nama_file_asli = photo.filename
             nama_file_gambar = secure_filename(nama_file_asli)
             file_path = f'./static/assets/imgProduk/{nama_file_gambar}'
@@ -255,9 +263,7 @@ def edit_data_produk(_id):
         doc = {
             'jenis_skincare': jenisSkincare,
             'nama_produk': namaProduk,
-            'harga_per_pcs': hargaPerPcs,
-            'total_dus': totalDus,
-            'total_harga': totalHarga
+            'dus_harga': [{'hargaPerPcs': harga_pcs, 'total_dus': dus, 'total_harga': harga} for harga_pcs, dus, harga in zip(hargaPerPcs, totalDus, totalHarga)]
         }
 
         # Tambahkan nama_file_gambar ke dictionary jika ada
@@ -310,10 +316,29 @@ def hapus_data_pelanggan(_id):
 def adminPemesanan():
     orders = db.orders.find()
     if is_valid_admin():
-        return render_template('adminPemesanan.html', orders=orders)
+        page = int(request.args.get('page', 1))
+        per_page = 5
+        total_products = db.orders.count_documents({})
+        total_pages = (total_products + per_page - 1) // per_page
+
+        orders = list(db.orders.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminPemesanan.html', orders=orders, page=page, total_pages=total_pages)
     else:
         return redirect(url_for('admin_login'))
 # route admin pemesanan end
+
+@app.route('/selesaikan-pesanan/<string:_id>', methods=['POST'])
+def selesaikan_pemesanan(_id):
+    try:
+        orders = db.orders.find_one_and_delete({"_id": ObjectId(_id)})
+        if orders:
+            db.riwayatPemesanan.insert_one(orders)
+            return jsonify({"success": True}), 200
+        else:
+            return jsonify({"success": False, "error": "Pesanan tidak ditemukan"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 
@@ -381,7 +406,7 @@ def hapus_data_pembayaran(_id):
 
 
 # route produk terlaris start
-@app.route('/adminProdukTerlaris', methods=['GET'])
+@app.route('/adminProdukTerlaris')
 def adminProdukTerlaris():
     if is_valid_admin():
         produkTerlaris = db.produkTerlaris.find()
@@ -389,16 +414,21 @@ def adminProdukTerlaris():
     else:
         return redirect(url_for('admin_login'))
 
+
 @app.route('/tambahDataProdukTerlaris', methods=['GET', 'POST'])
 def tambah_data_produk_terlaris():
     if request.method == 'POST':
         jenisSkincare = request.form['jenisSkincare']
         namaProduk = request.form['namaProduk']
-        hargaPerPcs = request.form['hargaPerPcs']
-        totalDus = request.form['totalDus']
-        totalHarga = request.form['totalHarga']
+        hargaPerPcs = request.form.getlist('hargaPerPcs[]')
+        totalDus = request.form.getlist('totalDus[]')
+        totalHarga = request.form.getlist('totalHarga[]')
         photo = request.files['photo']
-        
+
+        # Validasi input
+        if not jenisSkincare or not namaProduk or not hargaPerPcs or not totalDus or not totalHarga or not photo:
+            return "Semua bidang harus diisi!", 400
+
         if photo:
             nama_file_asli = photo.filename
             nama_file_gambar = secure_filename(nama_file_asli)
@@ -406,19 +436,24 @@ def tambah_data_produk_terlaris():
             photo.save(file_path)
         else:
             nama_file_gambar = None
-            
+
+        # Buat daftar entri total dus dan total harga
+        dus_harga_list = []
+        for harga_pcs, dus, harga in zip(hargaPerPcs, totalDus, totalHarga):
+            dus_harga_list.append({'hargaPerPcs': harga_pcs, 'total_dus': dus, 'total_harga': harga})
+
+        # Buat dokumen untuk disimpan di database
         doc = {
             'jenis_skincare': jenisSkincare,
             'nama_produk': namaProduk,
-            'harga_per_pcs': hargaPerPcs,
-            'total_dus': totalDus,
-            'total_harga': totalHarga,
+            'dus_harga': dus_harga_list,
             'photo': nama_file_gambar
         }
-        
+
+        # Simpan dokumen ke MongoDB
         db.produkTerlaris.insert_one(doc)
         return redirect(url_for("adminProdukTerlaris"))
-        
+
     return render_template('tambahDataProdukTerlaris.html')
 
 @app.route('/editDataProdukTerlaris/<string:_id>', methods=["GET", "POST"])
@@ -426,16 +461,16 @@ def edit_data_produk_terlaris(_id):
     if request.method == 'POST':
         jenisSkincare = request.form['jenisSkincare']
         namaProduk = request.form['namaProduk']
-        hargaPerPcs = request.form['hargaPerPcs']
-        totalDus = request.form['totalDus']
-        totalHarga = request.form['totalHarga']
-        photo = request.files['photo']
+        hargaPerPcs = request.form.getlist('hargaPerPcs[]')
+        totalDus = request.form.getlist('totalDus[]')
+        totalHarga = request.form.getlist('totalHarga[]')
+        photo = request.files.get('photo')  # Menggunakan get() agar tidak error jika tidak ada foto yang diunggah
 
         # Inisialisasi nama_file_gambar dengan nilai default
         nama_file_gambar = None
 
         # Simpan file jika ada
-        if photo:
+        if photo and photo.filename:  # Periksa jika ada foto yang diunggah
             nama_file_asli = photo.filename
             nama_file_gambar = secure_filename(nama_file_asli)
             file_path = f'./static/assets/imgProdukTerlaris/{nama_file_gambar}'
@@ -445,9 +480,7 @@ def edit_data_produk_terlaris(_id):
         doc = {
             'jenis_skincare': jenisSkincare,
             'nama_produk': namaProduk,
-            'harga_per_pcs': hargaPerPcs,
-            'total_dus': totalDus,
-            'total_harga': totalHarga
+            'dus_harga': [{'hargaPerPcs': harga_pcs, 'total_dus': dus, 'total_harga': harga} for harga_pcs, dus, harga in zip(hargaPerPcs, totalDus, totalHarga)]
         }
 
         # Tambahkan nama_file_gambar ke dictionary jika ada
@@ -670,10 +703,18 @@ def hapus_data_footer(_id):
 
 
 # route admin riwayat pemesanan start
-@app.route('/adminRiwayatPemesanan')
+@app.route('/adminRiwayatPemesanan', methods=['GET', 'POST'])
 def adminRiwayatPemesanan():
+    riwayatPemesanan = db.riwayatPemesanan.find()
     if is_valid_admin():
-        return render_template('adminRiwayatPemesanan.html')
+        page = int(request.args.get('page', 1))
+        per_page = 5
+        total_products = db.riwayatPemesanan.count_documents({})
+        total_pages = (total_products + per_page - 1) // per_page
+
+        riwayatPemesanan = list(db.riwayatPemesanan.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminRiwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan, page=page, total_pages=total_pages)
     else:
         return redirect(url_for('admin_login'))
 # route admin riwayat pemesanan end

@@ -117,8 +117,12 @@
           <img src="../static/assets/imgProdukTerlaris/{{data.photo}}" alt="..." class="image">
           <div class="card-body text-center">
             <h5 class="card-title">{{data.nama_produk}}</h5>
-            <p class="card-text">{{data.total_dus}} = Rp {{data.harga_per_pcs}}</p>
-            <button class="btn">Beli Sekarang</button>
+            <ul class="list-unstyled">
+              {% for dus_harga in data.dus_harga %}
+              <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
+              {% endfor %}
+          </ul>
+            <button class="btn" onclick="window.location.href='/loginUser'">Beli Sekarang</button>
           </div>
         </div>
         {% endfor %}

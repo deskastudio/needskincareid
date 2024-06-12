@@ -23,7 +23,7 @@
         {% include 'navbarAdmin.html' %}
 
         <!-- Modal untuk Edit Produk -->
-        <div class="modal-body">
+        <div class="container" style="padding-left: 10rem; padding-right: 10rem;">
             <form action="/editDataProdukTerlaris/{{data._id}}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="jenisSkincare" class="form-label">Jenis Skincare</label>
@@ -33,28 +33,28 @@
                         <option value="Moisturizer" {% if data.jenis_skincare == 'Moisturizer' %}selected{% endif %}>Moisturizer</option>
                         <option value="Serum" {% if data.jenis_skincare == 'Serum' %}selected{% endif %}>Serum</option>
                         <option value="Toner" {% if data.jenis_skincare == 'Toner' %}selected{% endif %}>Toner</option>
-                        <option value="Masker" {% if data.jenis_skincare == 'Masker' %}selected{% endif %}>Masker</option>
                         <option value="Facial Wash" {% if data.jenis_skincare == 'Facial Wash' %}selected{% endif %}>Facial Wash</option>
                         <option value="Micellar Water" {% if data.jenis_skincare == 'Micellar Water' %}selected{% endif %}>Micellar Water</option>
-                        <option value="Essense" {% if data.jenis_skincare == 'Essense' %}selected{% endif %}>Essense</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="namaProduk" class="form-label">Nama Produk</label>
                     <input type="text" class="form-control" id="namaProduk" name="namaProduk" required value="{{ data.nama_produk }}" placeholder="contoh: Skintific 5X Ceramide Barrier Moisturizer Gel 30g">
                 </div>
+                {% for index in range(data.dus_harga|length) %}
                 <div class="mb-3">
                     <label for="hargaPerPcs" class="form-label">Harga/Pcs</label>
-                    <input type="text" class="form-control" id="hargaPerPcs" name="hargaPerPcs" required value="{{ data.harga_per_pcs }}" placeholder="contoh: 54.000">
+                    <input type="text" class="form-control" id="hargaPerPcs_{{ index }}" name="hargaPerPcs[]" required value="{{ data.dus_harga[index].hargaPerPcs }}" placeholder="contoh: 54.000">
                 </div>
                 <div class="mb-3">
                     <label for="totalDus" class="form-label">Total Dus</label>
-                    <input type="text" class="form-control" id="totalDus" name="totalDus" required value="{{ data.total_dus }}" placeholder="contoh: 2 dus (54.000)">
+                    <input type="text" class="form-control" id="totalDus_{{ index }}" name="totalDus[]" required value="{{ data.dus_harga[index].total_dus }}" placeholder="contoh: 2 dus (54.000)">
                 </div>
                 <div class="mb-3">
                     <label for="totalHarga" class="form-label">Total Harga</label>
-                    <input type="text" class="form-control" id="totalHarga" name="totalHarga" required value="{{ data.total_harga }}"  placeholder="contoh: 2.500.000">
+                    <input type="text" class="form-control" id="totalHarga_{{ index }}" name="totalHarga[]" required value="{{ data.dus_harga[index].total_harga }}"  placeholder="contoh: 2.500.000">
                 </div>
+                {% endfor %}
                 <div class="mb-3">
                     <label for="photo" class="form-label">Upload Foto</label>
                     <input type="file" class="form-control" id="photo" name="photo">
