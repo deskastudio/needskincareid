@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+
+    <title>Detail Pemesanan</title>
+
+    <style>
+        
+        .col-md-8 {
+            border: 2px solid #faa0dc;
+            border-radius: 5px;
+            margin: 5px;
+            width: 65%;
+            padding: 5px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            margin: 5px;
+            background-color: #fff;
+            border: 3px solid;
+            border-color: #f3c9d5;
+        }
+
+        .card-body {
+            width: 200px;
+            background-color: #f8b6c8;
+        }
+
+        .col-6{
+            border: 2px solid #faa0dc;;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px;
+            width: 30%;
+        }
+        
+
+    </style>
+</head>
+
+<body>
+    <!-- header start -->
+    {% include 'header.html' %}
+    <!-- navbar end -->
+
+    <!-- detail pemesanan start -->
+    <div class="container">
+        <h2 style="font-weight: bold;" class="text-center">Detail Pemesanan</h2>
+        <div class="row" style="max-width: 100%; margin:5px">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <img src="../static/img/produk/hydramax-ss.png" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: #fff;">Azarine Hydrasoothe
+                                    Sunscreen Gel SPF 45</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        halo
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">.col-md-4</div>
+        </div>
+
+    </div>
+    <!-- detail pemesanan end -->
+
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

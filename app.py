@@ -641,6 +641,11 @@ def pemesanan():
     return render_template('pemesanan.html')
 #izin nambahin buat liat tampilannya
 
+@app.route('/detailPemesanan')
+def detailPemesanan():
+    return render_template('detailPemesanan.html')
+
+
 @app.route('/riwayatPemesanan')
 def riwayatPemesanan():
     return render_template('riwayatPemesanan.html')
