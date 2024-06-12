@@ -6,16 +6,14 @@ from dotenv import load_dotenv
 from flask import Flask, flash, jsonify, render_template, request, redirect, session, url_for
 from pymongo import MongoClient
 import bcrypt
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename 
+from werkzeug.security import check_password_hash
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 MONGODB_URI = os.environ.get("MONGODB_URI")
 DB_NAME =  str(os.environ.get("DB_NAME"))
-
-# Configuration for file uploads
-UPLOAD_FOLDER = 'static/uploads'
 
 client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
@@ -25,10 +23,14 @@ users_collection = db['users']
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+def is_valid_admin():
+    return 'admin_id' in session
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    produkTerlaris = db.produkTerlaris.find()
+    return render_template('index.html', produkTerlaris=produkTerlaris)
 
 @app.route('/registerUser', methods=['POST', 'GET'])
 def register_user():
@@ -99,19 +101,35 @@ def login_user():
     else:
         return render_template('loginUser.html')
     
+@app.route('/adminLogin', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        namaPengguna = request.form['namaPengguna']
+        password = request.form['password']
+
+        admin = db.admin.find_one({'namaPengguna': namaPengguna})
+
+        if admin and admin['password'] == password:
+            session['admin_id'] = str(admin['_id'])
+            return redirect(url_for('adminDashboard'))
+        else:
+            flash("Nama Pengguna atau Kata Sandi salah")
+            return redirect(url_for('admin_login'))
+
+    return render_template('adminLogin.html')
+    
 @app.route('/produk', methods=['GET'])
 def produk():
     return render_template('produk.html')
-
-@app.route('/sidebar')
-def sidebar():
-    return render_template('sidebarAdmin.html')
 
 
 # route admin dashboard start
 @app.route('/adminDashboard')
 def adminDashboard():
-    return render_template('adminDashboard.html')
+    if is_valid_admin():
+        return render_template('adminDashboard.html')
+    else: 
+        return redirect(url_for('admin_login'))
 # route admin dashboard end
 
 
@@ -119,8 +137,12 @@ def adminDashboard():
 # route admin produk start
 @app.route('/adminProduk')
 def adminProduk():
-    products = db.products.find()
-    return render_template('adminProduk.html', products=products)
+    if is_valid_admin():
+        products = db.products.find()
+        return render_template('adminProduk.html', products=products)
+    else:
+        return redirect(url_for('admin_login'))
+
 
 @app.route('/tambahDataProduk', methods=['GET', 'POST'])
 def tambah_data_produk():
@@ -203,10 +225,21 @@ def hapus_data_produk(_id):
 
 
 # route admin pelanggan start
-@app.route('/adminPelanggan')
+@app.route('/adminPelanggan', methods=['GET'])
 def adminPelanggan():
-    users = db.users.find()
-    return render_template('adminPelanggan.html', users=users)
+    if is_valid_admin():
+        users = db.users.find()
+        page = int(request.args.get('page', 1))
+        per_page = 5  # Number of users per page
+        total_users = users_collection.count_documents({})
+        total_pages = (total_users + per_page - 1) // per_page
+
+        users = list(users_collection.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminPelanggan.html', users=users, page=page, total_pages=total_pages)
+    else:
+        return redirect(url_for('admin_login'))
+    
 
 @app.route('/hapusDataPelanggan/<string:_id>', methods=["GET", "POST"])
 def hapus_data_pelanggan(_id):
@@ -219,16 +252,29 @@ def hapus_data_pelanggan(_id):
 # route admin pemesanan start
 @app.route('/adminPemesanan')
 def adminPemesanan():
-    return render_template('adminPemesanan.html')
+    if is_valid_admin():
+        return render_template('adminPemesanan.html')
+    else:
+        return redirect(url_for('admin_login'))
 # route admin pemesanan end
 
 
 
 # route admin pembayaran start
-@app.route('/adminPembayaran')
+@app.route('/adminPembayaran', methods=['GET'])
 def adminPembayaran():
-    pembayaran = db.pembayaran.find()
-    return render_template('adminPembayaran.html', pembayaran=pembayaran)
+    if is_valid_admin():
+        pembayaran = db.pembayaran.find()
+        page = int(request.args.get('page', 1))
+        per_page = 5  # Number of products per page
+        total_products = db.pembayaran.count_documents({})
+        total_pages = (total_products + per_page - 1) // per_page
+
+        pembayaran = list(db.pembayaran.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminPembayaran.html', pembayaran=pembayaran, page=page, total_pages=total_pages)
+    else:
+        return redirect(url_for('admin_login'))
 
 @app.route('/tambahDataPembayaran', methods=['GET', 'POST'])
 def tambah_data_pembayaran():
@@ -277,10 +323,13 @@ def hapus_data_pembayaran(_id):
 
 
 # route produk terlaris start
-@app.route('/adminProdukTerlaris')
+@app.route('/adminProdukTerlaris', methods=['GET'])
 def adminProdukTerlaris():
-    produkTerlaris = db.produkTerlaris.find()
-    return render_template('adminProdukTerlaris.html', produkTerlaris=produkTerlaris)
+    if is_valid_admin():
+        produkTerlaris = db.produkTerlaris.find()
+        return render_template('adminProdukTerlaris.html', produkTerlaris=produkTerlaris)
+    else:
+        return redirect(url_for('admin_login'))
 
 @app.route('/tambahDataProdukTerlaris', methods=['GET', 'POST'])
 def tambah_data_produk_terlaris():
@@ -365,8 +414,18 @@ def hapus_data_produk_terlaris(_id):
 # route banner homepage start
 @app.route('/adminBannerHomepage')
 def adminBannerHomepage():
-    bannerHomepage = db.bannerHomepage.find()
-    return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage)
+    if is_valid_admin():
+        bannerHomepage = db.bannerHomepage.find()
+        page = int(request.args.get('page', 1))
+        per_page = 5  # Number of products per page
+        total_banner = db.bannerHomepage.count_documents({})
+        total_pages = (total_banner + per_page - 1) // per_page
+
+        bannerHomepage = list(db.bannerHomepage.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage, page=page, total_pages=total_pages)
+    else:
+        return redirect(url_for('admin_login'))
 
 @app.route('/tambahDataBannerHomepage', methods=['GET', 'POST'])
 def tambah_data_banner_homepage():
@@ -435,8 +494,18 @@ def hapus_data_banner_homepage(_id):
 # route data admin start
 @app.route('/adminDataAdmin')
 def adminDataAdmin():
-    admin = db.admin.find()
-    return render_template('adminDataAdmin.html', admin=admin)
+    if is_valid_admin():
+        admin = db.admin.find()
+        page = int(request.args.get('page', 1))
+        per_page = 5  # Number of products per page
+        total_admin = db.admin.count_documents({})
+        total_pages = (total_admin + per_page - 1) // per_page
+
+        admin = list(db.admin.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminDataAdmin.html', admin=admin, page=page, total_pages=total_pages)
+    else:
+        return redirect(url_for('admin_login'))
 
 @app.route('/tambahDataAdmin', methods=['GET', 'POST'])
 def tambah_data_admin():
@@ -481,10 +550,20 @@ def hapus_data_admin(_id):
 
 
 # route admin footer start
-@app.route('/adminFooter')
+@app.route('/adminFooter', methods=['GET'])
 def adminFooter():
-    footer = db.footer.find()
-    return render_template('adminFooter.html', footer=footer)
+    if is_valid_admin():
+        footer = db.footer.find()
+        page = int(request.args.get('page', 1))
+        per_page = 5  # Number of products per page
+        total_footer = db.footer.count_documents({})
+        total_pages = (total_footer + per_page - 1) // per_page
+
+        footer = list(db.footer.find().skip((page - 1) * per_page).limit(per_page))
+
+        return render_template('adminFooter.html', footer=footer, page=page, total_pages=total_pages)
+    else:
+        return redirect(url_for('admin_login'))
 
 @app.route('/tambahDataFooter', methods=['GET', 'POST'])
 def tambah_data_footer():
@@ -535,7 +614,10 @@ def hapus_data_footer(_id):
 # route admin riwayat pemesanan start
 @app.route('/adminRiwayatPemesanan')
 def adminRiwayatPemesanan():
-    return render_template('adminRiwayatPemesanan.html')
+    if is_valid_admin():
+        return render_template('adminRiwayatPemesanan.html')
+    else:
+        return redirect(url_for('admin_login'))
 # route admin riwayat pemesanan end
 
 @app.route('/logout')
@@ -543,11 +625,12 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-
-
-@app.route('/adminLogin')
-def admin_login():
-    return render_template('adminLogin.html')
+@app.route('/adminLogout')
+def admin_logout():
+    # Hapus data admin dari sesi
+    session.pop('admin_id', None)
+    # Redirect ke halaman login admin atau halaman lain yang sesuai
+    return redirect(url_for('index'))
 
 @app.route('/dataPribadi')
 def dataPribadi():
@@ -558,6 +641,10 @@ def dataPribadi():
 def pemesanan():
     return render_template('pemesanan.html')
 #izin nambahin buat liat tampilannya
+
+@app.route('/riwayatPemesanan')
+def riwayatPemesanan():
+    return render_template('riwayatPemesanan.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")

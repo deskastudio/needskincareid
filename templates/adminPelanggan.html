@@ -37,7 +37,7 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">Nama</th>
+                        <th scope="col">Nama Lengkap</th>
                         <th scope="col">Nama Pengguna</th>
                         <th scope="col">Email</th>
                         <th scope="col">No Handphone</th>
@@ -66,16 +66,16 @@
                   <div class="d-flex justify-content-end">
                     <nav aria-label="Page navigation example">
                       <ul class="pagination">
-                        <li class="page-item">
-                          <a class="page-link" href="#" aria-label="Previous">
+                        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                          <a class="page-link" href="/adminPelanggan?page={{ page - 1 }}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                           </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                          <a class="page page-link" href="#" aria-label="Next">
+                        {% for p in range(1, total_pages + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="/adminPelanggan?page={{ p }}">{{ p }}</a></li>
+                        {% endfor %}
+                        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                          <a class="page-link" href="/adminPelanggan?page={{ page + 1 }}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                           </a>
                         </li>
@@ -91,6 +91,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+      $('form').submit(function(e) {
+        e.preventDefault();
+        const searchText = $(this).find('input[type="search"]').val().toLowerCase();
+        filterRowsBySearch(searchText);
+    });
+    
+    function filterRowsBySearch(searchText) {
+        const rows = $('tbody tr');
+        rows.each(function() {
+            const namaLengkap = $(this).find('td:eq(0)').text().toLowerCase();
+            const namaPengguna = $(this).find('td:eq(1)').text().toLowerCase();
+            if (namaLengkap.includes(searchText) || namaPengguna.includes(searchText)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    
+    </script>
 
   </body>
 </html>

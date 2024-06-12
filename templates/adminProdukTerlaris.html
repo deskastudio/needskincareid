@@ -8,16 +8,19 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
-
     <style>
       .active-label {
         background-color: #DB7095 !important;
         color: white !important;
         border-radius: 8px !important;
       }
+      .active-page {
+        background-color: #DB7095 !important;
+        color: white !important;
+      }
     </style>
 
+    <title>Hello, world!</title>
   </head>
   <body>
     <!-- sidebar start -->
@@ -31,7 +34,7 @@
     <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
         <div class="row align-items-center px-3">
             <div class="col-lg-6">
-              <h3 class="fw-bold">Semua Produk Terlaris</h3>
+              <h3 class="fw-bold">Semua Produk</h3>
             </div>
             <div class="col-lg-3">
               <!-- Button trigger modal -->
@@ -66,16 +69,10 @@
                     <label class="btn fs-5" for="btnradio4" data-filter="Toner">Toner</label>
         
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
-                    <label class="btn fs-5" for="btnradio5" data-filter="Masker">Masker</label>
+                    <label class="btn fs-5" for="btnradio5" data-filter="Facial Wash">Facial Wash</label>
         
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
-                    <label class="btn fs-5" for="btnradio6" data-filter="Facial Wash">Facial Wash</label>
-        
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off">
-                    <label class="btn fs-5" for="btnradio7" data-filter="Micellar Water">Micellar Water</label>
-    
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio8" autocomplete="off">
-                    <label class="btn fs-5" for="btnradio8" data-filter="Essense">Essense</label>
+                    <label class="btn fs-5" for="btnradio6" data-filter="Micellar Water">Micellar Water</label>
                   </div>
               </div>
           </div>
@@ -96,7 +93,7 @@
                     </thead>
                     <tbody>
                       {% for data in produkTerlaris %}
-                      <tr data-jenis="{{ data.jenis_skincare }}">
+                    <tr data-jenis="{{ data.jenis_skincare }}">
                         <td>{{ data.jenis_skincare }}</td>
                         <td>{{ data.nama_produk }}</td>
                         <td>Rp. {{ data.harga_per_pcs }}</td>
@@ -120,9 +117,9 @@
                             <span aria-hidden="true">&laquo;</span>
                           </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link page-number" href="#" data-page="1">1</a></li>
+                        <li class="page-item"><a class="page-link page-number" href="#" data-page="2">2</a></li>
+                        <li class="page-item"><a class="page-link page-number" href="#" data-page="3">3</a></li>
                         <li class="page-item">
                           <a class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
@@ -149,37 +146,148 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <script>
-          $(document).ready(function() {
-              // untuk menampilkan gambar produk
-              $('.product-image').on('click', function() {
-                  const modal = new bootstrap.Modal($('#productImageModal')[0]);
-                  const productImage = $('#productImage');
-                  productImage.attr('src', $(this).attr('src'));
-                  modal.show();
-              });
-  
-              // untuk memfilter produk berdasarkan jenis skincare
-              $('.btn-check').on('click', function() {
-                  const filter = $(this).next('label').data('filter').toLowerCase();
-                  const rows = $('tbody tr');
-  
-                  // Ubah label yang aktif
-                  $('.btn-group .btn').removeClass('active-label');
-                  $(this).next('label').addClass('active-label');
-  
-                  // Filter baris berdasarkan jenis skincare
-                  rows.each(function() {
-                      const jenis = $(this).data('jenis').toLowerCase();
-                      if (filter === 'all' || jenis === filter) {
-                          $(this).show();
-                      } else {
-                          $(this).hide();
-                      }
-                  });
-              });
+    <script>
+      $(document).ready(function() {
+        // Untuk menampilkan gambar produk
+        $('.product-image').on('click', function() {
+          const modal = new bootstrap.Modal($('#productImageModal')[0]);
+          const productImage = $('#productImage');
+          productImage.attr('src', $(this).attr('src'));
+          modal.show();
+        });
+    
+        $('.btn-check').on('click', function() {
+          const filter = $(this).next('label').data('filter').toLowerCase();
+          filterRows(filter);
+          $('.btn-check').removeClass('active-label'); // Menghapus kelas active-label dari semua tombol
+          $(this).addClass('active-label'); // Menambahkan kelas active-label ke tombol yang aktif
+      });
+      
+      $('.btn-check').on('click', function() {
+          const filter = $(this).next('label').data('filter').toLowerCase();
+          const rows = $('tbody tr');
+      
+          // Ubah label yang aktif
+          $('.btn-group .btn').removeClass('active-label');
+          $(this).next('label').addClass('active-label');
+      
+          // Filter baris berdasarkan jenis skincare
+          rows.each(function() {
+              const jenis = $(this).data('jenis').toLowerCase();
+              if (filter === 'all' || jenis === filter) {
+                  $(this).show();
+              } else {
+                  $(this).hide();
+              }
           });
-      </script>
+          showPage(1); // Reset to first page after filter
+      });
+      
+      function filterRows(filter) {
+          const rows = $('tbody tr');
+      
+          // Ubah label yang aktif
+          $('.btn-group .btn').removeClass('active-label');
+          $(this).next('label').addClass('active-label');
+      
+          // Filter baris berdasarkan jenis skincare
+          rows.each(function() {
+              const jenis = $(this).data('jenis').toLowerCase();
+              if (filter === 'all' || jenis === filter) {
+                  $(this).show();
+              } else {
+                  $(this).hide();
+              }
+          });
+          showPage(1); // Reset to first page after filter
+      };
+    
+      
+        // Pagination setup
+        const rowsPerPage = 5; // Number of rows per page
+        const rows = $('tbody tr');
+        let filteredRows = rows.toArray(); // Copy all rows initially
+        let pageCount = Math.ceil(filteredRows.length / rowsPerPage); // Calculate initial page count
+        const pagination = $('.pagination');
+    
+        // Generate pagination
+        generatePagination();
+    
+        pagination.on('click', '.page-number', function(e) {
+          e.preventDefault();
+          const page = $(this).data('page');
+          showPage(page);
+        });
+    
+        pagination.on('click', '[aria-label="Previous"]', function(e) {
+          e.preventDefault();
+          const currentPage = parseInt($('.pagination .active-page').attr('data-page'));
+          if (currentPage > 1) {
+            showPage(currentPage - 1);
+          }
+        });
+    
+        pagination.on('click', '[aria-label="Next"]', function(e) {
+          e.preventDefault();
+          const currentPage = parseInt($('.pagination .active-page').attr('data-page'));
+          if (currentPage < pageCount) {
+            showPage(currentPage + 1);
+          }
+        });
+    
+        // Memfilter baris berdasarkan teks pencarian
+        $('form').submit(function(e) {
+          e.preventDefault();
+          const searchText = $(this).find('input[type="search"]').val().toLowerCase();
+          filterRowsBySearch(searchText);
+        });
+    
+        showPage(1); // Display first page initially
+    
+        function showPage(page) {
+          const startIndex = (page - 1) * rowsPerPage;
+          const endIndex = startIndex + rowsPerPage;
+          const rowsToShow = filteredRows.slice(startIndex, endIndex);
+          rows.hide();
+          $(rowsToShow).show();
+          pagination.find('.page-number').removeClass('active-page');
+          pagination.find(`[data-page=${page}]`).addClass('active-page');
+        }
+    
+        function filterRows(filter) {
+          filteredRows = rows.toArray().filter(row => {
+            const jenis = $(row).data('jenis').toLowerCase();
+            return filter === 'all' || jenis === filter;
+          });
+          pageCount = Math.ceil(filteredRows.length / rowsPerPage); // Recalculate page count
+          generatePagination();
+          showPage(1); // Reset to first page after filter
+        }
+    
+        function filterRowsBySearch(searchText) {
+          filteredRows = rows.toArray().filter(row => {
+            const jenis = $(row).data('jenis').toLowerCase();
+            const namaProduk = $(row).find('td:eq(1)').text().toLowerCase();
+            return jenis.includes(searchText) || namaProduk.includes(searchText);
+          });
+          pageCount = Math.ceil(filteredRows.length / rowsPerPage); // Recalculate page count
+          generatePagination();
+          showPage(1); // Reset to first page after filtering by search
+        }
+    
+        function generatePagination() {
+          pagination.empty();
+          if (pageCount > 1) {
+            pagination.append(`<li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>`);
+            for (let i = 1; i <= pageCount; i++) {
+              pagination.append(`<li class="page-item"><a class="page-link page-number" href="#" data-page="${i}">${i}</a></li>`);
+            }
+            pagination.append(`<li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>`);
+          }
+        }
+      });
+    
+    </script>
+  
   </body>
 </html>
