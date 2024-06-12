@@ -314,6 +314,7 @@ def edit_data_pembayaran(_id):
     data = db.pembayaran.find_one({'_id': ObjectId(_id)})
     return render_template('editDataPembayaran.html', data=data)
 
+
 @app.route('/hapusDataPembayaran/<string:_id>', methods=["GET", "POST"])
 def hapus_data_pembayaran(_id):
     db.pembayaran.delete_one({'_id': ObjectId(_id)})
@@ -644,7 +645,8 @@ def pemesanan():
 
 @app.route('/detailPemesanan')
 def detailPemesanan():
-    return render_template('detailPemesanan.html')
+    data = db.pembayaran.find()
+    return render_template('detailPemesanan.html',data=data)
 
 
 @app.route('/riwayatPemesanan')

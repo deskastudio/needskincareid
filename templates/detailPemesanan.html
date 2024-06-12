@@ -36,23 +36,71 @@
             margin: 5px;
             background-color: #fff;
             border: 3px solid;
-            border-color: #f3c9d5;
+            border-color: #faa0dc;
         }
 
         .card-body {
             width: 200px;
-            background-color: #f8b6c8;
+            background-color: #db7095;
         }
 
         .col-6{
-            border: 2px solid #faa0dc;;
+            border: 2px solid #faa0dc;
             border-radius: 5px;
             padding: 5px;
             margin: 5px;
             width: 30%;
         }
-        
 
+        .formbeli{
+          
+            margin-top: 50px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+            list-style: none;
+        }
+
+       .formbeli li{
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: start;
+            padding: 10px;
+            font-weight: bold;
+       }
+
+       .noted{
+          width: 100%;
+          justify-content: center;
+          align-items: center;
+          height: auto;
+          background-color:  #db7095;
+       }
+
+       .btn{
+        background-color: #db7095;
+        margin: 30px auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 70px;
+        border-radius: 10px;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+       }
+
+       .btn:hover{
+        cursor: pointer;
+        background-color: #ffffff;
+        border-color: #db7095;
+        color: #db7095;
+       }
     </style>
 </head>
 
@@ -67,7 +115,7 @@
         <div class="row" style="max-width: 100%; margin:5px">
             <div class="col-md-8">
                 <div class="row">
-                    <div class="col">
+                    <div class="col " style="max-width:300px">
                         <div class="card">
                             <img src="../static/img/produk/hydramax-ss.png" class="card-img-top" alt="...">
                             <div class="card-body">
@@ -77,14 +125,37 @@
                         </div>
                     </div>
                     <div class="col">
-                        halo
+                      <ul class="formbeli">
+                        <li>Nama Pembeli: </li>
+                        <li>Nomor Telepon: </li>
+                        <li>Jumlah Produk: </li>
+                        <li>Alamat: </li>
+                      </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-4">.col-md-4</div>
+            <div class="col-6 col-md-4">
+                <h4 class="text-center" style="font-weight: bold; ">Metode Pembayaran</h4>
+                <div class="col" >
+                    <ul>
+                        {% for data in pembayaran %}
+                        <li>
+                            <span style="font-weight: bold;">{{ data.jenisPembayaran }}</span>
+                            <p>{{ data.nomorPembayaran }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
-
     </div>
+
+    
+    <div class="noted">
+        <p class="text-center" style="color: #fff; font-size:20px">Pembeli wajib melakukan konfirmasi pembayaran agar pesanan segera diproses. Klik tombol dibawah ini untuk mengirim bukti pembayaran dan mendapatkan informasi pengiriman!!!</p>
+    </div>
+
+    <a class="btn" href="wa.me/6281317867755" role="button">Bayar</a>
     <!-- detail pemesanan end -->
 
     <!-- footer start -->
