@@ -120,7 +120,53 @@ def admin_login():
     
 @app.route('/produk', methods=['GET'])
 def produk():
-    return render_template('produk.html')
+    products = db.products.find()
+    return render_template('produk.html', products=products)
+
+@app.route('/pemesanan', methods=['GET', 'POST'])
+def pemesanan():
+    if request.method == 'POST':
+        product_id = request.form.get('product_id')
+        nama_lengkap = request.form.get('namaLengkap')
+        nomor_telepon = request.form.get('nomorTelepon')
+        jumlah_produk = request.form.get('jumlahProduk')
+        alamat = request.form.get('alamat')
+
+        # Simpan data pemesanan ke basis data
+        new_order = {
+            'product_id': ObjectId(product_id),
+            'nama_lengkap': nama_lengkap,
+            'nomor_telepon': nomor_telepon,
+            'jumlah_produk': jumlah_produk,
+            'alamat': alamat
+        }
+        db.orders.insert_one(new_order)
+
+        # Redirect ke halaman detail pemesanan dengan menyertakan ID pemesanan
+        return redirect(url_for('detail_pemesanan', id=new_order['_id']))
+
+    else:
+        product_id = request.args.get('id')
+        product = db.products.find_one({'_id': ObjectId(product_id)}) 
+        if product:
+            return render_template('pemesanan.html', product=product)
+        else:
+            return "Produk tidak ditemukan."
+
+@app.route('/detailPemesanan/<id>')
+def detail_pemesanan(id):
+    pembayaran = db.pembayaran.find()
+    order = db.orders.find_one({'_id': ObjectId(id)})
+    if order:
+        product_id = order['product_id']
+        product = db.products.find_one({'_id': product_id}) 
+        if product:
+            return render_template('detailPemesanan.html', order=order, product=product, pembayaran=pembayaran)
+        else:
+            return "Produk tidak ditemukan."
+    else:
+        return "Pemesanan tidak ditemukan."
+
 
 
 # route admin dashboard start
@@ -149,11 +195,15 @@ def tambah_data_produk():
     if request.method == 'POST':
         jenisSkincare = request.form['jenisSkincare']
         namaProduk = request.form['namaProduk']
-        hargaPerPcs = request.form['hargaPerPcs']
-        totalDus = request.form['totalDus']
-        totalHarga = request.form['totalHarga']
+        hargaPerPcs = request.form.getlist('hargaPerPcs[]')
+        totalDus = request.form.getlist('totalDus[]')
+        totalHarga = request.form.getlist('totalHarga[]')
         photo = request.files['photo']
-        
+
+        # Validasi input
+        if not jenisSkincare or not namaProduk or not hargaPerPcs or not totalDus or not totalHarga or not photo:
+            return "Semua bidang harus diisi!", 400
+
         if photo:
             nama_file_asli = photo.filename
             nama_file_gambar = secure_filename(nama_file_asli)
@@ -161,19 +211,24 @@ def tambah_data_produk():
             photo.save(file_path)
         else:
             nama_file_gambar = None
-            
+
+        # Buat daftar entri total dus dan total harga
+        dus_harga_list = []
+        for harga_pcs, dus, harga in zip(hargaPerPcs, totalDus, totalHarga):
+            dus_harga_list.append({'hargaPerPcs': harga_pcs, 'total_dus': dus, 'total_harga': harga})
+
+        # Buat dokumen untuk disimpan di database
         doc = {
             'jenis_skincare': jenisSkincare,
             'nama_produk': namaProduk,
-            'harga_per_pcs': hargaPerPcs,
-            'total_dus': totalDus,
-            'total_harga': totalHarga,
+            'dus_harga': dus_harga_list,
             'photo': nama_file_gambar
         }
-        
+
+        # Simpan dokumen ke MongoDB
         db.products.insert_one(doc)
         return redirect(url_for("adminProduk"))
-        
+
     return render_template('tambahDataProduk.html')
 
 @app.route('/editDataProduk/<string:_id>', methods=["GET", "POST"])
@@ -215,6 +270,7 @@ def edit_data_produk(_id):
     
     data = db.products.find_one({'_id': ObjectId(_id)})
     return render_template('editDataProduk.html', data=data)
+
 
 @app.route('/hapusDataProduk/<string:_id>', methods=["GET", "POST"])
 def hapus_data_produk(_id):
@@ -637,16 +693,6 @@ def admin_logout():
 def dataPribadi():
     return render_template('dataPribadi.html')
 #izin nambahin buat liat tampilannya
-
-@app.route('/pemesanan')
-def pemesanan():
-    return render_template('pemesanan.html')
-#izin nambahin buat liat tampilannya
-
-@app.route('/detailPemesanan')
-def detailPemesanan():
-    data = db.pembayaran.find()
-    return render_template('detailPemesanan.html',data=data)
 
 
 @app.route('/riwayatPemesanan')

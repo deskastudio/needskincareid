@@ -107,7 +107,6 @@ body {
 }
   .card {
     background-color: #FEE8EE;
-    width: calc(22.22% - 5px); 
     text-align: center;
     border: #FEE8EE;
     margin-bottom: 30px;
