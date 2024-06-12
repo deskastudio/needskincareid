@@ -308,8 +308,9 @@ def hapus_data_pelanggan(_id):
 # route admin pemesanan start
 @app.route('/adminPemesanan')
 def adminPemesanan():
+    orders = db.orders.find()
     if is_valid_admin():
-        return render_template('adminPemesanan.html')
+        return render_template('adminPemesanan.html', orders=orders)
     else:
         return redirect(url_for('admin_login'))
 # route admin pemesanan end

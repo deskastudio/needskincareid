@@ -69,23 +69,17 @@
                       <tr>
                         <th scope="col">Nama </th>
                         <th scope="col">No Handphone</th>
-                        <th scope="col">Nama Produk</th>
-                        <th scope="col">Jumlah Produk</th>
-                        <th scope="col">Harga Produk</th>
-                        <th scope="col">Tanggal Pemesanan</th>
+                        <th scope="col">Total dus dan Harga Produk</th>
                         <th scope="col">Alamat</th>
                         <th scope="col">Tindakan</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {% for data in pemesanan %}
+                      {% for data in orders %}
                     <tr>
-                        <td>{{ data.nama }}</td>
-                        <td>{{ data.no_handphone }}</td>
-                        <td>{{ data.nama_produk }}</td>
+                        <td>{{ data.nama_lengkap }}</td>
+                        <td>{{ data.nomor_telepon }}</td>
                         <td>{{ data.jumlah_produk }}</td>
-                        <td>{{ data.harga_produk }}</td>
-                        <td>{{ data.tanggal_pemesanan }}</td>
                         <td>{{ data.alamat }}</td>
                         <td>
                             <button class="btn" style="background-color: #FFC5C5; color: #DF0404;">Selesai</button>
