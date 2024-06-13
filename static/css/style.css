@@ -212,11 +212,16 @@ body {
   }
 
     /* Aturan media query untuk tampilan responsif pada perangkat seluler */
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 480px) {
     .banner-area img {
       height: 300px; /* Mengurangi tinggi gambar banner pada perangkat seluler */
       margin-top: -17px; /* Menghapus margin atas pada gambar banner pada perangkat seluler */
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      object-fit: cover;
     }
     .about {
       flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
@@ -343,7 +348,7 @@ body {
     }
 
     /* Aturan media query untuk tampilan responsif pada perangkat seluler */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 480px) {
   .search-container {
     width: calc(40% - 10px); /* Menggunakan lebar penuh dengan sedikit padding pada perangkat seluler */
     margin-top: 20px; /* Kurangi margin atas pada perangkat seluler */
@@ -436,7 +441,7 @@ body {
   }
 
   /* Aturan media query untuk tampilan responsif pada perangkat seluler */
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 480px) {
     .image-with-text {
       flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
       align-items: flex-start; /* Posisikan elemen secara vertikal pada perangkat seluler */
