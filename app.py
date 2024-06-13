@@ -174,6 +174,18 @@ def detail_pemesanan(id):
             return "Produk tidak ditemukan."
     else:
         return "Pemesanan tidak ditemukan."
+    
+@app.route('/totals', methods=['GET'])
+def get_totals():
+    total_customers = db.users.count_documents({})
+    total_products = db.products.count_documents({})
+    total_orders = db.orders.count_documents({})
+    
+    return jsonify({
+        'total_customers': total_customers,
+        'total_products': total_products,
+        'total_orders': total_orders
+    })
 
 
 
