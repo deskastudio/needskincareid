@@ -8,6 +8,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>Hello, world!</title>
   </head>
   <body>
@@ -21,17 +24,11 @@
 
     <div class="container-fluid py-5" style="background-color: #FFFFFF; border-radius: 30px;">
         <div class="row align-items-center px-3">
-            <div class="col-lg-7">
-              <h3 class="fw-bold">Semua Riwayat Pemesanan</h3>
-            </div>
-            <div class="col-lg-2">
-              <!-- Button trigger modal -->
-              <button onclick="window.location.href='/tambahDataProduk'" type="button" class="py-2 px-3 btn" style="background-color: #00B087; color: white; border-radius: 8px;">
-                + Buat Laporan
-              </button>
+            <div class="col-lg-9">
+              <h3 class="fw-bold">Semua Pemesanan</h3>
             </div>
             <div class="col-lg-3">
-                <form class="d-flex">
+                <form class="d-flex" id="search-form">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
@@ -43,21 +40,23 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">Nama Pengguna</th>
+                        <th scope="col">Nama </th>
+                        <th scope="col">No Handphone</th>
                         <th scope="col">Nama Produk</th>
+                        <th scope="col">Total dus dan Harga Produk</th>
                         <th scope="col">Tanggal Pemesanan</th>
-                        <th scope="col">Jumlah Produk</th>
-                        <th scope="col">Harga Produk</th>
+                        <th scope="col">Alamat</th>
                       </tr>
                     </thead>
                     <tbody>
                       {% for data in riwayatPemesanan %}
                     <tr>
-                        <td>{{ data.namaPengguna }}</td>
-                        <td>{{ data.namaProduk }}</td>
-                        <td>Rp. {{ data.tanggalPemesanan }}</td>
-                        <td>{{ data.jumlahProduk }}</td>
-                        <td>Rp. {{ data.hargaProduk }}</td>
+                        <td>{{ data.nama_lengkap }}</td>
+                        <td>{{ data.nomor_telepon }}</td>
+                        <td>{{ data.nama_produk }}</td>
+                        <td>{{ data.jumlah_produk }}</td>
+                        <td>{{ data.tanggal_pemesanan }}</td>
+                        <td>{{ data.alamat }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -66,51 +65,51 @@
                   <div class="d-flex justify-content-end">
                     <nav aria-label="Page navigation example">
                       <ul class="pagination">
-                        <li class="page-item">
-                          <a class="page-link" href="#" aria-label="Previous">
+                        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                          <a class="page-link" href="/adminRiwayatPemesanan?page={{ page - 1 }}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                           </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                          <a class="page-link" href="#" aria-label="Next">
+                        {% for p in range(1, total_pages + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="/adminRiwayatPemesanan?page={{ p }}">{{ p }}</a></li>
+                        {% endfor %}
+                        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                          <a class="page-link" href="/adminRiwayatPemesanan?page={{ page + 1 }}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                           </a>
                         </li>
                       </ul>
                     </nav>
                   </div>
+
               </div>
           </div>
     </div>
     <!-- hero section end -->
 
-    <!-- Modal untuk melihat gambar produk -->
-    <div class="modal fade" id="productImageModal" tabindex="-1" aria-labelledby="productImageModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body text-center">
-            <img id="productImage" src="" alt="" style="max-width: 100%;">
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
-        // untuk menampilkan gambar produk
-        const productImages = document.querySelectorAll('.product-image');
-        productImages.forEach(function(image) {
-            image.addEventListener('click', function() {
-                const modal = new bootstrap.Modal(document.getElementById('productImageModal'));
-                const productImage = document.getElementById('productImage');
-                productImage.src = this.src;
-                modal.show();
-            });
-        });
+      $(document).ready(function() {
+          $('#search-form').submit(function(e) {
+              e.preventDefault();
+              const searchText = $(this).find('input[type="search"]').val().toLowerCase();
+              filterRowsBySearch(searchText);
+          });
+
+          function filterRowsBySearch(searchText) {
+              const rows = $('tbody tr');
+              rows.each(function() {
+                  const namaLengkap = $(this).find('td:eq(0)').text().toLowerCase();
+                  const namaProduk = $(this).find('td:eq(2)').text().toLowerCase();
+                  if (namaLengkap.includes(searchText) || namaProduk.includes(searchText)) {
+                      $(this).show();
+                  } else {
+                      $(this).hide();
+                  }
+              });
+          }
+      });
     </script>
   </body>
 </html>
