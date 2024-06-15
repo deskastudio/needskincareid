@@ -44,23 +44,23 @@
     <div class="container">
         <h4 class="fw-bold text-start text-primary mb-4" id="categoryTitle">Sunscreen</h4>
         <div class="row" id="productList">
-          {% for product in products %}
-          <div class="col mb-3 product-item" data-category="{{ product.jenis_skincare | lower | replace(" ", "_") }}" data-name="{{ product.nama_produk }}">
-              <div class="card">
-                <img src="{{ url_for('static', filename='assets/imgProduk/' ~ product.photo) }}" alt="{{ product.jenis_skincare }}" class="card-img-top" width="70" height="70">
-                  <div class="card-body">
-                      <h5 class="card-title">{{ product.nama_produk }}</h5>
-                      <p class="card-text">Pilih Dus dan Harga:</p>
-                      <ul class="list-unstyled">
-                          {% for dus_harga in product.dus_harga %}
-                          <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
-                          {% endfor %}
-                      </ul>
-                      <a href="/pemesanan?id={{ product._id }}" class="btn btn-primary">Beli Sekarang</a>
-                  </div>
-              </div>
-          </div>
-          {% endfor %}
+            {% for product in products %}
+            <div class="col-6 col-md-3 product-item " data-category="{{ product.jenis_skincare | lower | replace(' ', '_') }}" data-name="{{ product.nama_produk }}">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='assets/imgProduk/' ~ product.photo) }}" alt="{{ product.jenis_skincare }}" class="card-img-top" width="70" height="70">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.nama_produk }}</h5>
+                        <p class="card-text">Pilih Dus dan Harga:</p>
+                        <ul class="list-unstyled">
+                            {% for dus_harga in product.dus_harga %}
+                            <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="/pemesanan?id={{ product._id }}" class="btn btn-primary">Beli Sekarang</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
