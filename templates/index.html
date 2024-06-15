@@ -50,14 +50,30 @@
     <!-- homepage start -->
 
     <!-- banner start -->
-      <section class="banner">
-        <div class="banner-area">
-          <img src="../static/img/banner.png" >
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="../static/img/banner.png" class="d-block w-100" alt="...">
         </div>
-      </section>
+        <div class="carousel-item">
+          <img src="../static/img/banner.png" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="../static/img/banner.png" class="d-block w-100" alt="...">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
     <!-- banner end -->
 
-    <div class="container-fluid py-5" style="background-color: #FEE8EE; ">
+    <div class="container-quote py-5" style="background-color: #FEE8EE; ">
       <div class="row align-items-center">
         <div class="col d-flex align-items-center justify-content-center">
           <div class="mt-2">
@@ -133,7 +149,7 @@
 
     
     <!-- manfaat start  -->
-    <div class="carousel-container">
+    <div class="carousel-benefit">
       <h3 class="fw-bold text-center" style="padding-top: 30px; color: white">Manfaat Penggunaan Skincare</h3>
       <div class="carousel-content">
         <div class="carousel-card">
