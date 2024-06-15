@@ -1,54 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="../static/css/style.css">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const track = document.querySelector(".carousel-content");
+      const cards = document.querySelectorAll(".carousel-card");
+      const prevBtn = document.querySelector(".prev");
+      const nextBtn = document.querySelector(".next");
     
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="../static/css/style.css">
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const track = document.querySelector(".carousel-content");
-        const cards = document.querySelectorAll(".carousel-card");
-        const prevBtn = document.querySelector(".prev");
-        const nextBtn = document.querySelector(".next");
-      
-        let index = 0;
-        const cardWidth = cards[0].offsetWidth + 20; // Lebar card + margin-right
-        const totalCards = cards.length;
-      
-        function updateCarousel() {
-          track.style.transform = `translateX(-${index * cardWidth}px)`;
-        }
-      
-        prevBtn.addEventListener("click", function() {
-          index = Math.max(index - 1, 0);
-          updateCarousel();
-        });
-      
-        nextBtn.addEventListener("click", function() {
-          index = (index + 1) % totalCards; // Menggunakan modulo untuk kembali ke card pertama jika sudah di card terakhir
-          updateCarousel();
-        });
+      let index = 0;
+      const cardWidth = cards[0].offsetWidth + 20; // Lebar card + margin-right
+      const totalCards = cards.length;
+    
+      function updateCarousel() {
+        track.style.transform = `translateX(-${index * cardWidth}px)`;
+      }
+    
+      prevBtn.addEventListener("click", function() {
+        index = Math.max(index - 1, 0);
+        updateCarousel();
       });
-      </script>
-
-    <title>Beranda</title>
     
-  </head>
-  <body>
-    <!-- header start -->
-    {% include 'header.html' %}
-    <!-- navbar end -->
+      nextBtn.addEventListener("click", function() {
+        index = (index + 1) % totalCards; // Menggunakan modulo untuk kembali ke card pertama jika sudah di card terakhir
+        updateCarousel();
+      });
+    });
+  </script>
 
-    <!-- homepage start -->
+  <title>Beranda</title>
+  
+</head>
+<body>
+  <!-- header start -->
+  {% include 'header.html' %}
+  <!-- navbar end -->
 
+<<<<<<< HEAD
     <!-- banner start -->
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
@@ -75,30 +74,44 @@
 
     <div class="container-quote py-5" style="background-color: #FEE8EE; ">
       <div class="row align-items-center">
+=======
+  <!-- homepage start -->
+
+  <!-- banner start -->
+  <section class="banner">
+    <div class="banner-area">
+      <img src="../static/img/banner.png" >
+    </div>
+  </section>
+  <!-- banner end -->
+
+  <div class="container-fluid py-5" style="background-color: #FEE8EE; ">
+    <div class="row align-items-center">
+      <div class="col d-flex align-items-center justify-content-center">
+        <div class="mt-2">
+          <h5 class="fw-bold text-center" style="color: #333333;">"Merawat kulit secara alami untuk kilau yang sehat."</h5>
+          <p class="fs-5 text-center" style="color: #F17591;">Cahaya Kulit Sehat Alami</p>
+        </div>
+      </div>
+      <div class="col d-flex align-items-center justify-content-center border-start border-end border-2">
+>>>>>>> 0e92d2e18b4761bade100307118ba7f0886155ed
         <div class="col d-flex align-items-center justify-content-center">
           <div class="mt-2">
-            <h5 class="fw-bold text-center" style="color: #333333;">"Merawat kulit secara alami untuk kilau yang sehat."</h5>
-            <p class="fs-5 text-center" style="color: #F17591;">Cahaya Kulit Sehat Alami</p>
+            <h5 class="fw-bold text-center" style="color: #333333;">"Kecantikan berasal dari perawatan alami."</h5>
+            <p class="fs-5 text-center" style="color: #F17591;">Kecantikan Murni dari Dalam</p>
           </div>
         </div>
-        <div class="col d-flex align-items-center justify-content-center border-start border-end border-2">
-          <div class="col d-flex align-items-center justify-content-center">
-            <div class="mt-2">
-              <h5 class="fw-bold text-center" style="color: #333333;">"Kecantikan berasal dari perawatan alami."</h5>
-              <p class="fs-5 text-center" style="color: #F17591;">Kecantikan Murni dari Dalam</p>
-            </div>
-          </div>
-        </div>
+      </div>
+      <div class="col d-flex align-items-center justify-content-center">
         <div class="col d-flex align-items-center justify-content-center">
-          <div class="col d-flex align-items-center justify-content-center">
-            <div class="mt-2">
-              <h5 class="fw-bold text-center" style="color: #333333;">"Kulit sehat, bersinar secara alami."</h5>
-              <p class="fs-5 text-center" style="color: #F17591;">Kulit Sehat, Kecerahan Alami</p>
-            </div>
+          <div class="mt-2">
+            <h5 class="fw-bold text-center" style="color: #333333;">"Kulit sehat, bersinar secara alami."</h5>
+            <p class="fs-5 text-center" style="color: #F17591;">Kulit Sehat, Kecerahan Alami</p>
           </div>
         </div>
       </div>
     </div>
+<<<<<<< HEAD
 
       <!-- Tentang kami start -->
       <div class="wrap-about">
@@ -185,28 +198,116 @@
         <button class="carousel-control prev">&#10094;</button>
         <button class="carousel-control next">&#10095;</button>
       </div>
+=======
+>>>>>>> 0e92d2e18b4761bade100307118ba7f0886155ed
   </div>
-    <!-- manfaat end -->
 
-    <!-- payment method start -->
-    <section class="paymentMethod">
-      <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Metode Pembayaran</h3>
-      <div class="image-container">
-        <img src="../static/img/mandiri.png" alt="Bank Mandiri">
-        <img src="../static/img/bca.png" alt="Bank BCA">
-        <img src="..//static/img/bri.png" alt="Bank BRI">
+  <!-- Tentang kami start -->
+  <div class="wrap-about">
+    <section class="about">
+      <div class="about-image">
+        <img src="../static/img/owner.jpg">
+      </div>
+      <div class="about-text">
+        <h2 class="fw-bold text-center" style="padding-top: 20px;">Tentang Kami</h2>
+        <p>Needskincareid adalah platform reseller yang
+          didirikan pada tahun 2021 oleh Khairunnisa Hayyu 
+          Kusnadi dengan semangat kewirausahaan dan
+          komitmen terhadap kualitas. Needskincareid 
+          berfokus pada penjualan produk skincare
+          perawatan wajah dengan berkualitas tinggi
+          dengan harga yang kompetitif.</p>
+        <p>Terima kasih telah mempercayai Needskincareid
+          sebagai mitra bisnis Anda dan kami berkomitmen
+          untuk terus mendukung kesuksesan pelanggan 
+          kami dengan pelayanan yang terbaik.</p>
       </div>
     </section>
-    <!-- payment method end -->
-    
-    <!-- homepage end -->
+  </div>
+  <!-- Tentang kami end -->
+  
+  
+<!-- produk terlaris start -->
+<section class="product-container" style="background-color: #FEE8EE;">
+  <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Produk Terlaris</h3>
+  <div class="product-card d-flex justify-content-center flex-wrap">
+    {% for data in produkTerlaris %}
+    <div class="card d-flex justify-content-center align-items-center">
+      <img src="../static/assets/imgProduk/{{data.photo}}" alt="..." class="image">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{data.nama_produk}}</h5>
+        <ul class="list-unstyled">
+          {% for dus_harga in data.dus_harga %}
+          <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
+          {% endfor %}
+        </ul>
+        <button class="btn" onclick="window.location.href='{% if session.get('user_id') %}/pemesanan?id={{ data._id }}{% else %}/loginUser{% endif %}'">Beli Sekarang</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+<!-- produk terlaris end     -->
 
-    <!-- footer start -->
-    {% include 'footer.html' %}
-    <!-- footer end -->
 
+  <!-- manfaat start  -->
+  <div class="carousel-container">
+    <h3 class="fw-bold text-center" style="padding-top: 30px; color: white">Manfaat Penggunaan Skincare</h3>
+    <div class="carousel-content">
+      <div class="carousel-card">
+        <h5>Membantu Memelihara Kulit</h5>
+        <p>Menjaga kesehatan kulit agar tetap sehat dengan menyediakan nutrisi yang dibutuhkan</p>
+      </div>
+      <div class="carousel-card">
+        <h5>Mencegah Penuaan Dini</h5>
+        <p>Penggunaan produk skincare khususnya produk yang mengandung antioksidan, 
+           retinol, dan asam hialuronat membantu mengurangi tanda-tanda penuaan</p>
+      </div>
+      <div class="carousel-card">
+        <h5>Mencerahkan Kulit</h5>
+        <p>Dapat mencerahkan kulit dan mengurangi noda hitam dengan mengandung vitamin C</p>
+      </div>
+      <div class="carousel-card">
+        <h5>Membantu permasalahan kulit</h5>
+        <p>Penggunaan produk skincare dapat mengatasi berbagai masalah kulit seperti 
+          jerawat, kulit kering, rosacea, dll.</p>
+      </div>
+      <div class="carousel-card">
+        <h5>Menjaga Kelembapan Kulit</h5>
+        <p>Membantu menjaga kulit agar tetap lembap sepanjang hari, mencegah kekeringan dan 
+          kulit melupas yang menyebabkan ketidaknyamanan</p>
+      </div>
+      <div class="carousel-card">
+        <h5>Dapat mengontrol minyak di wajah</h5>
+        <p>Bagi mereka dengan kulit berminyak dengan menggunakan produk skincare yang tepat
+          dapat membantu mengontrol produksi minyak </p>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-control prev">&#10094;</button>
+      <button class="carousel-control next">&#10095;</button>
+    </div>
+  </div>
+  <!-- manfaat end -->
 
+  <!-- payment method -->
+  <section class="paymentMethod">
+    <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Metode Pembayaran</h3>
+    <div class="image-container">
+      <img src="../static/img/mandiri.png" alt="Bank Mandiri">
+      <img src="../static/img/bca.png" alt="Bank BCA">
+      <img src="../static/img/bri.png" alt="Bank BRI">
+    </div>
+  </section>
+  <!-- payment method end -->
+  
+  <!-- homepage end -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  </body>
+  <!-- footer start -->
+  {% include 'footer.html' %}
+  <!-- footer end -->
+
+  <!-- Bootstrap JS Bundle with Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
 </html>

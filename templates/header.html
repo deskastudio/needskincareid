@@ -1,31 +1,38 @@
 <header class="p-3 mb-3 border-bottom" style="background-color: #F17591;">
-  <div class="container">
+    <div class="container">
       <div class="row align-items-center">
-          <div class="col-4 d-flex justify-content-start">
-              <ul class="nav mb-2 mb-md-0">
-                  <li><a href="/" class="nav-link px-2 link-secondary text-white fw-bold">Beranda</a></li>
-                  <li><a href="/produk" class="nav-link px-2 link-dark text-white fw-bold">Produk</a></li>
-                  <li><a href="#" class="nav-link px-2 link-dark text-white fw-bold">Tentang Kami</a></li>
-              </ul>
+        <div class="col-4 d-flex justify-content-start">
+          <ul class="nav mb-2 mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary text-white fw-bold">Beranda</a></li>
+            <li>
+              <a href="{% if session.get('user_id') %}/produk{% else %}/loginUser{% endif %}" class="nav-link px-2 link-dark text-white fw-bold">Produk</a>
+            </li>
+            <li><a href="#" class="nav-link px-2 link-dark text-white fw-bold">Tentang Kami</a></li>
+          </ul>
+        </div>
+        <div class="col-4 d-flex justify-content-center">
+          <a href="/" class="">
+            <img src="../static/img/logoneedskincare.png" alt="" style="width: 100px;">
+          </a>
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+          {% if session.get('user_id') %}
+          <div class="dropdown">
+            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
+            </a>
+            <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+              <li><a class="dropdown-item" href="/dataPribadi">Data Pribadi</a></li>
+              <li><a class="dropdown-item" href="/riwayatPemesanan">Riwayat Pemesanan</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Keluar</a></li>
+            </ul>
           </div>
-          <div class="col-4 d-flex justify-content-center">
-              <a href="/" class="">
-                  <img src="../static/img/logoneedskincare.png" alt="" style="width: 100px;">
-              </a>
-          </div>
-          <div class="col-4 d-flex justify-content-end">
-              <div class="dropdown">
-                  <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
-                  </a>
-                  <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                      <li><a class="dropdown-item" href="/dataPribadi">Data Pribadi</a></li>
-                      <li><a class="dropdown-item" href="/riwayatPemesanan">Riwayat Pemesanan</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Keluar</a></li>
-                  </ul>
-              </div>
-          </div>
+          {% else %}
+          <a href="/loginUser" class="btn btn-outline-light">Login</a>
+          {% endif %}
+        </div>
       </div>
-  </div>
-</header>
+    </div>
+  </header>
+  
