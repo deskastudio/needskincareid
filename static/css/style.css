@@ -50,21 +50,6 @@ body {
 
 
 /* homepage start*/
-
-  /* .carousel-inner .caraousel-active img{
-    background-position: center;
-    background-size: cover; 
-
-    width: 100%;
-    height: 500px;
-    margin-top: -17px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    object-fit: cover;
-  }*/
 .carousel-inner {
     position: relative;
     width: 100%;
@@ -85,7 +70,7 @@ body {
  .about-image img{
     flex: 0 0 auto;
     width: 100%;
-    height: 410px;
+    height: 430px;
  }
  .about-text{
     flex: 1;
@@ -99,6 +84,7 @@ body {
   padding-right: 50px;
   padding-top: 10px;
  }
+
 
 .product-card {
   display: flex;
@@ -221,7 +207,6 @@ body {
     .carousel-item img {
       object-fit: cover;
     }
-    
     .about {
       flex-direction: column; /* Mengubah tata letak menjadi tumpukan vertikal pada perangkat seluler */
       align-items: center; /* Pusatkan konten pada perangkat seluler */
