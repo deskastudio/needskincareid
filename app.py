@@ -1,14 +1,21 @@
 from functools import wraps
+from io import BytesIO
 import os
 from posixpath import dirname, join
 import re
+from tkinter import Canvas
 from bson import ObjectId
 from dotenv import load_dotenv
-from flask import Flask, flash, jsonify, render_template, request, redirect, session, url_for
-from pymongo import MongoClient
+from flask import Flask, flash, jsonify, make_response, render_template, request, redirect, session, url_for
+from pymongo import DESCENDING, MongoClient
 import bcrypt
-from werkzeug.utils import secure_filename 
-from werkzeug.security import check_password_hash
+import pymongo
+from werkzeug.utils import secure_filename
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -356,7 +363,7 @@ def adminPemesanan():
     total_products = db.orders.count_documents({})
     total_pages = (total_products + per_page - 1) // per_page
 
-    orders = list(db.orders.find().skip((page - 1) * per_page).limit(per_page))
+    orders = list(db.orders.find().sort('_id', pymongo.DESCENDING).skip((page - 1) * per_page).limit(per_page))
 
     return render_template('adminPemesanan.html', orders=orders, page=page, total_pages=total_pages)
 # route admin pemesanan end
@@ -794,12 +801,67 @@ def dataPribadi():
 #izin nambahin buat liat tampilannya
 
 
-@app.route('/riwayat_pemesanan/<int:user_id>')
-def riwayat_pemesanan(user_id):
-    # Mengambil riwayat pemesanan dari MongoDB berdasarkan user_id
-    riwayat = db.orders.find({'user_id': user_id})
+@app.route('/riwayatPemesanan', methods=['GET', 'POST'])
+def riwayat_pemesanan():
+    user_id = session.get('user_id')
+    riwayatPemesanan = db.riwayatPemesanan.find({'_id': ObjectId(user_id)})
+    return render_template('riwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan)
 
-    return render_template('riwayatPemesanan.html', riwayat=riwayat)
+@app.route('/generate_pdf', methods=['GET'])
+def generate_pdf():
+    # Ambil data riwayat pemesanan dari MongoDB
+    riwayatPemesanan = list(db.riwayatPemesanan.find().sort('_id', DESCENDING))
+
+    # Menghasilkan PDF
+    response = make_response(generate_pdf_from_data(riwayatPemesanan))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=riwayat_pemesanan.pdf'
+    return response
+
+def generate_pdf_from_data(riwayatPemesanan):
+    buffer = BytesIO()
+
+    # Menggunakan landscape untuk halaman
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
+
+    # Konten PDF
+    elements = []
+
+    # Judul laporan
+    styles = getSampleStyleSheet()
+    title_style = styles['Title']
+    elements.append(Paragraph("Laporan Riwayat Pemesanan", title_style))
+
+    # Tabel riwayat pemesanan
+    data = [["Nama", "No Handphone", "Nama Produk", "Total dus dan Harga Produk", "Tanggal Pemesanan", "Alamat"]]
+    for data_pemesanan in riwayatPemesanan:
+        # Menangani kasus di mana kunci mungkin tidak ada di dalam data
+        nama_lengkap = data_pemesanan.get('nama_lengkap', '')
+        nomor_telepon = data_pemesanan.get('nomor_telepon', '')
+        nama_produk = data_pemesanan.get('nama_produk', '')
+        jumlah_produk = data_pemesanan.get('jumlah_produk', '')
+        tanggal_pemesanan = data_pemesanan.get('tanggal_pemesanan', '')
+        alamat = data_pemesanan.get('alamat', '')
+
+        data.append([nama_lengkap, nomor_telepon, nama_produk, jumlah_produk, tanggal_pemesanan, alamat])
+
+    # Tabel
+    table = Table(data, repeatRows=1)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),  # Background color for header row
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),             # Align all cells to center
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)        # Add border to cells
+    ]))
+
+    elements.append(table)
+
+    # Membuat dokumen PDF
+    doc.build(elements)
+
+    # Mengembalikan buffer PDF
+    buffer.seek(0)
+    return buffer.read()
+
 
 
 if __name__ == '__main__':
