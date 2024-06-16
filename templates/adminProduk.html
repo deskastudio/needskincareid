@@ -84,6 +84,7 @@
                                 <th scope="col">Nama Produk</th>
                                 <th scope="col">Total Dus dan Harga</th>
                                 <th scope="col">Photo</th>
+                                <th scope="col">Opsi</th>
                                 <th scope="col">Tindakan</th>
                             </tr>
                         </thead>
@@ -99,6 +100,15 @@
                                       {% endfor %}
                                   </td>
                                     <td><img src="{{ url_for('static', filename='assets/imgProduk/' ~ data.photo) }}" alt="{{ data.jenis_skincare }}" width="100px" class="product-image" style="cursor: pointer;"></td>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input show-on-homepage-checkbox" type="checkbox" id="showOnHomepage_{{ data._id }}" {% if data.showOnHomepage %} checked {% endif %}>
+                                            <label class="form-check-label" for="showOnHomepage_{{ data._id }}">
+                                                Tampilkan di Halaman Utama
+                                            </label>
+                                        </div>
+                                    </td>
+                                    
                                     <td>
                                         <button onclick="window.location.href='/editDataProduk/{{ data._id }}';" class="btn edit-button" style="background-color:#A6E7D8; color:#008767;">Edit</button>
                                         <button onclick="window.location.href='/hapusDataProduk/{{ data._id }}';" class="btn" style="background-color: #FFC5C5; color: #DF0404;">Hapus</button>
@@ -149,6 +159,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('.show-on-homepage-checkbox').on('change', function() {
+                const productId = $(this).attr('id').split('_')[1]; // Ambil ID produk dari ID checkbox
+                const isChecked = $(this).prop('checked'); // Cek apakah checkbox dicentang
+    
+                // Kirim permintaan Ajax ke backend
+                $.ajax({
+                    url: '/updateShowOnHomepageStatus/' + productId,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ showOnHomepage: isChecked }),
+                    success: function(response) {
+                        console.log(response); // Tindakan sukses
+                    },
+                    error: function(error) {
+                        console.error('Error:', error); // Tindakan jika terjadi kesalahan
+                    }
+                });
+            });
+
             // Untuk menampilkan gambar produk
             $('.product-image').on('click', function() {
                 const modal = new bootstrap.Modal($('#productImageModal'), {

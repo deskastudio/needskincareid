@@ -21,7 +21,7 @@
   
   <!-- start content -->
   <div class="image-with-text">
-    <img src="../static/img/foto-profil.png" alt="Gambar" class="round-image">
+    <img src="../static/img/foto-profil.png" alt="Gambar" class="round-image product-image" style="cursor: pointer;">
     <div class="text-container">
         <p class="fw-bold">{{ users.namaLengkap }}</p>
         <span>{{ users.namaPengguna }}</span>
@@ -65,10 +65,36 @@
   </form>
   <!-- content end -->
 
+  <!-- Modal untuk melihat gambar produk -->
+  <div class="modal fade" id="productImageModal" tabindex="-1" aria-labelledby="productImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <img id="productImage" src="" alt="" style="max-width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+
   <!-- footer start -->
   {% include 'footer.html' %}
   <!-- footer end -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+
+  <script>
+    // Untuk menampilkan gambar produk
+    $('.product-image').on('click', function() {
+      const modal = new bootstrap.Modal($('#productImageModal'), {
+          keyboard: false
+      });
+      const productImage = $('#productImage');
+      productImage.attr('src', $(this).attr('src'));
+      modal.show();
+  });
+  </script>
 </body>
 </html>

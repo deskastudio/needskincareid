@@ -49,10 +49,26 @@ def admin_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    products = db.products.find()
-    return render_template('index.html', products=products)
+    try:
+        products = list(db.products.find({'showOnHomepage': True}))
+        return render_template('index.html', products=products)
+    except Exception as e:
+        return str(e)
+
+@app.route('/updateShowOnHomepageStatus/<product_id>', methods=['POST'])
+def update_show_on_homepage_status(product_id):
+    try:
+        show_on_homepage = request.json.get('showOnHomepage')
+        # Update status checkbox di MongoDB
+        db.products.update_one(
+            {'_id': ObjectId(product_id)},
+            {'$set': {'showOnHomepage': show_on_homepage}}
+        )
+        return jsonify({'message': 'Status updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/registerUser', methods=['POST', 'GET'])
