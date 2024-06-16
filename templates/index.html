@@ -38,6 +38,12 @@
         });
       });
       </script>
+
+      <style>
+        #tentangKami p {
+          font-size: 20px;
+        }
+      </style>
  
 
     <title>Beranda</title>
@@ -75,7 +81,7 @@
     <!-- banner end -->
 
     <div class="container-fluid py-5" style="background-color: #FEE8EE; ">
-      <div class="row align-items-center">
+      <div class="row align-items-center justify-content-center text-center flex-wrap">
         <div class="col d-flex align-items-center justify-content-center">
           <div class="mt-2">
             <h5 class="fw-bold text-center" style="color: #333333;">"Merawat kulit secara alami untuk kilau yang sehat."</h5>
@@ -136,7 +142,7 @@
                   <h5 class="card-title">{{ product.nama_produk }}</h5>
                   <ul class="list-unstyled">
                       {% for dus_harga in product.dus_harga %}
-                      <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
+                      <li class="card-text">{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
                       {% endfor %}
                   </ul>
                   <button class="btn beli-btn" onclick="window.location.href='{% if session.get('user_id') %}/pemesanan?id={{ product._id }}{% else %}/loginUser{% endif %}'">Beli Sekarang</button>
@@ -193,9 +199,9 @@
     <section class="paymentMethod">
       <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Metode Pembayaran</h3>
       <div class="image-container">
-        <img src="../static/img/mandiri.png" alt="Bank Mandiri">
-        <img src="../static/img/bca.png" alt="Bank BCA">
-        <img src="..//static/img/bri.png" alt="Bank BRI">
+        {% for data in pembayaran %}
+        <img src="../static/img/{{data.jenisPembayaran}}.png" alt="{{data.jenisPembayaran}}">
+        {% endfor %}
       </div>
     </section>
     <!-- payment method end -->

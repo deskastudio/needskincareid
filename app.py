@@ -52,8 +52,9 @@ def admin_login_required(f):
 @app.route('/')
 def index():
     try:
+        pembayaran = list(db.pembayaran.find({}))
         products = list(db.products.find({'showOnHomepage': True}))
-        return render_template('index.html', products=products)
+        return render_template('index.html', products=products, pembayaran=pembayaran)
     except Exception as e:
         return str(e)
 

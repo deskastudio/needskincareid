@@ -13,22 +13,120 @@
   <link rel="stylesheet" href="../static/css/style.css">
 
   <title>Data Pribadi | NeedSkincareID</title>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+    }
+
+    .round-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .text-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 20px;
+    }
+
+    .image-with-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .btn-simpan {
+      background-color: #0d6efd;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-simpan:hover {
+      background-color: #0b5ed7;
+    }
+
+    @media (max-width: 576px) {
+      .input-box {
+        flex-direction: column;
+      }
+
+      .image-with-text {
+        flex-direction: column;
+      }
+
+      .text-container {
+        margin-left: 0;
+        text-align: center;
+      }
+
+      .round-image {
+        margin-bottom: 15px;
+      }
+    }
+
+    .file-upload {
+      display: none;
+    }
+
+    .file-upload-label {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <!-- header start -->
   {% include 'header.html' %}
-  <!-- navbar end -->
+  <!-- header end -->
   
   <!-- start content -->
   <div class="image-with-text">
-    <img src="../static/img/foto-profil.png" alt="Gambar" class="round-image product-image" style="cursor: pointer;">
+    <img src="../static/img/foto-profil.png" alt="Gambar" class="round-image product-image" id="profileImage">
+    <input type="file" id="profileImageUpload" class="file-upload" accept="image/*">
     <div class="text-container">
-        <p class="fw-bold">{{ users.namaLengkap }}</p>
-        <span>{{ users.namaPengguna }}</span>
+        <p class="fw-bold fs-3">{{ users.namaLengkap }}</p>
+        <span class="fs-6">{{ users.namaPengguna }}</span>
     </div>
   </div>
 
-  <form action="{{ url_for('dataPribadi') }}" method="post" class="form-container">
+  <form action="{{ url_for('dataPribadi') }}" method="post" enctype="multipart/form-data" class="form-container mb-4">
     <div class="input-box">
       <div class="input-field">
         <label for="namaLengkap" class="form-label fw-bold">Nama Lengkap</label>
@@ -56,10 +154,10 @@
       </div>
       <div class="input-field">
         <label for="alamat" class="form-label fw-bold">Alamat</label>
-        <textarea class="form-control" name="alamat" id="alamat" rows="3" style="margin-left: 11px;">{{ users.alamat }}</textarea>
+        <textarea class="form-control" name="alamat" id="alamat" rows="3">{{ users.alamat }}</textarea>
       </div>
     </div>
-    <div class="button">
+    <div class="button text-center">
       <input type="submit" value="Simpan" class="btn-simpan">
     </div>
   </form>
@@ -74,17 +172,15 @@
             </div>
         </div>
     </div>
-</div>
+  </div>
 
   <!-- footer start -->
   {% include 'footer.html' %}
   <!-- footer end -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
-
   <script>
     // Untuk menampilkan gambar produk
     $('.product-image').on('click', function() {
@@ -94,7 +190,15 @@
       const productImage = $('#productImage');
       productImage.attr('src', $(this).attr('src'));
       modal.show();
-  });
+    });
+
+    // Untuk preview gambar sebelum upload
+    $('#profileImageUpload').on('change', function() {
+      const [file] = this.files;
+      if (file) {
+        $('#profileImage').attr('src', URL.createObjectURL(file));
+      }
+    });
   </script>
 </body>
 </html>

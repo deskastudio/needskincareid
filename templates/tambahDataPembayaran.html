@@ -36,7 +36,18 @@
                 </div>
                 <div class="mb-3">
                   <label for="jenisPembayaran" class="form-label">Jenis Pembayaran</label>
-                  <input type="text" class="form-control" id="jenisPembayaran" name="jenisPembayaran" required>
+                  <select class="form-select" id="jenisPembayaran" name="jenisPembayaran" required>
+                    <option value="">Pilih Jenis Pembayaran</option>
+                    <option value="Bank BRI">BRI</option>
+                    <option value="Bank BCA">BCA</option>
+                    <option value="Bank MANDIRI">MANDIRI</option>
+                    <option value="Bank BTN">BTN</option>
+                    <option value="Bank BSI">BSI SYARIAH</option>
+                    <option value="Dana">DANA</option>
+                    <option value="Ovo">OVO</option>
+                    <option value="ShopeePay">SHOPEEPAY</option>
+                    <option value="GoPay">GOPAY</option>
+                  </select>
                 </div>
                 <div class="mb-3">
                     <label for="nomorPembayaran" class="form-label">Nomor Pembayaran</label>

@@ -1,108 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produk | NeedSkincareID</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Your Custom CSS -->
     <link rel="stylesheet" href="../static/css/style.css">
-</head>
-<body>
 
-<!-- Header -->
-{% include 'header.html' %}
-
-<!-- Navbar -->
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="search-container">
-                <input type="text" class="form-control search-input" placeholder="Cari Produk" id="search" name="search">
-                <button class="btn btn-primary btn-search" type="button" onclick="filterProducts()">Search</button>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <select class="form-select dropdown-categories" id="categoryFilter" onchange="filterProducts()">
-                <option value="all">All Products</option>
-                <option value="sunscreen">Sunscreen</option>
-                <option value="moisturizer">Moisturizer</option>
-                <option value="serum">Serum</option>
-                <option value="toner">Toner</option>
-                <option value="facial Wash">Facial Wash</option>
-                <option value="Micellar Water">Micellar Water</option>
-            </select>
-        </div>
-    </div>
-</div>
-
-<!-- Product Section -->
-<section class="product-container mt-4">
-    <div class="container">
-        <h4 class="fw-bold text-start text-primary mb-4" id="categoryTitle">Sunscreen</h4>
-        <div class="row" id="productList">
-            {% for product in products %}
-            <div class="col-6 col-md-3 product-item " data-category="{{ product.jenis_skincare | lower | replace(' ', '_') }}" data-name="{{ product.nama_produk }}">
-                <div class="card">
-                    <img src="{{ url_for('static', filename='assets/imgProduk/' ~ product.photo) }}" alt="{{ product.jenis_skincare }}" class="card-img-top" width="70" height="70">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.nama_produk }}</h5>
-                        <p class="card-text">Pilih Dus dan Harga:</p>
-                        <ul class="list-unstyled">
-                            {% for dus_harga in product.dus_harga %}
-                            <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
-                            {% endfor %}
-                        </ul>
-                        <a href="/pemesanan?id={{ product._id }}" class="btn btn-primary">Beli Sekarang</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-{% include 'footer.html' %}
-
-<!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-<script>
-    function filterProducts() {
-        var searchInput = document.getElementById('search').value.toLowerCase();
-        var categoryFilter = document.getElementById('categoryFilter').value.toLowerCase().replace(" ", "_");
-        var productList = document.getElementById('productList');
-        var products = productList.getElementsByClassName('product-item');
-        var categoryTitle = document.getElementById('categoryTitle');
-
-        // Update the heading based on the selected category
-        if (categoryFilter === 'all') {
-            categoryTitle.textContent = 'All Products';
-        } else {
-            // Capitalize the first letter of the selected category
-            categoryTitle.textContent = categoryFilter.replace("_", " ").replace(/\b\w/g, char => char.toUpperCase());
+    <style>
+        /* Custom Styles */
+        .search-filter-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        for (var i = 0; i < products.length; i++) {
-            var productName = products[i].getAttribute('data-name').toLowerCase();
-            var productCategory = products[i].getAttribute('data-category');
+        .search-container,
+        .dropdown-categories {
+            flex: 1;
+        }
 
-            if ((categoryFilter === 'all' || categoryFilter === productCategory) &&
-                (searchInput === '' || productName.includes(searchInput))) {
-                products[i].style.display = '';
-            } else {
-                products[i].style.display = 'none';
+        .btn-search {
+            margin-left: 10px;
+        }
+
+        .product-item {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .card-text {
+            color: #6c757d;
+        }
+
+        .btn-primary {
+            background-color: #db7095;
+            border: none;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #faa0dc;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .search-filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container,
+            .dropdown-categories {
+                width: 100%;
+                margin-bottom: 10px;
             }
         }
-    }
 
-    // Trigger filterProducts on page load to display all products initially
-    document.addEventListener('DOMContentLoaded', filterProducts);
-</script>
+        @media (max-width: 576px) {
+            .card-img-top {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    {% include 'header.html' %}
+
+    <!-- Navbar -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="search-filter-container">
+                    <div class="search-container">
+                        <input type="text" class="form-control search-input" placeholder="Cari Produk" id="search"
+                            name="search">
+                        <button class="btn text-white btn-search" type="button" onclick="filterProducts()"
+                            style="background: #db7095;">Search</button>
+                    </div>
+                    <select class="form-select dropdown-categories mt-4" id="categoryFilter"
+                        onchange="filterProducts()">
+                        <option value="all">All Products</option>
+                        <option value="sunscreen">Sunscreen</option>
+                        <option value="moisturizer">Moisturizer</option>
+                        <option value="serum">Serum</option>
+                        <option value="toner">Toner</option>
+                        <option value="facial Wash">Facial Wash</option>
+                        <option value="Micellar Water">Micellar Water</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Section -->
+    <section class="product-container mt-4">
+        <div class="container">
+            <h4 class="fw-bold text-start mb-5" id="categoryTitle" style="color: #db7095;">Sunscreen</h4>
+            <div class="row" id="productList">
+                {% for product in products %}
+                <div class="col-12 col-md-6 col-lg-3 product-item"
+                    data-category="{{ product.jenis_skincare | lower | replace(' ', '_') }}"
+                    data-name="{{ product.nama_produk }}">
+                    <div class="card bg-transparent">
+                        <img src="{{ url_for('static', filename='assets/imgProduk/' ~ product.photo) }}"
+                            alt="{{ product.jenis_skincare }}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.nama_produk }}</h5>
+                            <p class="card-text">Pilih Dus dan Harga:</p>
+                            <ul class="list-unstyled">
+                                {% for dus_harga in product.dus_harga %}
+                                <li class="card-text">{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{
+                                    dus_harga.total_harga }}</li>
+                                {% endfor %}
+                            </ul>
+                            <a href="/pemesanan?id={{ product._id }}" class="btn btn-primary">Beli Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function filterProducts() {
+            var searchInput = document.getElementById('search').value.toLowerCase();
+            var categoryFilter = document.getElementById('categoryFilter').value.toLowerCase().replace(" ", "_");
+            var productList = document.getElementById('productList');
+            var products = productList.getElementsByClassName('product-item');
+            var categoryTitle = document.getElementById('categoryTitle');
+
+            // Update the heading based on the selected category
+            if (categoryFilter === 'all') {
+                categoryTitle.textContent = 'All Products';
+            } else {
+                // Capitalize the first letter of the selected category
+                categoryTitle.textContent = categoryFilter.replace("_", " ").replace(/\b\w/g, char => char.toUpperCase());
+            }
+
+            for (var i = 0; i < products.length; i++) {
+                var productName = products[i].getAttribute('data-name').toLowerCase();
+                var productCategory = products[i].getAttribute('data-category');
+
+                if ((categoryFilter === 'all' || categoryFilter === productCategory) &&
+                    (searchInput === '' || productName.includes(searchInput))) {
+                    products[i].style.display = '';
+                } else {
+                    products[i].style.display = 'none';
+                }
+            }
+        }
+
+        // Trigger filterProducts on page load to display all products initially
+        document.addEventListener('DOMContentLoaded', filterProducts);
+    </script>
 
 </body>
+
 </html>
