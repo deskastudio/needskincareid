@@ -2,27 +2,18 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <!-- Font Awesome CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
-
     <title>Riwayat Pemesanan</title>
-
     <style>
         .card-body {
             background-color: #FEE8EE;
             border-style: none;
             border-radius: 5px;
         }
-
         img {
             max-height: 100px;
         }
@@ -30,26 +21,20 @@
 </head>
 
 <body>
-    <!-- header start -->
     {% include 'header.html' %}
-    <!-- navbar end -->
-
-    <!-- riwayat pemesanan start -->
     <div class="container">
         <h3 class="text-center">Riwayat Pemesanan</h3>
         <div class="card">
             <div class="card-body">
+                {% if riwayatPemesanan|length > 0 %}
                     {% for data in riwayatPemesanan %}
                         <div class="row align-items-center mb-3">
                             <div class="col-2 text-center">
-                                <img src="{{ url_for('static', filename='assets/imgProduk/default.png') }}" alt="Produk">
+                                <img src="{{ url_for('static', filename='assets/imgProduk/' ~ data.foto_produk) }}" alt="Produk">
                             </div>
                             <div class="col-7">
                                 <p style="font-weight: bold;">{{ data.nama_produk }}</p>
                                 <p>Jumlah: {{ data.jumlah_produk }}</p>
-                                <p>Nama Lengkap: {{ data.nama_lengkap }}</p>
-                                <p>Nomor Telepon: {{ data.nomor_telepon }}</p>
-                                <p>Alamat: {{ data.alamat }}</p>
                             </div>
                             <div class="col-3">
                                 <p style="font-weight: bold;">Pesanan Selesai</p>
@@ -57,18 +42,14 @@
                             </div>
                         </div>
                     {% endfor %}
+                {% else %}
+                    <p class="text-center">Anda belum memiliki riwayat pemesanan.</p>
+                {% endif %}
             </div>
         </div>
     </div>
-    <!-- riwayat pemesanan end -->
-
-    <!-- footer start -->
     {% include 'footer.html' %}
-    <!-- footer end -->
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>

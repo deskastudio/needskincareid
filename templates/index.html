@@ -38,6 +38,7 @@
         });
       });
       </script>
+ 
 
     <title>Beranda</title>
     
@@ -128,23 +129,23 @@
     <section class="product-container" style="background-color: #FEE8EE;">
       <h3 class="fw-bold text-center" style="padding-top: 30px; color: #333333">Produk Terlaris</h3>
       <div class="product-card d-flex justify-content-center flex-wrap">
-        {% for data in produkTerlaris %}
-        <div class="card d-flex justify-content-center align-items-center">
-          <img src="../static/assets/imgProdukTerlaris/{{data.photo}}" alt="..." class="image">
-          <div class="card-body text-center">
-            <h5 class="card-title">{{data.nama_produk}}</h5>
-            <ul class="list-unstyled">
-              {% for dus_harga in data.dus_harga %}
-              <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
-              {% endfor %}
-          </ul>
-            <button class="btn" onclick="window.location.href='/loginUser'">Beli Sekarang</button>
+          {% for product in products %}
+          <div class="card d-flex justify-content-center align-items-center">
+              <img src="{{ url_for('static', filename='assets/imgProduk/' + product.photo) }}" alt="..." class="image">
+              <div class="card-body text-center">
+                  <h5 class="card-title">{{ product.nama_produk }}</h5>
+                  <ul class="list-unstyled">
+                      {% for dus_harga in product.dus_harga %}
+                      <li>{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</li>
+                      {% endfor %}
+                  </ul>
+                  <button class="btn beli-btn" onclick="window.location.href='{% if session.get('user_id') %}/pemesanan?id={{ product._id }}{% else %}/loginUser{% endif %}'">Beli Sekarang</button>
+              </div>
           </div>
-        </div>
-        {% endfor %}
+          {% endfor %}
       </div>
-    </section>
-    
+  </section>
+  
     <!-- produk terlaris end     -->
 
     

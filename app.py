@@ -49,11 +49,11 @@ def admin_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    # Mengambil data dari koleksi products, mengurutkan berdasarkan jumlah pemesanan, dan membatasi hingga 10 produk
-    products = db.products.find().sort("jumlah_pemesanan", -1).limit(10)  # Urutkan dari jumlah pemesanan terbanyak dan ambil 10 teratas
-    return render_template('index.html', produkTerlaris=products)
+    products = db.products.find()
+    return render_template('index.html', products=products)
+
 
 @app.route('/registerUser', methods=['POST', 'GET'])
 def register_user():
@@ -156,20 +156,24 @@ def produk():
 @login_required
 def pemesanan():
     if request.method == 'POST':
+        user_id = session.get('user_id')  # Dapatkan user_id dari sesi
         product_id = request.form.get('product_id')
         nama_lengkap = request.form.get('namaLengkap')
         nomor_telepon = request.form.get('nomorTelepon')
         jumlah_produk = request.form.get('jumlahProduk')
         alamat = request.form.get('alamat')
         tanggal_pemesanan = request.form.get('tanggalPemesanan')
-        
-        # Ambil nama produk dari sesi
+
+        # Ambil nama produk dan foto produk dari sesi
         nama_produk = session.get('nama_produk')
+        foto_produk = session.get('foto_produk')
 
         # Simpan data pemesanan ke basis data
         new_order = {
+            'user_id': ObjectId(user_id),  # Tambahkan user_id ke data pemesanan
             'product_id': ObjectId(product_id),
             'nama_produk': nama_produk,
+            'foto_produk': foto_produk,
             'nama_lengkap': nama_lengkap,
             'nomor_telepon': nomor_telepon,
             'jumlah_produk': jumlah_produk,
@@ -185,11 +189,14 @@ def pemesanan():
         product_id = request.args.get('id')
         product = db.products.find_one({'_id': ObjectId(product_id)})
         if product:
-            # Simpan nama produk dalam sesi
+            # Simpan nama produk dan foto produk dalam sesi
             session['nama_produk'] = product['nama_produk']
+            session['foto_produk'] = product.get('photo', 'default.png')  # Gunakan 'default.png' jika tidak ada foto
             return render_template('pemesanan.html', product=product)
         else:
             return "Produk tidak ditemukan."
+
+
 
 @app.route('/detailPemesanan/<id>')
 @login_required
@@ -325,6 +332,7 @@ def edit_data_produk(_id):
 def hapus_data_produk(_id):
     db.products.delete_one({'_id': ObjectId(_id)})
     return redirect(url_for('adminProduk'))
+
 # route admin produk end
 
 
@@ -380,7 +388,6 @@ def selesaikan_pemesanan(_id):
             return jsonify({"success": False, "error": "Pesanan tidak ditemukan"}), 404
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-
 
 
 # route admin pembayaran start
@@ -752,13 +759,13 @@ def hapus_data_footer(_id):
 @app.route('/adminRiwayatPemesanan', methods=['GET', 'POST'])
 @admin_login_required
 def adminRiwayatPemesanan():
-    riwayatPemesanan = db.riwayatPemesanan.find()
     page = int(request.args.get('page', 1))
     per_page = 5
     total_products = db.riwayatPemesanan.count_documents({})
     total_pages = (total_products + per_page - 1) // per_page
 
-    riwayatPemesanan = list(db.riwayatPemesanan.find().skip((page - 1) * per_page).limit(per_page))
+    # Urutkan data berdasarkan tanggal pemesanan (desc) dan paginasi
+    riwayatPemesanan = list(db.riwayatPemesanan.find().sort('tanggal_pemesanan', pymongo.DESCENDING).skip((page - 1) * per_page).limit(per_page))
 
     return render_template('adminRiwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan, page=page, total_pages=total_pages)
 # route admin riwayat pemesanan end
@@ -802,10 +809,15 @@ def dataPribadi():
 
 
 @app.route('/riwayatPemesanan', methods=['GET', 'POST'])
+@login_required
 def riwayat_pemesanan():
     user_id = session.get('user_id')
-    riwayatPemesanan = db.riwayatPemesanan.find({'_id': ObjectId(user_id)})
-    return render_template('riwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan)
+    if user_id:
+        riwayatPemesanan = list(db.riwayatPemesanan.find({'user_id': ObjectId(user_id)}))
+        return render_template('riwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan)
+    else:
+        return redirect(url_for('login'))  # Arahkan ke halaman login jika user_id tidak ditemukan di session
+
 
 @app.route('/generate_pdf', methods=['GET'])
 def generate_pdf():

@@ -11,7 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <title>Hello, world!</title>
+    <title>Admin Riwayat Pemesanan</title>
   </head>
   <body>
     <!-- sidebar start -->
@@ -43,7 +43,7 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">Nama </th>
+                        <th scope="col">Nama</th>
                         <th scope="col">No Handphone</th>
                         <th scope="col">Nama Produk</th>
                         <th scope="col">Total dus dan Harga Produk</th>
@@ -61,7 +61,7 @@
                         <td>{{ data.tanggal_pemesanan }}</td>
                         <td>{{ data.alamat }}</td>
                     </tr>
-                    {% endfor %}
+                      {% endfor %}
                     </tbody>
                   </table>
                   
@@ -69,15 +69,15 @@
                     <nav aria-label="Page navigation example">
                       <ul class="pagination">
                         <li class="page-item {% if page == 1 %}disabled{% endif %}">
-                          <a class="page-link" href="/adminRiwayatPemesanan?page={{ page - 1 }}" aria-label="Previous">
+                          <a class="page-link" href="{{ url_for('adminRiwayatPemesanan', page=page-1) }}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                           </a>
                         </li>
                         {% for p in range(1, total_pages + 1) %}
-                        <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="/adminRiwayatPemesanan?page={{ p }}">{{ p }}</a></li>
+                        <li class="page-item {% if p == page %}active{% endif %}"><a class="page-link" href="{{ url_for('adminRiwayatPemesanan', page=p) }}">{{ p }}</a></li>
                         {% endfor %}
                         <li class="page-item {% if page == total_pages %}disabled{% endif %}">
-                          <a class="page-link" href="/adminRiwayatPemesanan?page={{ page + 1 }}" aria-label="Next">
+                          <a class="page-link" href="{{ url_for('adminRiwayatPemesanan', page=page+1) }}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                           </a>
                         </li>
