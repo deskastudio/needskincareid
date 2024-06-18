@@ -14,164 +14,182 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
 
-
-    <title>Detail Pemesanan</title>
+    <title>Detail Pemesanan | NeedSkincareID</title>
 
     <style>
-        
-        .col-md-8 {
-            border: 2px solid #faa0dc;
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .formDetail {
             border-radius: 5px;
-            margin: 5px;
-            width: 65%;
-            padding: 5px;
+            margin-bottom: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border: solid 1px lightgray;
+        }
+
+        .formDetailProduk {
+            border-radius: 5px;
+            margin-bottom: 15px;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #fff;
+            box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .card {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 200px;
-            margin: 5px;
-            background-color: #fff;
-            border: 3px solid;
-            border-color: #faa0dc;
+            margin-bottom: 15px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
         }
 
         .card-body {
-            width: 200px;
             background-color: #db7095;
+            color: #fff;
+            text-align: center;
         }
 
-        .col-6{
-            border: 2px solid #faa0dc;
+        .col-6 {
             border-radius: 5px;
-            padding: 5px;
-            margin: 5px;
-            width: 30%;
+            border: solid 1px lightgray;
+            padding: 20px;
+            background-color: #fff;
         }
 
-        .formbeli{
-          
-            margin-top: 50px;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: start;
+        .formbeli {
             list-style: none;
+            padding: 0;
         }
 
-       .formbeli li{
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            justify-content: start;
-            padding: 10px;
+        .formbeli li {
+            margin-bottom: 10px;
             font-weight: bold;
-       }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-       .noted{
-          width: 100%;
-          justify-content: center;
-          align-items: center;
-          height: auto;
-          background-color:  #db7095;
-       }
+        .formbeli li span {
+            font-weight: normal;
+        }
 
-       .btn{
-        background-color: #db7095;
-        margin: 30px auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 200px;
-        height: 70px;
-        border-radius: 10px;
-        color: white;
-        font-size: 20px;
-        font-weight: bold;
-       }
+        .noted {
+            background-color: #db7095;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
 
-       .btn:hover{
-        cursor: pointer;
-        background-color: #ffffff;
-        border-color: #db7095;
-        color: #db7095;
-       }
+        .btn {
+            background-color: #db7095;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            display: block;
+            margin: 30px auto;
+            width: 200px;
+        }
+
+        .btn:hover {
+            background-color: #ffffff;
+            color: #db7095;
+            border: 2px solid #db7095;
+        }
+
+        .list-unstyled li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .list-unstyled img {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .col-md-8,
+            .col-6 {
+                width: 100%;
+                margin: 0;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <!-- header start -->
     {% include 'header.html' %}
-    <!-- navbar end -->
+    <!-- header end -->
 
     <!-- detail pemesanan start -->
     <div class="container">
-        <h2 style="font-weight: bold;" class="text-center">Detail Pemesanan</h2>
-        <div class="row" style="max-width: 100%; margin:5px">
-            <div class="col-md-8">
+        <h2 class="text-center" style="font-weight: bold;">Detail Pemesanan</h2>
+        <div class="row">
+            <div class="col-md-8 formDetail">
                 <div class="row">
-                    <div class="col " style="max-width:300px">
+                    <div class="col-md-4">
                         <div class="card">
-                            <img src="../static/assets/imgProduk/{{ product.photo }}" class="card-img-top" alt="...">
+                            <img src="../static/assets/imgProduk/{{ product.photo }}" class="card-img-top" alt="{{ product.nama_produk }}">
                             <div class="card-body">
-                                <h5 class="card-title" style="color: #fff;">{{ product.nama_produk }}</h5>
+                                <h5 class="card-title text-white">{{ product.nama_produk }}</h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-8 formDetailProduk">
                         <ul class="formbeli">
-                            <li>Nama Pembeli: {{ order.nama_lengkap }}</li>
-                            <li>Nomor Telepon: {{ order.nomor_telepon }}</li>
-                            <li>Jumlah Produk: {{ order.jumlah_produk }}</li>
-                            <li>Alamat: {{ order.alamat }}</li>
-                            <li>Tanggal: {{ order.tanggal_pemesanan }}</li>
-                        </ul>                        
+                            <li>Nama Pembeli: <span>{{ order.nama_lengkap }}</span></li>
+                            <li>Nomor Telepon: <span>{{ order.nomor_telepon }}</span></li>
+                            <li>Jumlah Produk: <span>{{ order.jumlah_produk }}</span></li>
+                            <li>Alamat: <span>{{ order.alamat }}</span></li>
+                            <li>Tanggal: <span>{{ order.tanggal_pemesanan }}</span></li>
+                        </ul>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-4">
-                <h4 class="text-center mb-4">Metode Pembayaran</h4>
-                <div class="col">
-                    <ul class="list-unstyled">
-                        {% for data in pembayaran %}
-                        <li class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center">
-                            <div>
-                                <span style="font-weight: bold;">{{ data.jenisPembayaran }}</span>
-                                <p class="mb-0">{{ data.nomorPembayaran }}</p>
-                            </div>
-                            <div>
-                                <img src="../static/img/{{ data.jenisPembayaran }}.png" alt="" width="100" height="60">
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                <h4 class="text-center mb-4 fw-bold">Metode Pembayaran</h4>
+                <ul class="list-unstyled">
+                    {% for data in pembayaran %}
+                    <li>
+                        <div>
+                            <span style="font-weight: bold;">{{ data.jenisPembayaran }}</span>
+                            <p class="mb-0">{{ data.nomorPembayaran }}</p>
+                        </div>
+                        <div>
+                            <img src="../static/img/{{ data.jenisPembayaran }}.png" alt="{{ data.jenisPembayaran }}" width="100" height="60">
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
+        <div class="noted">
+            <p>Pembeli wajib melakukan konfirmasi pembayaran agar pesanan segera diproses. Klik tombol dibawah ini untuk mengirim bukti pembayaran dan mendapatkan informasi pengiriman!</p>
+        </div>
+        <a class="btn" href="https://wa.link/ecdlc4" role="button">Bayar</a>
     </div>
-
-    
-    <div class="noted">
-        <p class="container text-center " style="color: #fff; font-size:20px">Pembeli wajib melakukan konfirmasi pembayaran agar pesanan segera diproses. Klik tombol dibawah ini untuk mengirim bukti pembayaran dan mendapatkan informasi pengiriman!!!</p>
-    </div>
-
-    <a class="btn" href="https://wa.link/ecdlc4" role="button">Bayar</a>
     <!-- detail pemesanan end -->
 
     <!-- footer start -->
     {% include 'footer.html' %}
     <!-- footer end -->
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

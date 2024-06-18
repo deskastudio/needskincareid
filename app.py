@@ -164,7 +164,6 @@ def admin_dashboard():
     return render_template('adminDashboard.html')
     
 @app.route('/produk', methods=['GET'])
-@login_required
 def produk():
     products = db.products.find()
     return render_template('produk.html', products=products)

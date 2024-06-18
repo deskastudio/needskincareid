@@ -13,54 +13,102 @@
     <link rel="stylesheet" href="../static/css/style.css">
 
     <title>Pemesanan | NeedSkincareID</title>
+
+    <style>
+        body {
+            background-color: #ffe6f0;
+        }
+        .form-container-order {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container-order h5 {
+            margin-bottom: 1.5rem;
+            color: #d63384;
+        }
+        .input-field {
+            margin-bottom: 1rem;
+        }
+        .btn-pesan {
+            display: inline-block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #d63384;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn-pesan:hover {
+            background-color: #b8236f;
+        }
+        .form-label i {
+            margin-right: 0.5rem;
+        }
+        .form-control, .form-select {
+            border: 1px solid #d63384;
+        }
+        .form-label {
+            color: #d63384;
+        }
+    </style>
 </head>
 <body>
     <!-- header start -->
     {% include 'header.html' %}
     <!-- navbar end -->
-    <div class="order">
-        <h5 class="fw-bold text-start">Harap Lengkapi Form Di Bawah</h5>
-    </div>
+
+    <div class="container">
+        <div class="order text-center mb-4">
+            <h5 class="fw-bold">Harap Lengkapi Form Di Bawah</h5>
+        </div>
      
-    <div class="form-container-order">
-        <div class="form-input-section">
-          <form id="orderForm" action="/pemesanan?id={{ product._id }}" method="post">
-            <input type="hidden" name="product_id" value="{{ product._id }}">
+        <div class="form-container-order">
+            <form id="orderForm" action="/pemesanan?id={{ product._id }}" method="post">
+                <input type="hidden" name="product_id" value="{{ product._id }}">
+                
                 <div class="input-field">
-                    <label for="namaLengkap" class="form-label fw-bold">Nama Lengkap</label>
+                    <label for="namaLengkap" class="form-label fw-bold"><i class="fas fa-user"></i>Nama Lengkap</label>
                     <input type="text" class="form-control" id="namaLengkap" name="namaLengkap" placeholder="Masukkan Nama Lengkap" required>
                 </div>
+                
                 <div class="input-field">
-                    <label for="nomorTelepon" class="form-label fw-bold">Nomor Telepon</label>
+                    <label for="nomorTelepon" class="form-label fw-bold"><i class="fas fa-phone"></i>Nomor Telepon</label>
                     <input type="tel" class="form-control" id="nomorTelepon" name="nomorTelepon" placeholder="Masukkan Nomor Telepon" required>
                 </div>
-                <div class="input-field form-inline">
-                  <label for="jumlahProduk" class="form-label fw-bold me-3">Jumlah Produk</label>
-                  <select id="jumlahProduk" class="form-select dropdown-categories" name="jumlahProduk">
-                      <option value="all">Pilih Jumlah Produk</option>
-                      {% for dus_harga in product.dus_harga %}
-                      <option value="{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}">{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</option>
-                      {% endfor %}
-                  </select>
-              </div>          
+                
                 <div class="input-field">
-                    <label for="alamat" class="form-label fw-bold">Alamat</label>
-                    <textarea class="form-control" id="alamat" rows="3" name="alamat" placeholder="Masukkan Alamat Anda" style="margin-left: 11px;"></textarea>
+                    <label for="jumlahProduk" class="form-label fw-bold"><i class="fas fa-box"></i>Jumlah Produk</label>
+                    <select id="jumlahProduk" class="form-select" name="jumlahProduk" required>
+                        <option value="all">Pilih Jumlah Produk</option>
+                        {% for dus_harga in product.dus_harga %}
+                        <option value="{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}">{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{ dus_harga.total_harga }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
+                
                 <div class="input-field">
-                    <label for="tanggalPemesanan" class="form-label fw-bold">Tanggal Pemesanan</label>
+                    <label for="alamat" class="form-label fw-bold"><i class="fas fa-map-marker-alt"></i>Alamat</label>
+                    <textarea class="form-control" id="alamat" rows="3" name="alamat" placeholder="Masukkan Alamat Anda" required></textarea>
+                </div>
+                
+                <div class="input-field">
+                    <label for="tanggalPemesanan" class="form-label fw-bold"><i class="fas fa-calendar-alt"></i>Tanggal Pemesanan</label>
                     <input type="text" class="form-control" id="tanggalPemesanan" name="tanggalPemesanan" readonly>
-                  </div>
+                </div>
+                
                 <div class="button">
                     <button type="submit" class="btn-pesan">Pesan</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- start content -->
-
-    <!-- content end -->
 
     <!-- footer start -->
     {% include 'footer.html' %}
@@ -71,19 +119,13 @@
         function fillOrderDate() {
           var dateInput = document.getElementById("tanggalPemesanan");
           var today = new Date();
-  
           var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    
           var dayName = days[today.getDay()];
- 
           var formattedDate = dayName + ', ' + today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-      
           dateInput.value = formattedDate;
         }
       
         window.onload = fillOrderDate;
-      </script>
-      
-      
+    </script>
 </body>
 </html>
