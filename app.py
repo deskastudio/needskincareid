@@ -260,6 +260,7 @@ def adminProduk():
 @app.route('/tambahDataProduk', methods=['GET', 'POST'])
 @admin_login_required
 def tambah_data_produk():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         jenisSkincare = request.form['jenisSkincare']
         namaProduk = request.form['namaProduk']
@@ -297,7 +298,7 @@ def tambah_data_produk():
         db.products.insert_one(doc)
         return redirect(url_for("adminProduk"))
 
-    return render_template('tambahDataProduk.html')
+    return render_template('tambahDataProduk.html', admin=admin)
 
 @app.route('/editDataProduk/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
