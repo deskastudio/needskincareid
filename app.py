@@ -3,7 +3,6 @@ from io import BytesIO
 import os
 from posixpath import dirname, join
 import re
-from tkinter import Canvas
 from bson import ObjectId
 from dotenv import load_dotenv
 from flask import Flask, flash, jsonify, make_response, render_template, request, redirect, session, url_for
@@ -11,7 +10,6 @@ from pymongo import DESCENDING, MongoClient
 import bcrypt
 import pymongo
 from werkzeug.utils import secure_filename
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
@@ -35,7 +33,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
-            flash('You need to be logged in to access this page.')
+            flash('Anda harus masuk untuk mengakses halaman ini.')
             return redirect(url_for('login_user'))
         return f(*args, **kwargs)
     return decorated_function
@@ -44,7 +42,7 @@ def admin_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'admin_id' not in session:
-            flash('You need to be logged in as an admin to access this page.')
+            flash('Anda harus masuk untuk mengakses halaman ini.')
             return redirect(url_for('admin_login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -52,9 +50,10 @@ def admin_login_required(f):
 @app.route('/')
 def index():
     try:
+        bannerHomepage = list(db.bannerHomepage.find({}))
         pembayaran = list(db.pembayaran.find({}))
         products = list(db.products.find({'showOnHomepage': True}))
-        return render_template('index.html', products=products, pembayaran=pembayaran)
+        return render_template('index.html', products=products, pembayaran=pembayaran, bannerHomepage=bannerHomepage)
     except Exception as e:
         return str(e)
 
@@ -93,15 +92,15 @@ def register_user():
             return redirect(url_for('register_user'))
         
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
-            flash('Invalid email address')
+            flash('Alamat email tidak valid')
             return redirect(url_for('register_user'))
 
         if password1 != password2:
-            flash('Passwords do not match')
+            flash('Kata sandi tidak cocok')
             return redirect(url_for('register_user'))
 
         if users_collection.find_one({'email': email}): 
-            flash('Email already exists')
+            flash('Email sudah ada')
             return redirect(url_for('register_user'))
         
         new_user = {
@@ -157,11 +156,6 @@ def admin_login():
             return redirect(url_for('admin_login'))
 
     return render_template('adminLogin.html')
-
-@app.route('/adminDashboard')
-@admin_login_required
-def admin_dashboard():
-    return render_template('adminDashboard.html')
     
 @app.route('/produk', methods=['GET'])
 def produk():
@@ -248,7 +242,8 @@ def get_totals():
 @app.route('/adminDashboard')
 @admin_login_required
 def adminDashboard():
-        return render_template('adminDashboard.html')
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
+    return render_template('adminDashboard.html', admin=admin)
 # route admin dashboard end
 
 
@@ -257,8 +252,9 @@ def adminDashboard():
 @app.route('/adminProduk')
 @admin_login_required
 def adminProduk():
-        products = db.products.find()
-        return render_template('adminProduk.html', products=products)
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
+    products = db.products.find()
+    return render_template('adminProduk.html', products=products, admin=admin)
 
 
 @app.route('/tambahDataProduk', methods=['GET', 'POST'])
@@ -306,6 +302,7 @@ def tambah_data_produk():
 @app.route('/editDataProduk/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
 def edit_data_produk(_id):
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         jenisSkincare = request.form['jenisSkincare']
         namaProduk = request.form['namaProduk']
@@ -340,7 +337,7 @@ def edit_data_produk(_id):
         return redirect(url_for('adminProduk'))
     
     data = db.products.find_one({'_id': ObjectId(_id)})
-    return render_template('editDataProduk.html', data=data)
+    return render_template('editDataProduk.html', data=data, admin=admin)
 
 
 @app.route('/hapusDataProduk/<string:_id>', methods=["GET", "POST"])
@@ -357,6 +354,7 @@ def hapus_data_produk(_id):
 @app.route('/adminPelanggan', methods=['GET'])
 @admin_login_required
 def adminPelanggan():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     users = db.users.find()
     page = int(request.args.get('page', 1))
     per_page = 5  # Number of users per page
@@ -365,7 +363,7 @@ def adminPelanggan():
 
     users = list(users_collection.find().skip((page - 1) * per_page).limit(per_page))
 
-    return render_template('adminPelanggan.html', users=users, page=page, total_pages=total_pages)
+    return render_template('adminPelanggan.html', users=users, page=page, total_pages=total_pages, admin=admin)
     
 
 @app.route('/hapusDataPelanggan/<string:_id>', methods=["GET", "POST"])
@@ -381,6 +379,7 @@ def hapus_data_pelanggan(_id):
 @app.route('/adminPemesanan')
 @admin_login_required
 def adminPemesanan():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     orders = db.orders.find()
     page = int(request.args.get('page', 1))
     per_page = 5
@@ -389,7 +388,7 @@ def adminPemesanan():
 
     orders = list(db.orders.find().sort('_id', pymongo.DESCENDING).skip((page - 1) * per_page).limit(per_page))
 
-    return render_template('adminPemesanan.html', orders=orders, page=page, total_pages=total_pages)
+    return render_template('adminPemesanan.html', orders=orders, page=page, total_pages=total_pages, admin=admin)
 # route admin pemesanan end
 
 @app.route('/selesaikan-pesanan/<string:_id>', methods=['POST'])
@@ -410,6 +409,7 @@ def selesaikan_pemesanan(_id):
 @app.route('/adminPembayaran', methods=['GET'])
 @admin_login_required
 def adminPembayaran():
+        admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
         pembayaran = db.pembayaran.find()
         page = int(request.args.get('page', 1))
         per_page = 5  # Number of products per page
@@ -418,11 +418,12 @@ def adminPembayaran():
 
         pembayaran = list(db.pembayaran.find().skip((page - 1) * per_page).limit(per_page))
 
-        return render_template('adminPembayaran.html', pembayaran=pembayaran, page=page, total_pages=total_pages)
+        return render_template('adminPembayaran.html', pembayaran=pembayaran, page=page, total_pages=total_pages, admin=admin)
 
 @app.route('/tambahDataPembayaran', methods=['GET', 'POST'])
 @admin_login_required
 def tambah_data_pembayaran():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         jenisPembayaran = request.form['jenisPembayaran']
         metodePembayaran = request.form['metodePembayaran']
@@ -437,11 +438,12 @@ def tambah_data_pembayaran():
         db.pembayaran.insert_one(doc)
         return redirect(url_for("adminPembayaran"))
         
-    return render_template('tambahDataPembayaran.html')
+    return render_template('tambahDataPembayaran.html', admin=admin)
 
 @app.route('/editDataPembayaran/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
 def edit_data_pembayaran(_id):
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         jenisPembayaran = request.form['jenisPembayaran']
         metodePembayaran = request.form['metodePembayaran']
@@ -458,7 +460,7 @@ def edit_data_pembayaran(_id):
         return redirect(url_for('adminPembayaran'))
     
     data = db.pembayaran.find_one({'_id': ObjectId(_id)})
-    return render_template('editDataPembayaran.html', data=data)
+    return render_template('editDataPembayaran.html', data=data, admin=admin)
 
 
 @app.route('/hapusDataPembayaran/<string:_id>', methods=["GET", "POST"])
@@ -470,108 +472,11 @@ def hapus_data_pembayaran(_id):
 
 
 
-# route produk terlaris start
-@app.route('/adminProdukTerlaris')
-@admin_login_required
-def adminProdukTerlaris():
-        produkTerlaris = db.produkTerlaris.find()
-        return render_template('adminProdukTerlaris.html', produkTerlaris=produkTerlaris)
-
-
-@app.route('/tambahDataProdukTerlaris', methods=['GET', 'POST'])
-@admin_login_required
-def tambah_data_produk_terlaris():
-    if request.method == 'POST':
-        jenisSkincare = request.form['jenisSkincare']
-        namaProduk = request.form['namaProduk']
-        hargaPerPcs = request.form.getlist('hargaPerPcs[]')
-        totalDus = request.form.getlist('totalDus[]')
-        totalHarga = request.form.getlist('totalHarga[]')
-        photo = request.files['photo']
-
-        # Validasi input
-        if not jenisSkincare or not namaProduk or not hargaPerPcs or not totalDus or not totalHarga or not photo:
-            return "Semua bidang harus diisi!", 400
-
-        if photo:
-            nama_file_asli = photo.filename
-            nama_file_gambar = secure_filename(nama_file_asli)
-            file_path = f'./static/assets/imgProdukTerlaris/{nama_file_gambar}'
-            photo.save(file_path)
-        else:
-            nama_file_gambar = None
-
-        # Buat daftar entri total dus dan total harga
-        dus_harga_list = []
-        for harga_pcs, dus, harga in zip(hargaPerPcs, totalDus, totalHarga):
-            dus_harga_list.append({'hargaPerPcs': harga_pcs, 'total_dus': dus, 'total_harga': harga})
-
-        # Buat dokumen untuk disimpan di database
-        doc = {
-            'jenis_skincare': jenisSkincare,
-            'nama_produk': namaProduk,
-            'dus_harga': dus_harga_list,
-            'photo': nama_file_gambar
-        }
-
-        # Simpan dokumen ke MongoDB
-        db.produkTerlaris.insert_one(doc)
-        return redirect(url_for("adminProdukTerlaris"))
-
-    return render_template('tambahDataProdukTerlaris.html')
-
-@app.route('/editDataProdukTerlaris/<string:_id>', methods=["GET", "POST"])
-@admin_login_required
-def edit_data_produk_terlaris(_id):
-    if request.method == 'POST':
-        jenisSkincare = request.form['jenisSkincare']
-        namaProduk = request.form['namaProduk']
-        hargaPerPcs = request.form.getlist('hargaPerPcs[]')
-        totalDus = request.form.getlist('totalDus[]')
-        totalHarga = request.form.getlist('totalHarga[]')
-        photo = request.files.get('photo')  # Menggunakan get() agar tidak error jika tidak ada foto yang diunggah
-
-        # Inisialisasi nama_file_gambar dengan nilai default
-        nama_file_gambar = None
-
-        # Simpan file jika ada
-        if photo and photo.filename:  # Periksa jika ada foto yang diunggah
-            nama_file_asli = photo.filename
-            nama_file_gambar = secure_filename(nama_file_asli)
-            file_path = f'./static/assets/imgProdukTerlaris/{nama_file_gambar}'
-            photo.save(file_path)
-        
-        # Buat dictionary untuk update
-        doc = {
-            'jenis_skincare': jenisSkincare,
-            'nama_produk': namaProduk,
-            'dus_harga': [{'hargaPerPcs': harga_pcs, 'total_dus': dus, 'total_harga': harga} for harga_pcs, dus, harga in zip(hargaPerPcs, totalDus, totalHarga)]
-        }
-
-        # Tambahkan nama_file_gambar ke dictionary jika ada
-        if nama_file_gambar:
-            doc['photo'] = nama_file_gambar
-        
-        # Update database
-        db.produkTerlaris.update_one({'_id': ObjectId(_id)}, {'$set': doc})
-        return redirect(url_for('adminProdukTerlaris'))
-    
-    data = db.produkTerlaris.find_one({'_id': ObjectId(_id)})
-    return render_template('editDataProdukTerlaris.html', data=data)
-
-@app.route('/hapusDataProdukTerlaris/<string:_id>', methods=["GET", "POST"])
-@admin_login_required
-def hapus_data_produk_terlaris(_id):
-    db.produkTerlaris.delete_one({'_id': ObjectId(_id)})
-    return redirect(url_for('adminProdukTerlaris'))
-# route produk terlaris end
-
-
-
 # route banner homepage start
 @app.route('/adminBannerHomepage')
 @admin_login_required
 def adminBannerHomepage():
+        admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
         bannerHomepage = db.bannerHomepage.find()
         page = int(request.args.get('page', 1))
         per_page = 5  # Number of products per page
@@ -580,11 +485,12 @@ def adminBannerHomepage():
 
         bannerHomepage = list(db.bannerHomepage.find().skip((page - 1) * per_page).limit(per_page))
 
-        return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage, page=page, total_pages=total_pages)
+        return render_template('adminBannerHomepage.html', bannerHomepage=bannerHomepage, page=page, total_pages=total_pages, admin=admin)
 
 @app.route('/tambahDataBannerHomepage', methods=['GET', 'POST'])
 @admin_login_required
 def tambah_data_banner_homepage():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         judulBanner = request.form['judulBanner']
         photo = request.files['photo']
@@ -605,11 +511,12 @@ def tambah_data_banner_homepage():
         db.bannerHomepage.insert_one(doc)
         return redirect(url_for("adminBannerHomepage"))
         
-    return render_template('tambahDataBannerHomepage.html')
+    return render_template('tambahDataBannerHomepage.html', admin=admin)
 
 @app.route('/editDataBannerHomepage/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
 def edit_data_banner_homepage(_id):
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         judulBanner = request.form['judulBanner']
         photo = request.files['photo']
@@ -638,7 +545,7 @@ def edit_data_banner_homepage(_id):
         return redirect(url_for('adminBannerHomepage'))
     
     data = db.bannerHomepage.find_one({'_id': ObjectId(_id)})
-    return render_template('editDataBannerHomepage.html', data=data)
+    return render_template('editDataBannerHomepage.html', data=data, admin=admin)
 
 @app.route('/hapusDataBannerHomepage/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
@@ -653,6 +560,7 @@ def hapus_data_banner_homepage(_id):
 @app.route('/adminDataAdmin')
 @admin_login_required
 def adminDataAdmin():
+        admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
         admin = db.admin.find()
         page = int(request.args.get('page', 1))
         per_page = 5  # Number of products per page
@@ -666,6 +574,7 @@ def adminDataAdmin():
 @app.route('/tambahDataAdmin', methods=['GET', 'POST'])
 @admin_login_required
 def tambah_data_admin():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         namaPengguna = request.form['namaPengguna']
         password = request.form['password']
@@ -678,11 +587,12 @@ def tambah_data_admin():
         db.admin.insert_one(doc)
         return redirect(url_for("adminDataAdmin"))
         
-    return render_template('tambahDataAdmin.html')
+    return render_template('tambahDataAdmin.html', admin=admin)
 
 @app.route('/editDataAdmin/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
 def edit_data_admin(_id):
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     if request.method == 'POST':
         namaPengguna = request.form['namaPengguna']
         password = request.form['password']
@@ -697,7 +607,7 @@ def edit_data_admin(_id):
         return redirect(url_for('adminDataAdmin'))
     
     data = db.admin.find_one({'_id': ObjectId(_id)})
-    return render_template('editDataAdmin.html', data=data)
+    return render_template('editDataAdmin.html', data=data, admin=admin)
 
 @app.route('/hapusDataAdmin/<string:_id>', methods=["GET", "POST"])
 @admin_login_required
@@ -707,74 +617,11 @@ def hapus_data_admin(_id):
 # route admin produk end
 
 
-
-# route admin footer start
-@app.route('/adminFooter', methods=['GET'])
-@admin_login_required
-def adminFooter():
-        footer = db.footer.find()
-        page = int(request.args.get('page', 1))
-        per_page = 5  # Number of products per page
-        total_footer = db.footer.count_documents({})
-        total_pages = (total_footer + per_page - 1) // per_page
-
-        footer = list(db.footer.find().skip((page - 1) * per_page).limit(per_page))
-
-        return render_template('adminFooter.html', footer=footer, page=page, total_pages=total_pages)
-
-@app.route('/tambahDataFooter', methods=['GET', 'POST'])
-@admin_login_required
-def tambah_data_footer():
-    if request.method == 'POST':
-        socialMedia = request.form['socialMedia']
-        username = request.form['username']
-        linkSosmed = request.form['linkSosmed']
-
-        doc = {
-            'socialMedia': socialMedia,
-            'username': username,
-            'linkSosmed': linkSosmed
-        }
-        
-        db.footer.insert_one(doc)
-        return redirect(url_for("adminFooter"))
-        
-    return render_template('tambahDataFooter.html')
-
-@app.route('/editDataFooter/<string:_id>', methods=["GET", "POST"])
-@admin_login_required
-def edit_data_footer(_id):
-    if request.method == 'POST':
-        socialMedia = request.form['socialMedia']
-        username = request.form['username']
-        linkSosmed = request.form['linkSosmed']
-
-        doc = {
-            'socialMedia': socialMedia,
-            'username': username,
-            'linkSosmed': linkSosmed
-        }
-        
-        # Update database
-        db.footer.update_one({'_id': ObjectId(_id)}, {'$set': doc})
-        return redirect(url_for('adminFooter'))
-    
-    data = db.footer.find_one({'_id': ObjectId(_id)})
-    return render_template('editDataFooter.html', data=data)
-
-@app.route('/hapusDataFooter/<string:_id>', methods=["GET", "POST"])
-@admin_login_required
-def hapus_data_footer(_id):
-    db.footer.delete_one({'_id': ObjectId(_id)})
-    return redirect(url_for('adminFooter'))
-# route admin footer end
-
-
-
 # route admin riwayat pemesanan start
 @app.route('/adminRiwayatPemesanan', methods=['GET', 'POST'])
 @admin_login_required
 def adminRiwayatPemesanan():
+    admin = db.admin.find_one({'_id': ObjectId(session.get('admin_id'))})
     page = int(request.args.get('page', 1))
     per_page = 5
     total_products = db.riwayatPemesanan.count_documents({})
@@ -783,7 +630,7 @@ def adminRiwayatPemesanan():
     # Urutkan data berdasarkan tanggal pemesanan (desc) dan paginasi
     riwayatPemesanan = list(db.riwayatPemesanan.find().sort('tanggal_pemesanan', pymongo.DESCENDING).skip((page - 1) * per_page).limit(per_page))
 
-    return render_template('adminRiwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan, page=page, total_pages=total_pages)
+    return render_template('adminRiwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan, page=page, total_pages=total_pages, admin=admin)
 # route admin riwayat pemesanan end
 
 @app.route('/logout')
@@ -792,13 +639,13 @@ def logout():
     session.pop('nama-lengkap', None)
     session.pop('email', None)
     session.pop('namaPengguna', None)
-    flash('You have been logged out.')
+    flash('Anda telah Keluar')
     return redirect(url_for('index'))
 
 @app.route('/adminLogout')
 def admin_logout():
     session.pop('admin_id', None)
-    flash('Admin has been logged out.')
+    flash('Admin telah Keluar')
     return redirect(url_for('admin_login'))
 
 
@@ -835,60 +682,60 @@ def riwayat_pemesanan():
         return redirect(url_for('login'))  # Arahkan ke halaman login jika user_id tidak ditemukan di session
 
 
-@app.route('/generate_pdf', methods=['GET'])
-def generate_pdf():
-    # Ambil data riwayat pemesanan dari MongoDB
-    riwayatPemesanan = list(db.riwayatPemesanan.find().sort('_id', DESCENDING))
+# @app.route('/generate_pdf', methods=['GET'])
+# def generate_pdf():
+#     # Ambil data riwayat pemesanan dari MongoDB
+#     riwayatPemesanan = list(db.riwayatPemesanan.find().sort('_id', DESCENDING))
 
-    # Menghasilkan PDF
-    response = make_response(generate_pdf_from_data(riwayatPemesanan))
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=riwayat_pemesanan.pdf'
-    return response
+#     # Menghasilkan PDF
+#     response = make_response(generate_pdf_from_data(riwayatPemesanan))
+#     response.headers['Content-Type'] = 'application/pdf'
+#     response.headers['Content-Disposition'] = 'inline; filename=riwayat_pemesanan.pdf'
+#     return response
 
-def generate_pdf_from_data(riwayatPemesanan):
-    buffer = BytesIO()
+# def generate_pdf_from_data(riwayatPemesanan):
+#     buffer = BytesIO()
 
-    # Menggunakan landscape untuk halaman
-    doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
+#     # Menggunakan landscape untuk halaman
+#     doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
 
-    # Konten PDF
-    elements = []
+#     # Konten PDF
+#     elements = []
 
-    # Judul laporan
-    styles = getSampleStyleSheet()
-    title_style = styles['Title']
-    elements.append(Paragraph("Laporan Riwayat Pemesanan", title_style))
+#     # Judul laporan
+#     styles = getSampleStyleSheet()
+#     title_style = styles['Title']
+#     elements.append(Paragraph("Laporan Riwayat Pemesanan", title_style))
 
-    # Tabel riwayat pemesanan
-    data = [["Nama", "No Handphone", "Nama Produk", "Total dus dan Harga Produk", "Tanggal Pemesanan", "Alamat"]]
-    for data_pemesanan in riwayatPemesanan:
-        # Menangani kasus di mana kunci mungkin tidak ada di dalam data
-        nama_lengkap = data_pemesanan.get('nama_lengkap', '')
-        nomor_telepon = data_pemesanan.get('nomor_telepon', '')
-        nama_produk = data_pemesanan.get('nama_produk', '')
-        jumlah_produk = data_pemesanan.get('jumlah_produk', '')
-        tanggal_pemesanan = data_pemesanan.get('tanggal_pemesanan', '')
-        alamat = data_pemesanan.get('alamat', '')
+#     # Tabel riwayat pemesanan
+#     data = [["Nama", "No Handphone", "Nama Produk", "Total dus dan Harga Produk", "Tanggal Pemesanan", "Alamat"]]
+#     for data_pemesanan in riwayatPemesanan:
+#         # Menangani kasus di mana kunci mungkin tidak ada di dalam data
+#         nama_lengkap = data_pemesanan.get('nama_lengkap', '')
+#         nomor_telepon = data_pemesanan.get('nomor_telepon', '')
+#         nama_produk = data_pemesanan.get('nama_produk', '')
+#         jumlah_produk = data_pemesanan.get('jumlah_produk', '')
+#         tanggal_pemesanan = data_pemesanan.get('tanggal_pemesanan', '')
+#         alamat = data_pemesanan.get('alamat', '')
 
-        data.append([nama_lengkap, nomor_telepon, nama_produk, jumlah_produk, tanggal_pemesanan, alamat])
+#         data.append([nama_lengkap, nomor_telepon, nama_produk, jumlah_produk, tanggal_pemesanan, alamat])
 
-    # Tabel
-    table = Table(data, repeatRows=1)
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),  # Background color for header row
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),             # Align all cells to center
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)        # Add border to cells
-    ]))
+#     # Tabel
+#     table = Table(data, repeatRows=1)
+#     table.setStyle(TableStyle([
+#         ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),  # Background color for header row
+#         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),             # Align all cells to center
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black)        # Add border to cells
+#     ]))
 
-    elements.append(table)
+#     elements.append(table)
 
-    # Membuat dokumen PDF
-    doc.build(elements)
+#     # Membuat dokumen PDF
+#     doc.build(elements)
 
-    # Mengembalikan buffer PDF
-    buffer.seek(0)
-    return buffer.read()
+#     # Mengembalikan buffer PDF
+#     buffer.seek(0)
+#     return buffer.read()
 
 
 

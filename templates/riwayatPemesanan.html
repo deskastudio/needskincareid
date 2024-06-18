@@ -23,10 +23,10 @@
 <body>
     {% include 'header.html' %}
     <div class="container">
-        <h3 class="text-center">Riwayat Pemesanan</h3>
+        <h3 class="text-center fw-bold">Riwayat Pemesanan</h3>
         {% if riwayatPemesanan|length > 0 %}
             {% for data in riwayatPemesanan %}
-        <div class="card">
+        <div class="card shadow mt-3">
             <div class="card-body">
                         <div class="row align-items-center mb-3">
                             <div class="col-2 text-center">
