@@ -135,6 +135,16 @@
             .btn {
                 width: 100%;
             }
+
+            .card {
+                margin: auto; /* Mengatur kartu agar berada di tengah */
+                width: 90%; /* Mengatur lebar kartu agar tidak terlalu lebar pada layar kecil */
+            }
+    
+            .card img {
+                margin: 0 auto; /* Mengatur gambar agar berada di tengah */
+                display: block; /* Menghilangkan spasi putih di bawah gambar */
+            }
         }
     
         @media (max-width: 375px) {
@@ -214,13 +224,28 @@
                         </div>
                     </div>
                     <div class="col-md-8 formDetailProduk">
-                        <ul class="formbeli">
-                            <li>Nama Pembeli: <span>{{ order.nama_lengkap }}</span></li>
-                            <li>Nomor Telepon: <span>{{ order.nomor_telepon }}</span></li>
-                            <li>Jumlah Produk: <span>{{ order.jumlah_produk }}</span></li>
-                            <li>Alamat: <span>{{ order.alamat }}</span></li>
-                            <li>Tanggal: <span>{{ order.tanggal_pemesanan }}</span></li>
-                        </ul>
+                        <table class="formbeli">
+                            <tr>
+                                <td style="font-weight: bold;">Nama Pembeli</td>
+                                <td>: {{ order.nama_lengkap }} </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Nomor Telepon</td>
+                                <td>: {{ order.nomor_telepon }} </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Jumlah Produk</td>
+                                <td>: {{ order.jumlah_produk }} </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Alamat</td>
+                                <td>: {{ order.alamat }} </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Tanggal Pemesanan</td>
+                                <td>: {{ order.tanggal_pemesanan }} </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
