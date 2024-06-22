@@ -1,19 +1,14 @@
 from functools import wraps
-from io import BytesIO
 import os
 from posixpath import dirname, join
 import re
 from bson import ObjectId
 from dotenv import load_dotenv
-from flask import Flask, flash, jsonify, make_response, render_template, request, redirect, session, url_for
+from flask import Flask, flash, jsonify, render_template, request, redirect, session, url_for
 from pymongo import DESCENDING, MongoClient
 import bcrypt
 import pymongo
 from werkzeug.utils import secure_filename
-from reportlab.lib.pagesizes import letter, landscape
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib import colors
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -680,63 +675,7 @@ def riwayat_pemesanan():
         riwayatPemesanan = list(db.riwayatPemesanan.find({'user_id': ObjectId(user_id)}))
         return render_template('riwayatPemesanan.html', riwayatPemesanan=riwayatPemesanan)
     else:
-        return redirect(url_for('login'))  # Arahkan ke halaman login jika user_id tidak ditemukan di session
-
-
-# @app.route('/generate_pdf', methods=['GET'])
-# def generate_pdf():
-#     # Ambil data riwayat pemesanan dari MongoDB
-#     riwayatPemesanan = list(db.riwayatPemesanan.find().sort('_id', DESCENDING))
-
-#     # Menghasilkan PDF
-#     response = make_response(generate_pdf_from_data(riwayatPemesanan))
-#     response.headers['Content-Type'] = 'application/pdf'
-#     response.headers['Content-Disposition'] = 'inline; filename=riwayat_pemesanan.pdf'
-#     return response
-
-# def generate_pdf_from_data(riwayatPemesanan):
-#     buffer = BytesIO()
-
-#     # Menggunakan landscape untuk halaman
-#     doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
-
-#     # Konten PDF
-#     elements = []
-
-#     # Judul laporan
-#     styles = getSampleStyleSheet()
-#     title_style = styles['Title']
-#     elements.append(Paragraph("Laporan Riwayat Pemesanan", title_style))
-
-#     # Tabel riwayat pemesanan
-#     data = [["Nama", "No Handphone", "Nama Produk", "Total dus dan Harga Produk", "Tanggal Pemesanan", "Alamat"]]
-#     for data_pemesanan in riwayatPemesanan:
-#         # Menangani kasus di mana kunci mungkin tidak ada di dalam data
-#         nama_lengkap = data_pemesanan.get('nama_lengkap', '')
-#         nomor_telepon = data_pemesanan.get('nomor_telepon', '')
-#         nama_produk = data_pemesanan.get('nama_produk', '')
-#         jumlah_produk = data_pemesanan.get('jumlah_produk', '')
-#         tanggal_pemesanan = data_pemesanan.get('tanggal_pemesanan', '')
-#         alamat = data_pemesanan.get('alamat', '')
-
-#         data.append([nama_lengkap, nomor_telepon, nama_produk, jumlah_produk, tanggal_pemesanan, alamat])
-
-#     # Tabel
-#     table = Table(data, repeatRows=1)
-#     table.setStyle(TableStyle([
-#         ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),  # Background color for header row
-#         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),             # Align all cells to center
-#         ('GRID', (0, 0), (-1, -1), 1, colors.black)        # Add border to cells
-#     ]))
-
-#     elements.append(table)
-
-#     # Membuat dokumen PDF
-#     doc.build(elements)
-
-#     # Mengembalikan buffer PDF
-#     buffer.seek(0)
-#     return buffer.read()
+        return redirect(url_for('login'))
 
 
 
